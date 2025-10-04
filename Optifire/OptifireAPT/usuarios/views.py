@@ -2,28 +2,37 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-# La vista de prueba original, que modificaremos
-# def home_page(request):
-#     return HttpResponse("Página de inicio de la aplicación Usuarios de OptiFire.")
+def home(request):
+    return render(request, "index.html")
 
-# --- NUEVA VISTA PARA USUARIOS NORMALES ---
-@login_required # Esto asegura que solo usuarios logueados puedan acceder
-def dashboard_inspector(request):
-    # Lógica para mostrar las inspecciones o tareas del Inspector.
-    
-    # Para simplificar, devolvemos un mensaje basado en el usuario logueado.
-    user_rol = request.user.perfil.get_rol_display() if hasattr(request.user, 'perfil') else 'sin rol asignado'
-    
-    context = {
-        'username': request.user.username,
-        'rol': user_rol,
-        'email': request.user.email
-    }
-    
-    # En un proyecto real, esto devolvería render(request, 'usuarios/dashboard.html', context)
-    return HttpResponse(f"""
-        <h1>Bienvenido al Sistema OptiFire, {request.user.first_name if request.user.first_name else request.user.username}!</h1>
-        <p>Tu rol es: <strong>{user_rol}</strong>.</p>
-        <p>Esta es tu área de trabajo donde podrás gestionar tus tareas de inspección.</p>
-        <p>🎉 ¡Login exitoso! 🎉</p>
-    """)
+def login_view(request):
+    error_message = None
+    if request.method == "POST":
+        username = request.POST.get("username", "")
+        password = request.POST.get("password", "")
+
+        import re
+        user_pattern = re.compile(r'^[A-Za-z0-9]{4,}$')
+        pass_pattern = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+
+        if not user_pattern.match(username):
+            error_message = "Usuario inválido. Debe tener al menos 4 caracteres y solo letras o números."
+        elif not pass_pattern.match(password):
+            error_message = "Contraseña inválida. Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial."
+        else:
+            from django.contrib.auth import authenticate, login
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return render(request, "dashboard.html")  # O redirige a donde corresponda
+            else:
+                error_message = "Usuario o contraseña incorrectos."
+    return render(request, "login.html", {"error_message": error_message})
+
+def dashboard(request):
+    # puedes requerir login antes
+    return render(request, "dashboard.html")
+def nosotros_view(request):
+    """Muestra la página 'Nosotros'."""
+    # Asegúrate de que tu plantilla se llame 'nosotros.html'
+    return render(request, 'nosotros.html', {})

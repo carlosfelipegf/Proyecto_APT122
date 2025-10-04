@@ -17,18 +17,13 @@ Including another URLconf
 # OptifireAPT/urls.py
 
 from django.contrib import admin
-from django.urls import path, include
-from django.contrib.auth import views as auth_views # Importamos las vistas de autenticación
+from django.urls import path
+from usuarios import views # Asegúrate de que esta línea esté presente
 
 urlpatterns = [
-    # ADMIN SITE: Acceso exclusivo para Superusuario/Staff
     path('admin/', admin.site.urls),
-
-    # AUTENTICACIÓN: Rutas estándar de Django (login/logout)
-    path('auth/login/', auth_views.LoginView.as_view(), name='login'), # Nombre clave para LOGIN_URL
-    path('auth/logout/', auth_views.LogoutView.as_view(), name='logout'),
-    # Note: Usamos LoginView.as_view() en lugar de include('django.contrib.auth.urls') para simplificar el mapeo del nombre.
-
-    # RUTA DE LA APLICACIÓN: Acceso para usuarios normales
-    path('usuarios/', include('usuarios.urls')),
+    path('', views.home, name='home'),
+    path('login/', views.login_view, name='login'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('nosotros/', views.nosotros_view, name='nosotros'), 
 ]
