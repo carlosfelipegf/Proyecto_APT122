@@ -14,16 +14,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# OptifireAPT/urls.py
-
 from django.contrib import admin
 from django.urls import path
-from usuarios import views # Asegúrate de que esta línea esté presente
+from usuarios import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('nosotros/', views.nosotros_view, name='nosotros'), 
+    path('nosotros/', views.nosotros_view, name='nosotros'),
+    path('nueva_inspeccion/', views.nueva_inspeccion, name='nueva_inspeccion'),
 ]

@@ -32,15 +32,25 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # ... aplicaciones de Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-# Aplicaciones del Proyecto
-    'usuarios',  # <-- AGREGUE ESTA LÍNEA
+    
+    # Tus apps
+    'usuarios', 
+    # 'otra_app',
+    
+    # 🚨 AÑADE ESTA LÍNEA 🚨
+    'crispy_forms', 
 ]
+
+# Configuración para Django Crispy Forms (usando Bootstrap 5)
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,8 +129,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# settings.py
 
+# Esto ya deberías tener:
+STATIC_URL = '/static/'
+
+# Agrega esto:
+import os
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
