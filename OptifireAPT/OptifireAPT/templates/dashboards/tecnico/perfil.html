@@ -1,0 +1,29 @@
+{% extends "base_dashboard.html" %}
+
+{% block dashboard_menu %}
+    {% include "includes/tecnico_menu.html" %}
+{% endblock dashboard_menu %}
+
+{% block dashboard_content %}
+<h1>Mi Perfil Profesional</h1>
+<p class="alert alert-info">Aquí puedes subir tu foto y descripción profesional. Serán visibles para los administradores.</p>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="foto" class="form-label">Foto de Perfil</label>
+        {% if perfil.foto %}
+            <p>Foto actual: <img src="{{ perfil.foto.url }}" style="max-height: 100px;" class="img-thumbnail"></p>
+        {% endif %}
+        <input class="form-control" type="file" id="foto" name="foto" accept="image/*">
+    </div>
+
+    <div class="mb-3">
+        <label for="descripcion_profesional" class="form-label">Descripción Profesional</label>
+        <textarea class="form-control" id="descripcion_profesional" name="descripcion_profesional" rows="5" required>{{ perfil.descripcion_profesional|default_if_none:"" }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Perfil</button>
+</form>
+{% endblock dashboard_content %}
