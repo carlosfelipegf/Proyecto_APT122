@@ -1,16 +1,31 @@
+# usuarios/models.py (CÓDIGO COMPLETO SANETIZADO)
+
 from django.db import models
-# Importante: Usar get_user_model() para referenciar al modelo de usuario, 
-# aunque en tu caso usas 'User' directamente (lo mantendremos).
-from django.contrib.auth.models import User
+from django.conf import settings 
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group 
 
-# ==========================================================
-# 0. MODELO PERFIL (Para técnico - Requerido en tu flujo)
-# ==========================================================
+# Obtenemos el modelo User estándar (auth.User)
+User = get_user_model()
 
+# -------------------------------------------------------------------
+# CONSTANTES DE ROL 
+# -------------------------------------------------------------------
+ROL_ADMINISTRADOR = 'Administrador'
+ROL_TECNICO = 'Técnico'
+ROL_CLIENTE = 'Cliente'
+
+# -------------------------------------------------------------------
+# MODELO PERFIL TÉCNICO
+# -------------------------------------------------------------------
 class PerfilTecnico(models.Model):
     """Modelo para la información adicional del técnico (foto, descripción)."""
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil_tecnico')
+    usuario = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='perfil_tecnico'
+    )
     foto = models.ImageField(upload_to='perfiles/fotos/', blank=True, null=True, verbose_name="Foto de Perfil")
     descripcion_profesional = models.TextField(blank=True, null=True, verbose_name="Descripción Profesional")
 
@@ -19,7 +34,7 @@ class PerfilTecnico(models.Model):
 
 
 # ==========================================================
-# 1. MODELOS DE PLANTILLA (Creados y gestionados por el Administrador)
+# 2. MODELOS DE PLANTILLA
 # ==========================================================
 
 class PlantillaInspeccion(models.Model):
@@ -31,7 +46,7 @@ class PlantillaInspeccion(models.Model):
     def __str__(self):
         return self.nombre
 
-class PlantillaTarea(models.Model):
+class TareaPlantilla(models.Model): 
     """Tareas predefinidas que componen una PlantillaInspeccion."""
     plantilla = models.ForeignKey(
         PlantillaInspeccion, 
@@ -52,33 +67,32 @@ class PlantillaTarea(models.Model):
 
 
 # ==========================================================
-# 2. MODELO DE SOLICITUD (Iniciado por el Cliente, gestionado por Admin)
+# 3. MODELO DE SOLICITUD
 # ==========================================================
 
 ESTADOS_SOLICITUD = [
     ('PENDIENTE', 'Pendiente de Aprobación'),
     ('APROBADA', 'Aprobada (Inspección Creada)'),
     ('RECHAZADA', 'Rechazada'),
-    ('COMPLETADA', 'Inspección Finalizada'), # Estado final para el cliente
+    ('COMPLETADA', 'Inspección Finalizada'),
 ]
 
 class SolicitudInspeccion(models.Model):
-    """Modelo para la solicitud inicial de inspección hecha por un Cliente."""
-    
+    # Campo vital para la lógica de roles y vistas
     cliente = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name='solicitudes_cliente',
+        User,
+        on_delete=models.CASCADE,
+        related_name='solicitudes_enviadas',
         verbose_name="Cliente Solicitante"
     )
     
-    # Datos de la Solicitud
     nombre_cliente = models.CharField(max_length=100, verbose_name="Nombre de Contacto")
+    apellido_cliente = models.CharField(max_length=100, verbose_name="Apellido de Contacto", blank=True, null=True) 
     direccion = models.CharField(max_length=255, verbose_name="Dirección de la Inspección")
     telefono = models.CharField(max_length=20, verbose_name="Teléfono de Contacto")
-    maquinaria = models.TextField(verbose_name="Maquinaria / Servicio Requerido")
-    
-    # Gestión del Administrador
+    maquinaria = models.TextField(verbose_name="Maquinaria / Servicio Requerido") 
+    observaciones_cliente = models.TextField(blank=True, null=True, verbose_name="Observaciones o Requerimientos Adicionales")
+
     estado = models.CharField(
         max_length=20, 
         choices=ESTADOS_SOLICITUD, 
@@ -94,30 +108,29 @@ class SolicitudInspeccion(models.Model):
 
 
 # ==========================================================
-# 3. MODELOS DE INSPECCIÓN (Generados por Admin, Completados por Técnico)
+# 4. MODELOS DE INSPECCIÓN
 # ==========================================================
 
 ESTADOS_INSPECCION = [
-    ('ASIGNADA', 'Asignada a Técnico'), # El estado inicial una vez aprobada la solicitud
-    ('EN_PROGRESO', 'En Progreso (Borrador Guardado)'), 
-    ('TERMINADA', 'Inspección Terminada'), # Nuevo estado final de la inspección
+    ('ASIGNADA', 'Asignada a Técnico'),
+    ('EN_CURSO', 'En Curso (Borrador Guardado)'),
+    ('COMPLETADA', 'Inspección Terminada'),
 ]
 
 class Inspeccion(models.Model):
     """Modelo para la instancia de inspección asignada a un técnico."""
     
-    # Enlace a la solicitud que generó esta inspección (OneToOne para que 1 solicitud solo genere 1 inspección)
     solicitud = models.OneToOneField(
         SolicitudInspeccion,
         on_delete=models.CASCADE,
         related_name='inspeccion_creada',
         verbose_name="Solicitud de Origen",
-        null=True, # <--- AÑADIR ESTO
-        blank=True # <--- AÑADIR ESTO
+        null=True, 
+        blank=True 
     )
     
     tecnico = models.ForeignKey(
-        User, 
+        User, # Referencia al auth.User
         on_delete=models.PROTECT, 
         related_name='inspecciones_asignadas',
         verbose_name="Técnico Asignado"
@@ -137,11 +150,11 @@ class Inspeccion(models.Model):
     
     estado = models.CharField(
         max_length=50, 
-        default='ASIGNADA', # El estado inicial es ASIGNADA, no PENDIENTE
+        default='ASIGNADA',
         choices=ESTADOS_INSPECCION,
         verbose_name="Estado de la Inspección"
     )
-    fecha_termino = models.DateTimeField(null=True, blank=True)
+    fecha_finalizacion = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Inspección {self.id} - {self.nombre_inspeccion} ({self.tecnico.username})"
@@ -164,8 +177,7 @@ class TareaInspeccion(models.Model):
         verbose_name="Inspección Perteneciente"
     )
     
-    # El campo 'plantilla_tarea' nos permite saber de qué tarea base proviene, si es necesario
-    plantilla_tarea = models.ForeignKey(PlantillaTarea, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Tarea Base")
+    plantilla_tarea = models.ForeignKey(TareaPlantilla, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Tarea Base")
 
     descripcion = models.CharField(max_length=255, verbose_name="Punto de Control")
     
