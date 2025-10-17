@@ -1,0 +1,35 @@
+{% extends 'base.html' %} 
+
+{% block title %}Dashboard | Optifire{% endblock %}
+
+{% block content %}
+    <div class="d-flex">
+        <nav class="sidebar bg-light p-3 border-end" style="min-width: 250px; height: 100vh;">
+            <h4 class="mb-4">Opciones de Usuario</h4>
+            
+            {% block dashboard_menu %}
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            {% endblock dashboard_menu %}
+        </nav>
+        
+        <main class="p-4 flex-grow-1">
+            
+            {% block dashboard_content %}
+                <h1>Bienvenido, {{ user.username }}</h1>
+                <p class="alert alert-warning">Tu rol ({{ user|default:"Usuario" }}) no tiene un dashboard específico asignado.</p>
+            {% endblock dashboard_content %}
+
+        </main>
+    </div>
+{% endblock content %}
