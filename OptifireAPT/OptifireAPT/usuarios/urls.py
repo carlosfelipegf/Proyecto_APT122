@@ -1,63 +1,18 @@
-
 # usuarios/urls.py
-# (Archivo ubicado en la carpeta de la app 'usuarios')
-
-
-# usuarios/urls.py (CÓDIGO CORREGIDO)
-
+# Este archivo contiene solo las rutas que son relativas al prefijo 'usuarios/'
 
 from django.urls import path
-from . import views
+from . import views # Importamos todas las vistas de la app 'usuarios'
 
 urlpatterns = [
 
-    # --- 1. Rutas Públicas/Autenticación ---
-    
-    # Ruta principal (Landing page)
-    path('', views.home, name='home'), 
-    path('login/', views.login_view, name='login'), # Esta ruta debe estar en el proyecto principal (OptifireAPT/urls.py)
-
-    # VISTAS DE AUTENTICACIÓN
-    path('login/', views.login_view, name='login'),
-
-    path('logout/', views.logout_view, name='logout'),
-    
-    # VISTA CENTRAL DE REDIRECCIÓN
+    # ----------------------------------------
+    # 1. RUTAS DE DASHBOARDS
+    # ----------------------------------------
+    # path('') resuelve: /usuarios/ -> Dashboard principal (redirección por rol)
     path('', views.dashboard, name='dashboard'), 
     
-    # DASHBOARDS ESPECÍFICOS
-    path('cliente/', views.dashboard_cliente, name='dashboard_cliente'),
-    path('administrador/', views.dashboard_administrador, name='dashboard_administrador'),
-    path('tecnico/', views.dashboard_tecnico, name='dashboard_tecnico'),
-    
-    # VISTAS DE CLIENTE
-    path('solicitar/', views.solicitar_inspeccion, name='solicitar_inspeccion'),
-    path('solicitud/eliminar/<int:pk>/', views.eliminar_solicitud, name='eliminar_solicitud'),
-
-    # VISTAS DE ADMINISTRADOR
-    path('admin/historial/', views.historial_solicitudes, name='historial_solicitudes'),
-    
-    # 🚨 LÍNEA CORREGIDA: Apunta a 'aprobar_solicitud' en lugar de 'gestionar_solicitud'
-    path('admin/gestionar/<int:pk>/', views.aprobar_solicitud, name='aprobar_solicitud'), 
-    
-    # VISTAS DE TÉCNICO
-    path('tecnico/completar/<int:pk>/', views.completar_inspeccion, name='completar_inspeccion'),
-    path('tecnico/perfil/', views.perfil_tecnico, name='perfil_tecnico'),
-
-    path('tecnico/inspeccion/completar/<int:pk>/', views.completar_inspeccion, name='completar_inspeccion'),
-]
-
-    # 🚨 VISTAS DE AUTENTICACIÓN (ELIMINADAS: Ahora en OptifireAPT/urls.py)
-    # path('login/', views.login_view, name='login'),
-    # path('logout/', views.logout_view, name='logout'),
-    
-    # ----------------------------------------
-    # 1. VISTAS DE DASHBOARDS
-    # ----------------------------------------
-    # La ruta raíz de la app ('usuarios/') lleva al dashboard principal
-    path('', views.dashboard, name='dashboard'), # Resuelve /usuarios/
-    
-    # DASHBOARDS ESPECÍFICOS
+    # Dashboards específicos
     path('cliente/', views.dashboard_cliente, name='dashboard_cliente'),
     path('administrador/', views.dashboard_administrador, name='dashboard_administrador'),
     path('tecnico/', views.dashboard_tecnico, name='dashboard_tecnico'),
@@ -65,9 +20,16 @@ urlpatterns = [
     # ----------------------------------------
     # 2. VISTAS DE CLIENTE
     # ----------------------------------------
+    # path('solicitar/') resuelve: /usuarios/solicitar/
     path('solicitar/', views.solicitar_inspeccion, name='solicitar_inspeccion'),
     path('solicitud/eliminar/<int:pk>/', views.eliminar_solicitud, name='eliminar_solicitud'),
 
+    # URL para ver el detalle de la orden
+    path('orden/<int:pk>/detalle/', views.detalle_orden, name='detalle_orden'),
+    
+    # URL para descargar el acta (Agregada para resolver el NoReverseMatch)
+    path('inspeccion/<int:pk>/descargar_acta/', views.descargar_acta, name='descargar_acta'),
+    
     # ----------------------------------------
     # 3. VISTAS DE ADMINISTRADOR
     # ----------------------------------------
@@ -77,14 +39,11 @@ urlpatterns = [
     # ----------------------------------------
     # 4. VISTAS DE TÉCNICO
     # ----------------------------------------
+    # path('tecnico/completar/') resuelve: /usuarios/tecnico/completar/
     path('tecnico/completar/<int:pk>/', views.completar_inspeccion, name='completar_inspeccion'),
     path('tecnico/perfil/', views.perfil_tecnico, name='perfil_tecnico'),
     
-    # 🚨 RUTA NOSOTROS (ELIMINADA: Ahora en OptifireAPT/urls.py)
-    # path('nosotros/', views.nosotros_view, name='nosotros'),
+    # Ruta alternativa para completar la inspección (se mantiene para compatibilidad)
+    path('tecnico/inspeccion/completar/<int:pk>/', views.completar_inspeccion, name='completar_inspeccion_alt'),
+
 ]
-
-
-    path('nosotros/', views.nosotros_view, name='nosotros'),
-]
-

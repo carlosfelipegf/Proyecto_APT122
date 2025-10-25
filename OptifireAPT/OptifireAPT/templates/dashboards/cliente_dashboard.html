@@ -1,30 +1,24 @@
-
 {% extends "base_dashboard.html" %} 
 {% load static %}
 
 {% block title %}Dashboard Cliente | Optifire{% endblock %}
 
-
 {# -------------------------------------------------------------------------------------------------- #}
-{# 1. BLOQUE DEL MENÚ LATERAL (SIDEBAR) - Inyecta las opciones específicas del Cliente #}
+{# 1. BLOQUE DEL MENÚ LATERAL (SIDEBAR) - Opciones específicas del Cliente #}
 {# -------------------------------------------------------------------------------------------------- #}
 {% block dashboard_menu %}
 <ul class="nav flex-column">
     {# Mis Solicitudes (Página Actual) #}
     <li class="nav-item">
         <a class="nav-link active" href="{% url 'dashboard_cliente' %}">
-            <i class="fas fa-list-alt"></i> Mis Solicitudes
+            <i class="fas fa-list-alt"></i> Mis Ordenes
         </a>
     </li>
     
-    {# Solicitar Inspeccion #}
+    {# Solicitar Inspeccion / Orden de Trabajo (Unificado) #}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'solicitar_inspeccion' %}">
-
-            <i class="fas fa-plus-circle"></i> Solicitar orden de trabajo
-
-            <i class="fas fa-plus-circle"></i> Solicitar Inspección
-
+            <i class="fas fa-plus-circle"></i> Generar Orden de trabajo
         </a>
     </li>
     
@@ -39,23 +33,21 @@
 
 
 {# -------------------------------------------------------------------------------------------------- #}
-{# 2. BLOQUE DE CONTENIDO PRINCIPAL - Inyecta el contenido de la tabla de solicitudes #}
+{# 2. BLOQUE DE CONTENIDO PRINCIPAL - Tabla de solicitudes #}
 {# -------------------------------------------------------------------------------------------------- #}
 {% block dashboard_content %}
 <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl mt-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Panel del Cliente</h1>
     <p class="text-lg text-gray-600 mb-4">
-        Bienvenido, <span class="font-semibold">{{ request.user.first_name|default:request.user.username|title }}</span>. Aquí puedes gestionar tus solicitudes de inspección.
+        Bienvenido, <span class="font-semibold">{{ request.user.first_name|default:request.user.username|title }}</span>. Aquí puedes gestionar tus Ordenes de trabajo.
     </p>
     
     <div class="mt-8">
 
-        <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Mis Ordenes de trabajo</h3>
+        {# Título Unificado #}
+        <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Mis Ordenes</h3>
 
-        <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Mis Solicitudes de Inspección</h3>
-
-
-        {# Mensajes de éxito/error (usando Bootstrap styles si los tienes) #}
+        {# Mensajes de éxito/error #}
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -92,10 +84,18 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ solicitud.fecha_solicitud|date:"d M Y" }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                {# ----------------------------------------------------------- #}
+                                {# LÓGICA DE ACCIONES CORREGIDA CON "Ver detalle" #}
+                                {# ----------------------------------------------------------- #}
                                 {% if solicitud.estado == 'PENDIENTE' %}
                                     <a href="{% url 'eliminar_solicitud' solicitud.pk %}" class="text-red-600 hover:text-red-900 ml-3" onclick="return confirm('¿Seguro que quieres eliminar esta solicitud pendiente?');">Eliminar</a>
+                                {% elif solicitud.estado != 'RECHAZADA' %}
+                                    {# Muestra Ver detalle si la solicitud fue aprobada/asignada/en curso/completada #}
+                                    <a href="{% url 'detalle_orden' solicitud.pk %}" class="btn btn-sm btn-outline-primary" title="Ver Detalles y Descargar Acta">
+                                        Ver detalle
+                                    </a>
                                 {% else %}
-                                    <span class="text-gray-400">Acción no disponible</span>
+                                    <span class="text-gray-400">Rechazada</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -104,18 +104,10 @@
                 </table>
             </div>
         {% else %}
-
-            <p class="text-gray-500">Aún no has realizado ninguna solicitud. <a href="{% url 'solicitar_inspeccion' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Haz clic aquí para solicitar una!</a></p>
-
+            {# Mensaje de no solicitudes unificado #}
             <p class="text-gray-500">Aún no has realizado ninguna solicitud. <a href="{% url 'solicitar_inspeccion' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Haz clic aquí para solicitar una inspección.</a></p>
-
         {% endif %}
     </div>
 
 </div>
-
 {% endblock dashboard_content %}
-
-
-{% endblock dashboard_content %}
-
