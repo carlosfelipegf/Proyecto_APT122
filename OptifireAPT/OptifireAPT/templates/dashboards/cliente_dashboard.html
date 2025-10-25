@@ -1,3 +1,4 @@
+
 {% extends "base_dashboard.html" %} 
 {% load static %}
 
@@ -19,7 +20,11 @@
     {# Solicitar Inspeccion #}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'solicitar_inspeccion' %}">
+
+            <i class="fas fa-plus-circle"></i> Solicitar orden de trabajo
+
             <i class="fas fa-plus-circle"></i> Solicitar Inspección
+
         </a>
     </li>
     
@@ -44,7 +49,11 @@
     </p>
     
     <div class="mt-8">
+
+        <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Mis Ordenes de trabajo</h3>
+
         <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Mis Solicitudes de Inspección</h3>
+
 
         {# Mensajes de éxito/error (usando Bootstrap styles si los tienes) #}
         {% if messages %}
@@ -95,9 +104,18 @@
                 </table>
             </div>
         {% else %}
+
+            <p class="text-gray-500">Aún no has realizado ninguna solicitud. <a href="{% url 'solicitar_inspeccion' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Haz clic aquí para solicitar una!</a></p>
+
             <p class="text-gray-500">Aún no has realizado ninguna solicitud. <a href="{% url 'solicitar_inspeccion' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Haz clic aquí para solicitar una inspección.</a></p>
+
         {% endif %}
     </div>
 
 </div>
+
 {% endblock dashboard_content %}
+
+
+{% endblock dashboard_content %}
+
