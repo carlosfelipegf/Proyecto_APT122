@@ -1,14 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Inicio | Optifire APT{% endblock %}
+{% block title %}Inicio | Optifire{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1 class="display-4">Bienvenido a Optifire APT 🚀</h1>
-    <p class="lead">Sistema de Automatización de Procesos para la gestión de inspecciones.</p>
-    <p class="mt-4">
-        Por favor, inicie sesión para acceder a su Dashboard.
-        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Iniciar Sesión</a>
-    </p>
-</div>
+<header class="hero-banner text-center">
+    <div class="container">
+        <h1 class="display-3 fw-bold text-dark">
+            <i class="fa-solid fa-screwdriver-wrench me-3 text-secondary"></i>
+        </h1>
+        <p class="lead text-muted">Automatización de Procesos para la eficiencia y seguridad en sus activos.</p>
+        
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-4 shadow-lg">
+            <i class="fa-solid fa-right-to-bracket me-2"></i> Iniciar Sesión en la Plataforma
+        </a>
+    </div>
+</header>
+
+<section class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="p-4 border rounded shadow-sm">
+                <i class="fa-solid fa-shield-halved fa-3x text-success mb-3"></i>
+                <h4 class="fw-bold">Seguridad Total</h4>
+                <p class="text-muted">Aseguramos que sus equipos cumplan con todas las normativas de seguridad vigentes.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 border rounded shadow-sm">
+                <i class="fa-solid fa-gears fa-3x text-info mb-3"></i>
+                <h4 class="fw-bold">Proceso Automatizado</h4>
+                <p class="text-muted">Digitalizamos sus inspecciones para reducir errores y tiempos muertos.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 border rounded shadow-sm">
+                <i class="fa-solid fa-user-check fa-3x text-primary mb-3"></i>
+                <h4 class="fw-bold">Técnicos Certificados</h4>
+                <p class="text-muted">Asignación eficiente a personal calificado con perfiles profesionales verificados.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

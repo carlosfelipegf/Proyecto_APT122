@@ -1,0 +1,106 @@
+<<<<<<< Updated upstream
+=======
+{% extends "base_dashboard.html" %} 
+{% load static %}
+
+{% block title %}Dashboard Cliente | Optifire{% endblock %}
+
+
+{# -------------------------------------------------------------------------------------------------- #}
+{# 1. BLOQUE DEL MENÚ LATERAL (SIDEBAR) - Inyecta las opciones específicas del Cliente #}
+{# -------------------------------------------------------------------------------------------------- #}
+{% block dashboard_menu %}
+<ul class="nav flex-column">
+    {# Mis Solicitudes (Página Actual) #}
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'dashboard_cliente' %}">
+            <i class="fas fa-list-alt"></i> Mis Solicitudes
+        </a>
+    </li>
+    
+    {# Solicitar Inspeccion #}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'solicitar_inspeccion' %}">
+            <i class="fas fa-plus-circle"></i> Solicitar orden de trabajo
+        </a>
+    </li>
+    
+    {# Salir (Deslogearse) #}
+    <li class="nav-item">
+        <a class="nav-link text-danger" href="{% url 'logout' %}">
+            <i class="fas fa-sign-out-alt"></i> Salir
+        </a>
+    </li>
+</ul>
+{% endblock dashboard_menu %}
+
+
+{# -------------------------------------------------------------------------------------------------- #}
+{# 2. BLOQUE DE CONTENIDO PRINCIPAL - Inyecta el contenido de la tabla de solicitudes #}
+{# -------------------------------------------------------------------------------------------------- #}
+{% block dashboard_content %}
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-xl mt-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Panel del Cliente</h1>
+    <p class="text-lg text-gray-600 mb-4">
+        Bienvenido, <span class="font-semibold">{{ request.user.first_name|default:request.user.username|title }}</span>. Aquí puedes gestionar tus solicitudes de inspección.
+    </p>
+    
+    <div class="mt-8">
+        <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Mis Ordenes de trabajo</h3>
+
+        {# Mensajes de éxito/error (usando Bootstrap styles si los tienes) #}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if solicitudes %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 table table-striped">
+                    <thead class="bg-indigo-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">ID</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">Dirección</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">Maquinaria</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">Estado</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">Fecha</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for solicitud in solicitudes %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ solicitud.id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ solicitud.direccion }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ solicitud.maquinaria|truncatechars:30 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if solicitud.estado == 'PENDIENTE' %} bg-warning text-dark
+                                    {% elif solicitud.estado == 'APROBADA' %} bg-primary text-white
+                                    {% elif solicitud.estado == 'RECHAZADA' %} bg-danger text-white
+                                    {% else %} bg-success text-white {% endif %}">
+                                    {{ solicitud.get_estado_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ solicitud.fecha_solicitud|date:"d M Y" }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                {% if solicitud.estado == 'PENDIENTE' %}
+                                    <a href="{% url 'eliminar_solicitud' solicitud.pk %}" class="text-red-600 hover:text-red-900 ml-3" onclick="return confirm('¿Seguro que quieres eliminar esta solicitud pendiente?');">Eliminar</a>
+                                {% else %}
+                                    <span class="text-gray-400">Acción no disponible</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-gray-500">Aún no has realizado ninguna solicitud. <a href="{% url 'solicitar_inspeccion' %}" class="text-indigo-600 hover:text-indigo-800 font-semibold">Haz clic aquí para solicitar una!</a></p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock dashboard_content %}
+>>>>>>> Stashed changes
