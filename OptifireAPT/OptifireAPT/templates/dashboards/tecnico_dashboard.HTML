@@ -1,0 +1,30 @@
+{% extends "base_dashboard.html" %}
+
+{% block dashboard_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link active" href="{% url 'dashboard_tecnico' %}"><i class="fas fa-hammer"></i> Mis Inspecciones</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'perfil_tecnico' %}"><i class="fas fa-user-circle"></i> Mi Perfil Profesional</a></li>
+    <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+</ul>
+{% endblock dashboard_menu %}
+
+{% block dashboard_content %}
+<h1>Bienvenido, {{ user.username|title }} (Técnico)</h1>
+<p class="alert alert-info">Tu función es completar las inspecciones que te han sido asignadas.</p>
+
+
+{% if inspecciones_asignadas %}
+    <h3>Inspecciones Asignadas</h3>
+    <ul>
+    {% for inspeccion in inspecciones_asignadas %}
+        <li>
+            {{ inspeccion.nombre_inspeccion }} - Estado: {{ inspeccion.estado }}
+            <a href="{% url 'completar_inspeccion' inspeccion.pk %}">Gestionar</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tienes inspecciones asignadas o en curso actualmente.</p>
+{% endif %}
+
+{% endblock dashboard_content %}

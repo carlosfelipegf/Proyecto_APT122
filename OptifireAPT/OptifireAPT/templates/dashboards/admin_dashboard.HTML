@@ -1,0 +1,54 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<h1 class="h3 mb-4 text-gray-800">Dashboard de Administrador</h1>
+
+{% if solicitudes_pendientes %}
+    <div class="card shadow mb-4 border-left-warning">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-warning">
+                <i class="fas fa-exclamation-triangle"></i> Solicitudes Pendientes de Aprobación ({{ solicitudes_pendientes|length }})
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Dirección</th>
+                            <th>Maquinaria</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for solicitud in solicitudes_pendientes %}
+                        <tr>
+                            <td>{{ solicitud.id }}</td>
+                            <td>{{ solicitud.nombre_cliente }} {{ solicitud.apellido_cliente|default:"" }}</td>
+                            <td>{{ solicitud.direccion }}</td>
+                            <td>{{ solicitud.maquinaria|truncatechars:50 }}</td>
+                            <td>{{ solicitud.fecha_solicitud|date:"d M Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'aprobar_solicitud' pk=solicitud.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-check-circle"></i> Revisar/Aprobar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">¡Todo al día!</h4>
+        <p>No hay solicitudes de inspección pendientes de revisión. 🎉</p>
+    </div>
+{% endif %}
+
+{% endblock dashboard_content %}

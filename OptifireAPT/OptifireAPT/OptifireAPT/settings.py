@@ -32,13 +32,16 @@ INSTALLED_APPS = [
     # Tus apps
     # 'otra_app',
     
-    # 🚨 AÑADE ESTA LÍNEA 🚨
+    # 🚨 SOLUCIÓN: LIBRERÍAS CRISPY FORMS 🚨
+    # 1. App base de Crispy Forms
     'crispy_forms', 
+    # 2. El paquete de templates específico para Bootstrap 5 (¡NECESARIO!)
+    'crispy_bootstrap5', 
 ]
 
 # Configuración para Django Crispy Forms (usando Bootstrap 5)
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5" # Esto funciona porque ahora tenemos 'crispy_bootstrap5' en INSTALLED_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,8 +58,8 @@ ROOT_URLCONF = 'OptifireAPT.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "Templates"],  # Aquí apuntas a tu carpeta Templates global
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / "Templates"],  # Aquí apunta a tu carpeta Templates global
+        'APP_DIRS': True, # <--- ¡CLAVE! Esto permite a Django buscar templates dentro de la carpeta 'templates' de cada INSTALLED_APP (incluyendo crispy_forms y crispy_bootstrap5).
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -84,7 +87,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# https://docs.docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -143,4 +146,4 @@ LOGIN_URL = 'login' # Usa el nombre de la ruta de login de Django (que viene en 
 LOGIN_REDIRECT_URL = '/usuarios/' # Redirige a la nueva vista del inspector/usuario normal
 
 # URL a donde redirigir después de cerrar sesión
-LOGOUT_REDIRECT_URL = '/' 
+LOGOUT_REDIRECT_URL = '/'

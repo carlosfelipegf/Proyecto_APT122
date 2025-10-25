@@ -1,18 +1,22 @@
-# OptifireAPT/OptifireAPT/urls.py (Versión Corregida)
-
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< Updated upstream
+
+
 # ASEGÚRATE DE NO IMPORTAR 'from usuarios import views' AQUÍ
+from usuarios.views import home # Importa la vista home
+
 
 urlpatterns = [
+    path('', home, name='home'),
     path('admin/', admin.site.urls),
+    # Las URLs de la app 'usuarios' se manejarán bajo la ruta 'usuarios/'
+    path('usuarios/', include('usuarios.urls')),
     
+
     # ✅ ESTA LÍNEA ES CLAVE y engloba todas las URLs de usuarios (incluyendo el dashboard)
     path('', include('usuarios.urls')), 
     
     # 🚫 Todas las rutas específicas (como 'nueva_inspeccion') deben estar en usuarios/urls.py
-=======
 
 # Importamos las vistas públicas directamente desde la app 'usuarios'
 # Esto permite que login/, logout/ y nosotros/ funcionen en la raíz del sitio.
@@ -45,5 +49,7 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')), 
     
     # Nota: El path('usuarios/', views.dashboard, name='dashboard') se mueve a usuarios/urls.py
->>>>>>> Stashed changes
+    # Si quieres que login/logout/dashboard estén en la raíz, puedes hacerlo así,
+    # pero es mejor mantenerlos dentro del 'usuarios.urls'
+
 ]
