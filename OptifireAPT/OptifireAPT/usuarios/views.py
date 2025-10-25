@@ -1,19 +1,14 @@
-# usuarios/views.py (CÓDIGO COMPLETO Y CORREGIDO)
-
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.utils import timezone
-from django.http import Http404
 from django.db import transaction
 
-# Importamos las dependencias necesarias
 from .forms import AprobacionInspeccionForm, SolicitudInspeccionForm 
 from django.contrib.auth.models import Group 
 
-# --- Importación de Modelos ---
 from .models import (
     Inspeccion, 
     TareaInspeccion, 
@@ -21,19 +16,17 @@ from .models import (
     TareaPlantilla,
     SolicitudInspeccion, 
     PerfilTecnico,
-    # Importamos las constantes de ROL que ahora son strings
     ROL_ADMINISTRADOR,
     ROL_TECNICO,
     ROL_CLIENTE
 )
 
-User = get_user_model() # Obtiene el modelo auth.User
+User = get_user_model() 
 
 # ==========================================================
 # 1. FUNCIONES DE PERMISOS
 # ==========================================================
 def get_user_role(user):
-    """Obtiene el nombre del rol del usuario a través de la pertenencia a un Grupo."""
     if user.is_anonymous:
         return None
     
@@ -148,8 +141,30 @@ def eliminar_solicitud(request, pk):
         solicitud.delete()
         messages.success(request, "Solicitud eliminada con éxito.")
     else:
-        messages.error(request, f"La solicitud no se puede eliminar. Estado actual: {solicitud.get_estado_display()}")
+        messages.error(request, f"La solicitud no se puede eliminar. Estado actual: {solicitud.get_estado_display()}.")
     return redirect('dashboard_cliente')
+
+@login_required
+@user_passes_test(is_cliente)
+def detalle_orden(request, pk):
+    # 1. Obtener la solicitud del cliente
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk, cliente=request.user)
+
+    # 2. Intentar obtener la Inspección asociada
+    try:
+        inspeccion = Inspeccion.objects.get(solicitud=solicitud)
+        tareas = TareaInspeccion.objects.filter(inspeccion=inspeccion)
+    except Inspeccion.DoesNotExist:
+        inspeccion = None
+        tareas = None
+
+    context = {
+        'solicitud': solicitud,
+        'inspeccion': inspeccion,
+        'tareas': tareas
+    }
+    
+    return render(request, 'dashboards/cliente/detalle_orden.html', context)
 
 
 # ==========================================================
@@ -173,16 +188,11 @@ def historial_solicitudes(request):
     return render(request, 'admin/historial_solicitudes.html', {'historial': historial})
 
 
-# 🚨 VISTA CORREGIDA: Se agregó la búsqueda de Solicitud y el 'return render' final. 🚨
 @login_required
 @user_passes_test(is_administrador)
 def aprobar_solicitud(request, pk):
-    # Obtener la solicitud o devolver 404
     solicitud = get_object_or_404(SolicitudInspeccion, pk=pk)
 
-    # ----------------------------------------------------
-    # 1. BLOQUE POST (Manejo de formularios de Aprobación/Rechazo)
-    # ----------------------------------------------------
     if request.method == 'POST':
         action = request.POST.get('action') 
         
@@ -191,7 +201,6 @@ def aprobar_solicitud(request, pk):
             plantilla_id = request.POST.get('plantilla')
             nombre_inspeccion = request.POST.get('nombre_inspeccion')
             
-            # Validación básica de campos requeridos
             if not all([tecnico_id, plantilla_id, nombre_inspeccion]):
                 messages.error(request, "Debe seleccionar un técnico, una plantilla y dar un nombre a la inspección.")
             else:
@@ -200,7 +209,6 @@ def aprobar_solicitud(request, pk):
                     plantilla = get_object_or_404(PlantillaInspeccion, pk=plantilla_id)
                     
                     with transaction.atomic():
-                        # A. Crear la Inspección
                         nueva_inspeccion = Inspeccion.objects.create(
                             solicitud=solicitud,
                             tecnico=tecnico,
@@ -209,19 +217,16 @@ def aprobar_solicitud(request, pk):
                             estado='ASIGNADA'
                         )
 
-                        # B. Copiar Tareas de la Plantilla a la Inspección
                         tareas_plantilla = TareaPlantilla.objects.filter(plantilla=plantilla)
                         
                         tareas_a_crear = [
                             TareaInspeccion(
                                 inspeccion=nueva_inspeccion,
-                                # Asumo que TareaInspeccion tiene campos para copiar la info de TareaPlantilla
                                 descripcion=tp.descripcion 
                             ) for tp in tareas_plantilla
                         ]
                         TareaInspeccion.objects.bulk_create(tareas_a_crear)
 
-                        # C. Marcar la Solicitud como APROBADA
                         solicitud.estado = 'APROBADA'
                         solicitud.save()
                         
@@ -242,35 +247,24 @@ def aprobar_solicitud(request, pk):
             else:
                 messages.error(request, "Debe proporcionar un motivo para el rechazo.")
     
-    # ----------------------------------------------------
-    # 2. BLOQUE GET (Renderizar la página)
-    # ----------------------------------------------------
-    
-    # Obtener listas necesarias para los desplegables del formulario
     tecnicos_list = User.objects.filter(groups__name=ROL_TECNICO).order_by('username')
     plantillas_list = PlantillaInspeccion.objects.all()
 
-    # Contexto para renderizar la página
     context = {
         'solicitud': solicitud,
         'tecnicos': tecnicos_list,
         'plantillas': plantillas_list,
-        # Si tienes un formulario de Django (AprobacionInspeccionForm), puedes inicializarlo aquí
-        # 'form': AprobacionInspeccionForm(initial={'nombre_inspeccion': f"Inspección {solicitud.maquinaria} - {solicitud.cliente.username}"})
     }
     
-    # 🚨 LÍNEA FINAL DE RETORNO PARA EL MÉTODO GET 🚨
     return render(request, 'dashboards/admin/gestionar_solicitud.html', context)
 
 
 # ==========================================================
 # 5. VISTAS DEL TÉCNICO
 # ==========================================================
-# usuarios/views.py (Función dashboard_tecnico - NO SE MODIFICA)
 @login_required
 @user_passes_test(is_tecnico)
 def dashboard_tecnico(request):
-    # Asume que el modelo Inspeccion tiene un campo 'tecnico' (ForeignKey a User)
     inspecciones_asignadas = Inspeccion.objects.filter(
         tecnico=request.user,
         estado__in=['ASIGNADA', 'EN_CURSO'] 
@@ -334,7 +328,9 @@ def completar_inspeccion(request, pk):
         'inspeccion': inspeccion,
         'formset': formset
     }
-    return render(request, 'tecnico/completar_inspeccion.html', context)
+    
+    # 🚨 LÍNEA CORREGIDA PARA LA RUTA DEL TEMPLATE 🚨
+    return render(request, 'dashboards/tecnico/completar_inspeccion.html', context)
 
 
 @login_required
@@ -353,3 +349,13 @@ def perfil_tecnico(request):
 
     context = {'perfil': perfil}
     return render(request, 'tecnico/perfil.html', context)
+
+@login_required
+def descargar_acta(request, pk):
+    """
+    Vista placeholder temporal para la generación y descarga del PDF.
+    """
+    # TODO: Implementar lógica de generación de PDF aquí.
+    messages.info(request, f"Función para descargar el Acta de Inspección #{pk} aún no implementada.")
+    # Redirigir al detalle de la orden hasta que la funcionalidad esté lista
+    return redirect('detalle_orden', pk=Inspeccion.objects.get(pk=pk).solicitud.pk)
