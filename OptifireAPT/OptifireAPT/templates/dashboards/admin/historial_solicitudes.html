@@ -1,0 +1,62 @@
+{% extends "base_dashboard.html" %}
+
+{% block dashboard_menu %}
+    {% include "includes/admin_menu.html" %}
+{% endblock dashboard_menu %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1 text-gray-800">Historial de solicitudes</h1>
+        <p class="text-muted mb-0">Consulta todas las solicitudes ya procesadas por el equipo.</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'dashboard_administrador' %}">
+        <i class="fas fa-arrow-left"></i> Volver al panel
+    </a>
+</div>
+
+{% if historial %}
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Maquinaria</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for solicitud in historial %}
+                        <tr>
+                            <td>{{ solicitud.id }}</td>
+                            <td>{{ solicitud.nombre_cliente }} {{ solicitud.apellido_cliente|default:"" }}</td>
+                            <td>{{ solicitud.direccion }}</td>
+                            <td>{{ solicitud.maquinaria|truncatechars:40 }}</td>
+                            <td>
+                                <span class="badge {% if solicitud.estado == 'APROBADA' %}bg-primary{% elif solicitud.estado == 'RECHAZADA' %}bg-danger{% else %}bg-success{% endif %}">
+                                    {{ solicitud.get_estado_display }}
+                                </span>
+                            </td>
+                            <td>{{ solicitud.fecha_solicitud|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-info" href="{% url 'detalle_orden' solicitud.pk %}">
+                                    Ver detalle
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-info">No existen registros en el historial todavía.</div>
+{% endif %}
+{% endblock dashboard_content %}
