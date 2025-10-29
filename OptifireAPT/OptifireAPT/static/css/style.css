@@ -67,3 +67,70 @@ body {
     color: #fff;
     background-color: var(--optifire-secondary);
 }
+
+/* --- Efecto Hover para Tarjetas de Servicio --- */
+
+/* 1. Define el estado base de la tarjeta */
+.border-optifire-secondary {
+    /* Esto es lo más importante: 
+      le dice al navegador que cualquier cambio en 'transform' o 'box-shadow' 
+      debe animarse suavemente durante 0.3 segundos.
+    */
+    transition: transform 0.3s ease-in-out, box-shadow 0.5s ease-in-out;
+  }
+  
+  /* 2. Define lo que pasa cuando pones el mouse encima (:hover) */
+  .border-optifire-secondary:hover {
+    /* 'translateY(-5px)' mueve la tarjeta 5px hacia arriba.
+      'scale(1.03)' la hace un 3% más grande.
+    */
+    transform: translateY(-5px) scale(1.08);
+    
+    /* Opcional: Hacemos la sombra un poco más grande 
+      para aumentar el efecto de "elevación".
+    */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+  }
+
+/* --- Alternativa: Efecto de Color --- */
+
+/* 1. Define la transición para el color */
+.border-optifire-secondary,
+.feature-icon {
+  transition: all 0.3s ease-in-out;
+  
+  /* Asumimos que tu color 'optifire-secondary' es un naranja.
+    (Ajusta este color si es necesario) 
+  */
+  color: #FD7E14; 
+}
+
+/* 2. Define el estado :hover */
+.border-optifire-secondary:hover {
+  /* Hacemos el borde más grueso y de un color más oscuro */
+  border-width: 2px;
+  border-color: #E65100 !important; /* Un naranja más oscuro */
+}
+/* 3. Cambiamos el color del ícono (que está DENTRO de la tarjeta) */
+.border-optifire-secondary:hover .feature-icon {
+  color: #E65100; /* El mismo naranja más oscuro */
+}
+/* --- Efecto Hover para Tarjetas de Características (Seguridad, Proceso, etc.) --- */
+
+/* 1. Define el estado base de la tarjeta */
+.col-md-4 .shadow-sm {
+    /* Le decimos que anime suavemente cualquier cambio 
+       en 'transform' y 'box-shadow'
+    */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  /* 2. Define lo que pasa cuando pones el mouse encima (:hover) */
+  .col-md-4 .shadow-sm:hover {
+    /* La movemos 5px hacia arriba y la agrandamos un 3% */
+    transform: translateY(-5px) scale(1.08);
+    
+    /* Opcional: Aumentamos la sombra para el efecto de "elevación" */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+  }
+
