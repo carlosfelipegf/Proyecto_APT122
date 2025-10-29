@@ -35,6 +35,10 @@ urlpatterns = [
     # ----------------------------------------
     path('admin/historial/', views.historial_solicitudes, name='historial_solicitudes'),
     path('admin/gestionar/<int:pk>/', views.aprobar_solicitud, name='aprobar_solicitud'), 
+    path('admin/usuarios/', views.admin_usuarios_list, name='admin_usuarios_list'),
+    path('admin/usuarios/nuevo/', views.admin_usuario_crear, name='admin_usuario_crear'),
+    path('admin/usuarios/<int:pk>/editar/', views.admin_usuario_editar, name='admin_usuario_editar'),
+    path('admin/usuarios/<int:pk>/eliminar/', views.admin_usuario_eliminar, name='admin_usuario_eliminar'),
     
     # ----------------------------------------
     # 4. VISTAS DE TÉCNICO

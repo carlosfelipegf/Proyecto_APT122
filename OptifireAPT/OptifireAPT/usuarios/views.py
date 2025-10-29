@@ -6,7 +6,12 @@ from django.forms import inlineformset_factory
 from django.utils import timezone
 from django.db import transaction
 
-from .forms import AprobacionInspeccionForm, SolicitudInspeccionForm 
+from .forms import (
+    AprobacionInspeccionForm,
+    SolicitudInspeccionForm,
+    UsuarioAdminCreateForm,
+    UsuarioAdminUpdateForm,
+)
 from django.contrib.auth.models import Group 
 
 from .models import (
@@ -22,6 +27,7 @@ from .models import (
 )
 
 User = get_user_model() 
+ROLE_NAMES = [ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE]
 
 # ==========================================================
 # 1. FUNCIONES DE PERMISOS
@@ -185,7 +191,113 @@ def dashboard_administrador(request):
 @user_passes_test(is_administrador)
 def historial_solicitudes(request):
     historial = SolicitudInspeccion.objects.exclude(estado='PENDIENTE').order_by('-fecha_solicitud')
-    return render(request, 'admin/historial_solicitudes.html', {'historial': historial})
+    return render(request, 'dashboards/admin/historial_solicitudes.html', {'historial': historial})
+
+
+@login_required
+@user_passes_test(is_administrador)
+def admin_usuarios_list(request):
+    usuarios = (
+        User.objects.all()
+        .order_by('username')
+        .prefetch_related('groups')
+    )
+    usuarios_info = []
+    for usuario in usuarios:
+        grupo = usuario.groups.filter(name__in=ROLE_NAMES).first()
+        usuarios_info.append({
+            'obj': usuario,
+            'rol': grupo.name if grupo else 'Sin rol',
+        })
+
+    context = {
+        'usuarios_info': usuarios_info,
+    }
+    return render(request, 'dashboards/admin/usuarios_list.html', context)
+
+
+@login_required
+@user_passes_test(is_administrador)
+def admin_usuario_crear(request):
+    if request.method == 'POST':
+        form = UsuarioAdminCreateForm(request.POST)
+        if form.is_valid():
+            nuevo_usuario = form.save()
+            messages.success(
+                request,
+                f"Usuario '{nuevo_usuario.username}' creado correctamente.",
+            )
+            return redirect('admin_usuarios_list')
+        messages.error(request, "Por favor corrige los errores señalados.")
+    else:
+        form = UsuarioAdminCreateForm()
+
+    return render(
+        request,
+        'dashboards/admin/usuario_form.html',
+        {
+            'form': form,
+            'es_creacion': True,
+        },
+    )
+
+
+@login_required
+@user_passes_test(is_administrador)
+def admin_usuario_editar(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+
+    if usuario.is_superuser and not request.user.is_superuser:
+        messages.error(request, "No tienes permisos para modificar este usuario.")
+        return redirect('admin_usuarios_list')
+
+    if request.method == 'POST':
+        form = UsuarioAdminUpdateForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Usuario actualizado correctamente.")
+            return redirect('admin_usuarios_list')
+        messages.error(request, "Por favor corrige los errores señalados.")
+    else:
+        form = UsuarioAdminUpdateForm(instance=usuario)
+
+    return render(
+        request,
+        'dashboards/admin/usuario_form.html',
+        {
+            'form': form,
+            'es_creacion': False,
+            'usuario_objetivo': usuario,
+        },
+    )
+
+
+@login_required
+@user_passes_test(is_administrador)
+def admin_usuario_eliminar(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+
+    if usuario == request.user:
+        messages.error(request, "No puedes eliminar tu propia cuenta.")
+        return redirect('admin_usuarios_list')
+
+    if usuario.is_superuser:
+        messages.error(request, "No es posible eliminar esta cuenta.")
+        return redirect('admin_usuarios_list')
+
+    if request.method == 'POST':
+        username = usuario.username
+        usuario.delete()
+        messages.success(request, f"Usuario '{username}' eliminado correctamente.")
+        return redirect('admin_usuarios_list')
+
+    return render(
+        request,
+        'dashboards/admin/usuario_confirm_delete.html',
+        {
+            'usuario_objetivo': usuario,
+        },
+    )
 
 
 @login_required

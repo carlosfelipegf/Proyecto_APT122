@@ -8,7 +8,11 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
+<<<<<<< HEAD
 set VIRTUAL_ENV=C:\Users\hemor\OneDrive\Escritorio\Documentos Duoc\Proyecto_APT122\OptifireAPT\OptifireAPT\APT
+=======
+set "VIRTUAL_ENV=C:\Users\guerr\OneDrive\Escritorio\GMD certero\Proyecto_APT122\OptifireAPT\OptifireAPT\APT"
+>>>>>>> aa29f0a4f6aa11714a5f6004bbf4de8f62857e08
 
 if not defined PROMPT set PROMPT=$P$G
 
@@ -24,8 +28,13 @@ set PYTHONHOME=
 if defined _OLD_VIRTUAL_PATH set PATH=%_OLD_VIRTUAL_PATH%
 if not defined _OLD_VIRTUAL_PATH set _OLD_VIRTUAL_PATH=%PATH%
 
+<<<<<<< HEAD
 set PATH=%VIRTUAL_ENV%\Scripts;%PATH%
 set VIRTUAL_ENV_PROMPT=APT
+=======
+set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%"
+set "VIRTUAL_ENV_PROMPT=APT"
+>>>>>>> aa29f0a4f6aa11714a5f6004bbf4de8f62857e08
 
 :END
 if defined _OLD_CODEPAGE (
