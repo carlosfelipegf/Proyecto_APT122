@@ -14,9 +14,13 @@ AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
 AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+ALLOWED_HOSTS = [
+    'inspecmax-d7caewfbe0ahg5h7.brazilsouth-01.azurewebsites.net',
+    'localhost', # Opcional, para pruebas locales
+]
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
