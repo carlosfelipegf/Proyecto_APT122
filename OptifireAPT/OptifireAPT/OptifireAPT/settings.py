@@ -14,14 +14,24 @@ AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
 AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = [
-    'inspecmax-d7caewfbe0ahg5h7.brazilsouth-01.azurewebsites.net',
-    'localhost', # Opcional, para pruebas locales
-]
+#DEBUG = False
+#ALLOWED_HOSTS = [
+#    'inspecmax-d7caewfbe0ahg5h7.brazilsouth-01.azurewebsites.net',
+#
+#     'localhost', # Opcional, para pruebas locales
+#]
 
 #ALLOWED_HOSTS = []
+WEBSITE_HOSTNAME = os.environ.get('WEBSITE_HOSTNAME')
 
+if WEBSITE_HOSTNAME:
+    # Si la variable existe, estamos en producción (Azure)
+    DEBUG = False
+    ALLOWED_HOSTS = [WEBSITE_HOSTNAME]
+else:
+    # Si la variable NO existe, estamos en local (tu PC)
+    DEBUG = True  # O False, como prefieras para local
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
