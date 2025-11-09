@@ -9,7 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sbd#^wxmisc$n+(j#s!xy7g_#r2(9d*73dx2n8vg30vz=59#lb'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
+AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,11 +34,12 @@ INSTALLED_APPS = [
     # Tus apps
     # 'otra_app',
     
-    # 🚨 SOLUCIÓN: LIBRERÍAS CRISPY FORMS 🚨
+    #  SOLUCIÓN: LIBRERÍAS CRISPY FORMS 
     # 1. App base de Crispy Forms
     'crispy_forms', 
     # 2. El paquete de templates específico para Bootstrap 5 (¡NECESARIO!)
-    'crispy_bootstrap5', 
+    'crispy_bootstrap5',
+    'storages',
 ]
 
 # Configuración para Django Crispy Forms (usando Bootstrap 5)
@@ -80,8 +83,15 @@ WSGI_APPLICATION = 'OptifireAPT.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':  os.environ.get('DB_NAME'),        
+        'USER':  os.environ.get('DB_USER'),      
+        'PASSWORD': os.environ.get('DB_PASSWORD'), 
+        'HOST': os.environ.get('DB_HOST'),      
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },          
     }
 }
 
