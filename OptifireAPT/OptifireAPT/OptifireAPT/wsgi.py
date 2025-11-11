@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OptifireAPT.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OptifireAPP.settings')
 
 application = get_wsgi_application()
