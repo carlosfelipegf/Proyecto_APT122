@@ -2,13 +2,13 @@
 
 from django.contrib import admin
 
-# Importamos explícitamente todos los modelos que existen en usuarios/models.py
-# El error está aquí, debe asegurar que todos los modelos se importan
+# Importamos solo los modelos existentes, reemplazando PerfilTecnico con Perfil
 from .models import (
     PlantillaInspeccion, 
     TareaPlantilla, 
     Inspeccion, 
-    PerfilTecnico, 
+    # 🔥 CORRECCIÓN: Reemplazar PerfilTecnico y ProfileBase por el modelo Perfil unificado
+    Perfil, 
     SolicitudInspeccion, 
     TareaInspeccion
 )
@@ -39,14 +39,26 @@ class InspeccionAdmin(admin.ModelAdmin):
     list_filter = ('estado', 'tecnico')
     search_fields = ('nombre_inspeccion', 'tecnico__username')
 
+
 # ==========================================================
-# 3. REGISTROS FALTANTES (Añadidos para estabilidad)
+# 3. PERFIL UNIFICADO Y OTROS REGISTROS
 # ==========================================================
+
+# 🔥 CORRECCIÓN: Registrar el modelo Perfil unificado en lugar de PerfilTecnico 🔥
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    # Esto facilita la administración de los perfiles
+    list_display = ('usuario', 'get_rol_display', 'cambio_contrasena_obligatorio')
+    search_fields = ('usuario__username', 'usuario__email', 'descripcion')
+    list_filter = ('cambio_contrasena_obligatorio',)
+    
+    # Campo calculado para mostrar el rol del usuario en la lista
+    def get_rol_display(self, obj):
+        return obj.get_role()
+    get_rol_display.short_description = 'Rol'
+
 
 # Registros simples de los modelos que no necesitan customización
-admin.site.register(PerfilTecnico)
+# 🔥 CORRECCIÓN: Eliminamos el registro de PerfilTecnico, ya está registrado Perfil
 admin.site.register(SolicitudInspeccion)
-
-# Si TareaInspeccion y TareaPlantilla no se manejan en inlines, deben registrarse
-# TareaPlantilla se maneja en PlantillaInspeccionAdmin, así que no se registra aquí
 admin.site.register(TareaInspeccion)

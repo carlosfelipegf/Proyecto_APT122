@@ -1,40 +1,35 @@
-# urls.py ARREGLADO
+# OptifireAPT/urls.py CORREGIDO
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-# 1. Importaciones de Vistas
-# Es mejor importar solo las vistas necesarias.
-# Agrupa todas las vistas públicas y de autenticación que irán en la raíz.
-from usuarios.views import (
-    home, 
-    login_view, 
-    logout_view, 
-    nosotros_view, 
-    dashboard 
-)
+# Elimina las importaciones directas de vistas (home, login_view, etc.)
+# ya que ahora serán gestionadas por el include de 'usuarios.urls'
+# from usuarios.views import (...)
 
-
-# 2. Definición de urlpatterns (SOLO UNA VEZ)
 urlpatterns = [
     # ----------------------------------------
-    # A. RUTAS PÚBLICAS Y DE AUTENTICACIÓN (RAÍZ)
-    # ----------------------------------------
-    path('', home, name='home'),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('nosotros/', nosotros_view, name='nosotros'), 
-    
-    # ----------------------------------------
-    # B. ADMIN DJANGO
+    # A. RUTAS DE ADMINISTRACIÓN (Django Admin)
     # ----------------------------------------
     path('admin/', admin.site.urls),
     
     # ----------------------------------------
-    # C. RUTAS INTERNAS DE LA APLICACIÓN (BAJO /usuarios/)
+    # B. RUTAS DE LA APLICACIÓN 'USUARIOS'
     # ----------------------------------------
-    # Esto manejará todas las URLs privadas y de gestión, como /usuarios/dashboard/, 
-    # /usuarios/nueva_inspeccion/, etc.
-    path('usuarios/', include('usuarios.urls')), 
+    # 🔥 INCLUIR TODAS las URLs de la app 'usuarios' en la raíz del proyecto.
+    # Esto incluye home, login, logout, password_reset, dashboard, etc.
+    # Esto asegura que {% url 'password_reset' %} encuentre la ruta correcta. 🔥
+    path('', include('usuarios.urls')), 
     
-] # <--- ¡Este corchete de cierre es crucial!
+    # Nota: Eliminamos las rutas duplicadas (login, logout, home, nosotros) que
+    # estaban definidas aquí, porque ahora están en usuarios/urls.py.
+]
+
+# Configuración para servir archivos MEDIA en desarrollo
+if settings.DEBUG:
+    # Debes importar settings y static arriba:
+    # from django.conf import settings
+    # from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

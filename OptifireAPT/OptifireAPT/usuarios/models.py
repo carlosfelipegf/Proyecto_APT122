@@ -1,40 +1,112 @@
-# usuarios/models.py (CÓDIGO COMPLETO SANETIZADO)
+# usuarios/models.py (CÓDIGO COMPLETO Y UNIFICADO)
 
 from django.db import models
-from django.conf import settings 
+from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group 
+from django.contrib.auth.models import Group
+
+# Importar post_save y receiver para crear/guardar el perfil automáticamente
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db.models import Avg, Count # Importar para cálculos
 
 # Obtenemos el modelo User estándar (auth.User)
 User = get_user_model()
 
 # -------------------------------------------------------------------
-# CONSTANTES DE ROL 
+# CONSTANTES DE ROL
 # -------------------------------------------------------------------
 ROL_ADMINISTRADOR = 'Administrador'
 ROL_TECNICO = 'Técnico'
 ROL_CLIENTE = 'Cliente'
 
 # -------------------------------------------------------------------
-# MODELO PERFIL TÉCNICO
+# 🔥 MODELO PERFIL UNIFICADO (Reemplaza ProfileBase y PerfilTecnico) 🔥
 # -------------------------------------------------------------------
-class PerfilTecnico(models.Model):
-    """Modelo para la información adicional del técnico (foto, descripción)."""
+class Perfil(models.Model):
+    """
+    Modelo de perfil unificado para todos los usuarios (Admin, Técnico, Cliente).
+    Contiene la bandera de primer logeo, foto, descripción, y campos de estadísticas.
+    """
     usuario = models.OneToOneField(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name='perfil_tecnico'
+        User,
+        on_delete=models.CASCADE,
+        related_name='perfil' # Cambiado a 'perfil' para fácil acceso: user.perfil
     )
-    foto = models.ImageField(upload_to='perfiles/fotos/', blank=True, null=True, verbose_name="Foto de Perfil")
-    descripcion_profesional = models.TextField(blank=True, null=True, verbose_name="Descripción Profesional")
+    
+    # Campo de seguridad (de la anterior ProfileBase)
+    cambio_contrasena_obligatorio = models.BooleanField(
+        default=True,
+        verbose_name="Cambio de Contraseña Obligatorio"
+    )
+    
+    # Campos Comunes (de la anterior PerfilTecnico)
+    foto = models.ImageField(
+        upload_to='perfiles/fotos/', 
+        blank=True, 
+        null=True, 
+        verbose_name="Foto de Perfil"
+    )
+    descripcion = models.TextField(
+        max_length=500, 
+        blank=True, 
+        null=True, 
+        verbose_name="Descripción Personal/Profesional"
+    )
 
+    # Campos Específicos (para uso futuro, aunque la lógica es por código)
+    # Ejemplo: calificacion_tecnico, calificacion_cliente, etc.
+    # Por ahora, los dejaremos simples ya que se calcularán en la vista si es necesario.
+    
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
 
+    # ---------------------------------------------
+    # Propiedad para obtener el rol del usuario de forma fácil
+    # ---------------------------------------------
+    def get_role(self):
+        """Retorna el rol principal del usuario."""
+        if self.usuario.groups.filter(name=ROL_ADMINISTRADOR).exists():
+            return ROL_ADMINISTRADOR
+        if self.usuario.groups.filter(name=ROL_TECNICO).exists():
+            return ROL_TECNICO
+        if self.usuario.groups.filter(name=ROL_CLIENTE).exists():
+            return ROL_CLIENTE
+        return 'Sin Rol'
+    
+    # ---------------------------------------------
+    # Propiedad para obtener estadísticas del cliente (Calculadas)
+    # ---------------------------------------------
+    @property
+    def total_ordenes_solicitadas(self):
+        """Retorna el número de solicitudes (órdenes) creadas por este usuario cliente."""
+        return self.usuario.solicitudes_enviadas.count()
+    
+    # Propiedad de ejemplo si tuvieras un modelo de calificación del cliente
+    @property
+    def calificacion_como_cliente(self):
+        """Retorna la calificación promedio recibida por el cliente (Requiere modelo de Calificación)."""
+        # SUPLIDO: Retorna un valor fijo o nulo si no tienes un modelo de calificación de cliente
+        return 4.5 # Valor de ejemplo. Cámbialo por tu lógica real.
+
+# -------------------------------------------------------------------
+# SIGNAL: Crear y Guardar Perfil automáticamente al crear un Usuario
+# -------------------------------------------------------------------
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """Crea un Perfil al crear el usuario o lo guarda si ya existe."""
+    if created:
+        Perfil.objects.create(usuario=instance)
+    # Asegura que el perfil se guarde cuando se guarda el usuario (útil para la bandera)
+    try:
+        instance.perfil.save()
+    except Perfil.DoesNotExist:
+        Perfil.objects.create(usuario=instance)
+
 
 # ==========================================================
-# 2. MODELOS DE PLANTILLA
+# 2. MODELOS DE PLANTILLA (SIN CAMBIOS)
 # ==========================================================
 
 class PlantillaInspeccion(models.Model):
@@ -67,7 +139,7 @@ class TareaPlantilla(models.Model):
 
 
 # ==========================================================
-# 3. MODELO DE SOLICITUD
+# 3. MODELO DE SOLICITUD (SIN CAMBIOS)
 # ==========================================================
 
 ESTADOS_SOLICITUD = [
@@ -108,7 +180,7 @@ class SolicitudInspeccion(models.Model):
 
 
 # ==========================================================
-# 4. MODELOS DE INSPECCIÓN
+# 4. MODELOS DE INSPECCIÓN (SIN CAMBIOS)
 # ==========================================================
 
 ESTADOS_INSPECCION = [

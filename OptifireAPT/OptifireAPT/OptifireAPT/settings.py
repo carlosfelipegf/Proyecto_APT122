@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from django.urls import reverse_lazy # Importar reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,28 +21,28 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # ... aplicaciones de Django
+    # Django Core Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'usuarios.apps.UsuariosConfig',
+    
+    # IMPORTANTE: Sites Framework para el dominio en emails de restablecimiento
+    'django.contrib.sites', 
     
     # Tus apps
-    # 'otra_app',
+    'usuarios.apps.UsuariosConfig',
     
-    # 🚨 SOLUCIÓN: LIBRERÍAS CRISPY FORMS 🚨
-    # 1. App base de Crispy Forms
+    # LIBRERÍAS EXTERNAS
     'crispy_forms', 
-    # 2. El paquete de templates específico para Bootstrap 5 (¡NECESARIO!)
     'crispy_bootstrap5', 
 ]
 
 # Configuración para Django Crispy Forms (usando Bootstrap 5)
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5" # Esto funciona porque ahora tenemos 'crispy_bootstrap5' en INSTALLED_APPS
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,8 +59,9 @@ ROOT_URLCONF = 'OptifireAPT.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "Templates"],  # Aquí apunta a tu carpeta Templates global
-        'APP_DIRS': True, # <--- ¡CLAVE! Esto permite a Django buscar templates dentro de la carpeta 'templates' de cada INSTALLED_APP (incluyendo crispy_forms y crispy_bootstrap5).
+        # Configuración correcta para buscar plantillas en la carpeta 'Templates' del proyecto
+        'DIRS': [BASE_DIR / "Templates"], 
+        'APP_DIRS': True, 
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -87,7 +89,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -108,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es' 
 
 TIME_ZONE = 'UTC'
 
@@ -120,13 +122,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-# settings.py
-
-# Esto ya deberías tener:
 STATIC_URL = '/static/'
 
-# Agrega esto:
-import os
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -136,14 +133,36 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# OptifireAPT/settings.py (Fragmento)
-
+# ==========================================================
+# CONFIGURACIÓN DE AUTENTICACIÓN
+# ==========================================================
 # URL a donde redirigir si se necesita iniciar sesión
-LOGIN_URL = 'login' # Usa el nombre de la ruta de login de Django (que viene en include('django.contrib.auth.urls'))
+LOGIN_URL = 'login' 
 
 # URL por defecto a donde redirigir después de iniciar sesión.
-# Django buscará esta URL después de un login exitoso.
-LOGIN_REDIRECT_URL = '/usuarios/' # Redirige a la nueva vista del inspector/usuario normal
+LOGIN_REDIRECT_URL = 'dashboard' 
 
 # URL a donde redirigir después de cerrar sesión
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'home' 
+
+
+# ==========================================================
+# 🔥 CONFIGURACIÓN DE CORREO Y SITIO PARA RECUPERACIÓN DE CONTRASEÑA 🔥
+# ==========================================================
+
+# ⚠️ PARA DESARROLLO (Muestra el correo en la consola/terminal)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+
+# 💡 ALTERNATIVA PARA PRUEBAS REALES (Usando un servicio como Gmail)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'tu_correo@gmail.com' 
+# EMAIL_HOST_PASSWORD = 'tu_contraseña_o_app_password' # Usa una App Password si usas Gmail
+
+# Site ID (usado en el email de recuperación para construir el enlace)
+SITE_ID = 1
+
+# URL de redirección después del cambio de contraseña exitoso
+PASSWORD_RESET_REDIRECT_URL = reverse_lazy('login')

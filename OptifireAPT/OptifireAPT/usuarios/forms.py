@@ -4,11 +4,14 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Div
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+# Importar formularios de autenticación
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordChangeForm 
 from django.contrib.auth.models import Group
+# Importar gettext_lazy para traducción (opcional, pero buena práctica)
+from django.utils.translation import gettext_lazy as _ 
 
 # Importaciones de modelos y constantes de roles (Grupos)
-from .models import SolicitudInspeccion, PlantillaInspeccion 
+from .models import SolicitudInspeccion, PlantillaInspeccion, Perfil 
 from .models import ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE
 
 User = get_user_model()
@@ -54,6 +57,45 @@ def assign_role_group(user, role_name):
     user.groups.add(group)
 
     user.is_staff = role_name == ROL_ADMINISTRADOR
+
+
+# ==========================================================
+# 0. Formulario de Contraseña
+# ==========================================================
+class CustomSetPasswordForm(SetPasswordForm):
+    """Formulario personalizado para la confirmación de restablecimiento de contraseña."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_password1'].label = _("Nueva Contraseña")
+        self.fields['new_password2'].label = _("Confirmación de Nueva Contraseña")
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            'new_password1',
+            'new_password2',
+        )
+
+# 🔥 Formulario para el cambio de contraseña obligatorio
+class RequiredPasswordChangeForm(PasswordChangeForm):
+    """
+    Formulario adaptado del PasswordChangeForm, pero para el flujo
+    de cambio de contraseña obligatorio (primer login).
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Redefinir etiquetas en español
+        self.fields['old_password'].label = _("Contraseña Antigua")
+        self.fields['new_password1'].label = _("Contraseña Nueva")
+        self.fields['new_password2'].label = _("Contraseña Nueva (confirmación)")
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        # El layout de Crispy asegura que los campos se muestren con el estilo Bootstrap
+        self.helper.layout = Layout(
+            'old_password',
+            'new_password1',
+            'new_password2',
+        )
 
 
 # ==========================================================
@@ -320,3 +362,53 @@ class UsuarioAdminUpdateForm(forms.ModelForm):
         role = getattr(self, '_pending_role', None)
         if role and self.instance.pk:
             assign_role_group(self.instance, role)
+
+
+# ==========================================================
+# 🔥 4. Formularios de Edición de Perfil para el usuario 🔥
+# ==========================================================
+
+class UsuarioEditForm(forms.ModelForm):
+    """
+    Formulario para que el usuario edite sus campos básicos (nombre, apellido, email).
+    """
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Aplicar clases de Bootstrap y etiquetas en español
+        for name in self.fields:
+            self.fields[name].widget.attrs.update({'class': 'form-control'})
+        
+        self.fields['first_name'].label = SPANISH_LABELS_COMMON['first_name']
+        self.fields['last_name'].label = SPANISH_LABELS_COMMON['last_name']
+        self.fields['email'].label = SPANISH_LABELS_COMMON['email']
+
+
+class PerfilEditForm(forms.ModelForm):
+    """
+    Formulario para editar la foto y descripción del Perfil unificado.
+    (Solo incluye campos que definitivamente existen en el modelo Perfil: foto y descripcion).
+    """
+    descripcion = forms.CharField(
+        label="Descripción Personal/Profesional",
+        widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+        required=False
+    )
+    
+    class Meta:
+        model = Perfil
+        # 🔥 SOLUCIÓN: Quitamos 'telefono' y 'direccion' para evitar FieldError.
+        fields = ['foto', 'descripcion'] 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        
+        # Aplicar clases de Bootstrap genéricas
+        for name in self.fields:
+             if not isinstance(self.fields[name].widget, forms.Textarea):
+                 self.fields[name].widget.attrs.update({'class': 'form-control'})

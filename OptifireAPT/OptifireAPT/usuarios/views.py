@@ -1,26 +1,32 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.utils import timezone
 from django.db import transaction
+from django.contrib.auth.models import Group 
 
+# 🔥 IMPORTACIONES CORREGIDAS (Añadir UsuarioEditForm y PerfilEditForm) 🔥
 from .forms import (
     AprobacionInspeccionForm,
     SolicitudInspeccionForm,
     UsuarioAdminCreateForm,
     UsuarioAdminUpdateForm,
+    UsuarioEditForm, 
+    PerfilEditForm, 
+    RequiredPasswordChangeForm
 )
-from django.contrib.auth.models import Group 
 
+# 🔥 ACTUALIZADO: Cambiar importaciones de modelos de perfil
 from .models import (
     Inspeccion, 
     TareaInspeccion, 
     PlantillaInspeccion, 
     TareaPlantilla,
     SolicitudInspeccion, 
-    PerfilTecnico,
+    Perfil,
     ROL_ADMINISTRADOR,
     ROL_TECNICO,
     ROL_CLIENTE
@@ -33,23 +39,25 @@ ROLE_NAMES = [ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE]
 # 1. FUNCIONES DE PERMISOS
 # ==========================================================
 def get_user_role(user):
+    """
+    Determina el rol principal del usuario basado en sus grupos.
+    Se apoya en la propiedad get_role() del modelo Perfil.
+    """
     if user.is_anonymous:
         return None
     
-    if user.groups.filter(name=ROL_ADMINISTRADOR).exists() or user.is_superuser:
-        return ROL_ADMINISTRADOR
-    elif user.groups.filter(name=ROL_TECNICO).exists():
-        return ROL_TECNICO
-    elif user.groups.filter(name=ROL_CLIENTE).exists():
-        return ROL_CLIENTE
-    
-    return ROL_CLIENTE 
+    # 🔥 USAR LA PROPIEDAD DEL MODELO PERFIL 🔥
+    try:
+        return user.perfil.get_role()
+    except Perfil.DoesNotExist:
+        # Esto no debería ocurrir si el signal funciona, pero es un fallback
+        return ROL_CLIENTE 
 
 def is_cliente(user):
     return user.is_authenticated and get_user_role(user) == ROL_CLIENTE
 
 def is_administrador(user):
-    return user.is_authenticated and get_user_role(user) == ROL_ADMINISTRADOR
+    return user.is_authenticated and (get_user_role(user) == ROL_ADMINISTRADOR or user.is_superuser)
 
 def is_tecnico(user):
     return user.is_authenticated and get_user_role(user) == ROL_TECNICO
@@ -70,16 +78,37 @@ def login_view(request):
     next_param = request.GET.get('next', '') 
 
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
+        email_o_username = request.POST.get('username', '').strip() 
         password = request.POST.get('password', '')
 
-        user = authenticate(request, username=username, password=password)
+        user = None
+        
+        # 1. Intentar encontrar al usuario por CORREO ELECTRÓNICO
+        try:
+            target_user = User.objects.get(email__iexact=email_o_username)
+            user = authenticate(request, username=target_user.username, password=password)
+            
+        except User.DoesNotExist:
+            # 2. Si no se encuentra por email, intentamos por USERNAME (fallback)
+            user = authenticate(request, username=email_o_username, password=password)
+            
         if user is not None:
             login(request, user)
+            
+            # 🔥 Lógica de la bandera usando el modelo Perfil 🔥
+            try:
+                perfil = user.perfil
+            except Perfil.DoesNotExist:
+                perfil, created = Perfil.objects.get_or_create(usuario=user)
+            
+            if perfil.cambio_contrasena_obligatorio:
+                messages.info(request, "Por seguridad, debes cambiar tu contraseña inicial.")
+                return redirect('change_password_required') 
+
             next_url = request.POST.get('next') or request.GET.get('next') or 'dashboard'
             return redirect(next_url)
         else:
-            messages.error(request, "Usuario o contraseña incorrecta")
+            messages.error(request, "Correo Electrónico o contraseña incorrecta.") 
 
     return render(request, "login.html", {"next": next_param})
 
@@ -91,10 +120,78 @@ def nosotros_view(request):
     return render(request, 'nosotros.html', {})
 
 # ==========================================================
+# CÓDIGO PARA EL CAMBIO DE CONTRASEÑA OBLIGATORIO
+# ==========================================================
+
+@login_required
+def change_password_required_view(request):
+    """
+    Vista para manejar el cambio de contraseña obligatorio.
+    """
+    user = request.user
+    
+    # 🔥 OBTENER EL PERFIL UNIFICADO 🔥
+    try:
+        perfil = user.perfil
+    except Perfil.DoesNotExist:
+        perfil, created = Perfil.objects.get_or_create(usuario=user)
+    
+    
+    # Si la contraseña ya fue cambiada Y no se accedió directamente a la URL 'change_password_required'
+    if not perfil.cambio_contrasena_obligatorio and 'required' not in request.path:
+        return redirect('dashboard') 
+    
+    
+    if request.method == 'POST':
+        # Usamos PasswordChangeForm para asegurar que la contraseña actual sea verificada
+        form = PasswordChangeForm(user, request.POST) 
+        
+        if form.is_valid():
+            new_user = form.save() 
+            update_session_auth_hash(request, new_user) 
+            
+            # Desactiva la bandera de obligatoriedad
+            if perfil.cambio_contrasena_obligatorio:
+                perfil.cambio_contrasena_obligatorio = False
+                perfil.save()
+            
+            messages.success(request, "Contraseña actualizada con éxito.")
+            
+            # Redirección por Rol 
+            role = get_user_role_display(new_user)
+            if role == ROL_CLIENTE:
+                return redirect('dashboard_cliente')
+            elif role == ROL_ADMINISTRADOR:
+                return redirect('dashboard_administrador')
+            elif role == ROL_TECNICO:
+                return redirect('dashboard_tecnico')
+            
+            return redirect('home')
+        
+        # Si el formulario NO es válido
+        messages.error(request, "Error al actualizar la contraseña. Por favor, verifica la contraseña actual y que las nuevas coincidan.")
+    
+    else:
+        form = PasswordChangeForm(user)
+
+    return render(request, 'auth/change_password_required.html', {'form': form, 'es_obligatorio': perfil.cambio_contrasena_obligatorio})
+
+
+# ==========================================================
 # 2. DASHBOARD PRINCIPAL (Redirige por Rol)
 # ==========================================================
 @login_required
 def dashboard(request):
+    # 🔥 Chequeo de la bandera usando el modelo Perfil 🔥
+    try:
+        perfil = request.user.perfil
+    except Perfil.DoesNotExist:
+        perfil, created = Perfil.objects.get_or_create(usuario=request.user)
+
+    if perfil.cambio_contrasena_obligatorio:
+        messages.warning(request, "Debes cambiar tu contraseña para continuar.")
+        return redirect('change_password_required')
+        
     role = get_user_role_display(request.user)
     
     if role == ROL_CLIENTE:
@@ -106,6 +203,57 @@ def dashboard(request):
     
     messages.warning(request, "Tu cuenta no tiene un rol asignado. Contacta al administrador.")
     return redirect('home')
+
+
+# ==========================================================
+# 🔥 2.1. VISTA UNIFICADA PARA EDITAR EL PERFIL (CORREGIDA) 🔥
+# ==========================================================
+@login_required
+def editar_perfil_view(request):
+    """
+    Permite a cualquier usuario autenticado editar la información básica (User) 
+    y la información adicional (Perfil) en una sola vista.
+    """
+    usuario_instance = request.user
+    # Obtener la instancia de Perfil a editar (debe existir gracias al signal)
+    perfil_instance, created = Perfil.objects.get_or_create(usuario=usuario_instance)
+    
+    # 🔥 LÓGICA DE GRUPOS MOVIDA A PYTHON (para el template) 🔥
+    group_names = request.user.groups.values_list('name', flat=True)
+    
+    if request.method == 'POST':
+        # Instanciar ambos formularios
+        user_form = UsuarioEditForm(request.POST, instance=usuario_instance)
+        perfil_form = PerfilEditForm(request.POST, request.FILES, instance=perfil_instance)
+        
+        if user_form.is_valid() and perfil_form.is_valid():
+            try:
+                with transaction.atomic():
+                    user_form.save()
+                    perfil_form.save()
+                    
+                messages.success(request, "Tu perfil ha sido actualizado con éxito.")
+                return redirect('editar_perfil') 
+                
+            except Exception as e:
+                messages.error(request, f"Hubo un error al guardar: {e}. Inténtalo de nuevo.")
+        else:
+            messages.error(request, "Hubo un error al actualizar el perfil. Por favor, revisa los datos.")
+            
+    else: # GET
+        user_form = UsuarioEditForm(instance=usuario_instance)
+        perfil_form = PerfilEditForm(instance=perfil_instance)
+        
+    context = {
+        'user_form': user_form,       # Para nombre, apellido, email
+        'perfil_form': perfil_form,   # Para foto, descripcion, telefono
+        'group_names': group_names,   # Para mostrar el rol en el template
+        'rol': get_user_role_display(request.user) # Rol legible
+    }
+    
+    # CORRECCIÓN APLICADA: Asegura la ruta de la plantilla si está en un subdirectorio.
+    return render(request, 'perfil/perfil_editar.html', context)
+
 
 # ==========================================================
 # 3. VISTAS DEL CLIENTE
@@ -153,10 +301,7 @@ def eliminar_solicitud(request, pk):
 @login_required
 @user_passes_test(is_cliente)
 def detalle_orden(request, pk):
-    # 1. Obtener la solicitud del cliente
     solicitud = get_object_or_404(SolicitudInspeccion, pk=pk, cliente=request.user)
-
-    # 2. Intentar obtener la Inspección asociada
     try:
         inspeccion = Inspeccion.objects.get(solicitud=solicitud)
         tareas = TareaInspeccion.objects.filter(inspeccion=inspeccion)
@@ -176,7 +321,6 @@ def detalle_orden(request, pk):
 # ==========================================================
 # 4. VISTAS DEL ADMINISTRADOR
 # ==========================================================
-
 @login_required
 @user_passes_test(is_administrador)
 def dashboard_administrador(request):
@@ -222,10 +366,14 @@ def admin_usuario_crear(request):
     if request.method == 'POST':
         form = UsuarioAdminCreateForm(request.POST)
         if form.is_valid():
+            # Crear el usuario (el signal creará el Perfil)
             nuevo_usuario = form.save()
+            
+            # El signal crea el Perfil automáticamente con cambio_contrasena_obligatorio=True.
+            
             messages.success(
                 request,
-                f"Usuario '{nuevo_usuario.username}' creado correctamente.",
+                f"Usuario '{nuevo_usuario.username}' creado correctamente. Deberá cambiar la contraseña en el primer inicio de sesión.",
             )
             return redirect('admin_usuarios_list')
         messages.error(request, "Por favor corrige los errores señalados.")
@@ -441,33 +589,38 @@ def completar_inspeccion(request, pk):
         'formset': formset
     }
     
-    # 🚨 LÍNEA CORREGIDA PARA LA RUTA DEL TEMPLATE 🚨
     return render(request, 'dashboards/tecnico/completar_inspeccion.html', context)
 
-
-@login_required
-@user_passes_test(is_tecnico)
-def perfil_tecnico(request):
-    perfil, created = PerfilTecnico.objects.get_or_create(usuario=request.user)
-    
-    if request.method == 'POST':
-        perfil.descripcion_profesional = request.POST.get('descripcion_profesional')
-        if request.FILES.get('foto'):
-            perfil.foto = request.FILES['foto']
-            
-        perfil.save()
-        messages.success(request, "Perfil profesional actualizado.")
-        return redirect('dashboard_tecnico')
-
-    context = {'perfil': perfil}
-    return render(request, 'tecnico/perfil.html', context)
 
 @login_required
 def descargar_acta(request, pk):
     """
     Vista placeholder temporal para la generación y descarga del PDF.
     """
-    # TODO: Implementar lógica de generación de PDF aquí.
-    messages.info(request, f"Función para descargar el Acta de Inspección #{pk} aún no implementada.")
-    # Redirigir al detalle de la orden hasta que la funcionalidad esté lista
-    return redirect('detalle_orden', pk=Inspeccion.objects.get(pk=pk).solicitud.pk)
+    try:
+        inspeccion = Inspeccion.objects.get(pk=pk)
+        
+        # Permisos mejorados: Técnico asignado, Admin, o Cliente solicitante
+        permiso = (
+            request.user == inspeccion.tecnico or 
+            is_administrador(request.user) or 
+            (inspeccion.solicitud and request.user == inspeccion.solicitud.cliente)
+        )
+        
+        if not permiso:
+            messages.error(request, "No tiene permisos para descargar este acta.")
+            return redirect('dashboard')
+            
+        # TODO: Implementar lógica de generación de PDF aquí (usando ReportLab, xhtml2pdf, etc.).
+        messages.info(request, f"Función para descargar el Acta de Inspección #{pk} aún no implementada. Redirigiendo a detalle.")
+        
+        # Redirigir al detalle de la orden hasta que la funcionalidad esté lista
+        if inspeccion.solicitud:
+            return redirect('detalle_orden', pk=inspeccion.solicitud.pk)
+        else:
+            # Fallback si la inspección no tiene una solicitud de origen (caso raro)
+            return redirect('dashboard')
+    
+    except Inspeccion.DoesNotExist:
+        messages.error(request, "Inspección no encontrada.")
+        return redirect('dashboard')

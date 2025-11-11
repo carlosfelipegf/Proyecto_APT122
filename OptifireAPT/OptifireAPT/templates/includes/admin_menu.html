@@ -2,23 +2,30 @@
     <ul class="nav flex-column">
         <li class="nav-item">
             <a class="nav-link active" href="{% url 'dashboard_administrador' %}">
-                Dashboard
+                <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
         </li>
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'editar_perfil' %}">
+                <i class="fas fa-user-circle"></i> Mi Perfil
+            </a>
+        </li>
+        
         <li class="nav-item">
             <a class="nav-link" href="{% url 'historial_solicitudes' %}">
-                Historial de Solicitudes
+                <i class="fas fa-clipboard-list"></i> Historial de Solicitudes
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_usuarios_list' %}">
-                Gestión de Usuarios
+                <i class="fas fa-users-cog"></i> Gestión de Usuarios
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-danger" href="{% url 'logout' %}">
-                Cerrar Sesión
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </a>
         </li>
-        </ul>
+    </ul>
 </nav>
