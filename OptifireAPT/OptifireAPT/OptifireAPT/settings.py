@@ -13,6 +13,35 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
 AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
 
+
+if AZURE_ACCOUNT_NAME:
+    # 1. Configuración de PRODUCCIÓN (Azure)
+
+    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+    # Configuración de Archivos Estáticos (CSS, JS)
+    AZURE_CONTAINER = 'static'
+    STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    STATICFILES_LOCATION = AZURE_CONTAINER
+    STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+
+    # Configuración de Archivos Media (Fotos de perfil)
+    AZURE_MEDIA_CONTAINER = 'media'
+    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    MEDIAFILES_LOCATION = AZURE_MEDIA_CONTAINER
+    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_MEDIA_CONTAINER}/'
+
+else:
+    # 2. Configuración LOCAL (tu PC)
+
+    STATIC_URL = '/static/'
+    STATIC_ROOT = BASE_DIR / 'staticfiles_production' # Carpeta para 'collectstatic' local
+    STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    ]
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media/'
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
 #ALLOWED_HOSTS = [
