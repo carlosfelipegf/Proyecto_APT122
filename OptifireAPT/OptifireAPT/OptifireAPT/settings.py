@@ -1,5 +1,5 @@
 from pathlib import Path
-import os
+import os  # <-- Asegúrate de que esto esté al principio
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,49 +8,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# --- CLAVES SECRETAS ---
+# Lee las claves desde las Variables de Entorno de Azure
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
 AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
 
 
-if AZURE_ACCOUNT_NAME:
-    # 1. Configuración de PRODUCCIÓN (Azure)
-
-    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-
-    # Configuración de Archivos Estáticos (CSS, JS)
-    AZURE_CONTAINER = 'static'
-    STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    STATICFILES_LOCATION = AZURE_CONTAINER
-    STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
-
-    # Configuración de Archivos Media (Fotos de perfil)
-    AZURE_MEDIA_CONTAINER = 'media'
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    MEDIAFILES_LOCATION = AZURE_MEDIA_CONTAINER
-    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_MEDIA_CONTAINER}/'
-
-else:
-    # 2. Configuración LOCAL (tu PC)
-
-    STATIC_URL = '/static/'
-    STATIC_ROOT = BASE_DIR / 'staticfiles_production' # Carpeta para 'collectstatic' local
-    STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    ]
-
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media/'
-# SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-#ALLOWED_HOSTS = [
-#    'inspecmax-d7caewfbe0ahg5h7.brazilsouth-01.azurewebsites.net',
-#
-#     'localhost', # Opcional, para pruebas locales
-#]
-
-#ALLOWED_HOSTS = []
+# --- Configuración Dinámica de DEBUG y HOST ---
+# Este bloque soluciona el Error 500
 WEBSITE_HOSTNAME = os.environ.get('WEBSITE_HOSTNAME')
 
 if WEBSITE_HOSTNAME:
@@ -59,8 +25,9 @@ if WEBSITE_HOSTNAME:
     ALLOWED_HOSTS = [WEBSITE_HOSTNAME]
 else:
     # Si la variable NO existe, estamos en local (tu PC)
-    DEBUG = True  # O False, como prefieras para local
+    DEBUG = True
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 # Application definition
 
@@ -82,12 +49,12 @@ INSTALLED_APPS = [
     'crispy_forms', 
     # 2. El paquete de templates específico para Bootstrap 5 (¡NECESARIO!)
     'crispy_bootstrap5',
-    'storages',
+    #'storages', # <-- Comentado por ahora, ¡correcto!
 ]
 
 # Configuración para Django Crispy Forms (usando Bootstrap 5)
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5" # Esto funciona porque ahora tenemos 'crispy_bootstrap5' en INSTALLED_APPS
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,8 +71,8 @@ ROOT_URLCONF = 'OptifireAPT.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "Templates"],  # Aquí apunta a tu carpeta Templates global
-        'APP_DIRS': True, # <--- ¡CLAVE! Esto permite a Django buscar templates dentro de la carpeta 'templates' de cada INSTALLED_APP (incluyendo crispy_forms y crispy_bootstrap5).
+        'DIRS': [BASE_DIR / "Templates"],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -128,9 +95,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME':  os.environ.get('DB_NAME'),        
-        'USER':  os.environ.get('DB_USER'),      
+        'USER':  os.environ.get('DB_USER'),        
         'PASSWORD': os.environ.get('DB_PASSWORD'), 
-        'HOST': os.environ.get('DB_HOST'),      
+        'HOST': os.environ.get('DB_HOST'),        
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
@@ -140,7 +107,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -170,19 +137,15 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-# settings.py
-
-# Esto ya deberías tener:
+# --- Configuración de Archivos Estáticos (Temporal) ---
+# Este es el bloque unificado y corregido
 STATIC_URL = '/static/'
-
-# Agrega esto:
-import os
+STATIC_ROOT = BASE_DIR / 'staticfiles_production' # Necesario para que 'collectstatic' funcione
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+# (Dejamos MEDIA_URL y MEDIA_ROOT fuera por ahora)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -192,11 +155,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # OptifireAPT/settings.py (Fragmento)
 
 # URL a donde redirigir si se necesita iniciar sesión
-LOGIN_URL = 'login' # Usa el nombre de la ruta de login de Django (que viene en include('django.contrib.auth.urls'))
+LOGIN_URL = 'login' 
 
 # URL por defecto a donde redirigir después de iniciar sesión.
-# Django buscará esta URL después de un login exitoso.
-LOGIN_REDIRECT_URL = '/usuarios/' # Redirige a la nueva vista del inspector/usuario normal
+LOGIN_REDIRECT_URL = '/usuarios/' 
 
 # URL a donde redirigir después de cerrar sesión
 LOGOUT_REDIRECT_URL = '/'
