@@ -38,7 +38,8 @@ body { display: flex; flex-direction: column; }
 }
 /* 2. Hacemos que la página en general sea transparente */
 body, .main-content { background-color: transparent !important; }
-/* 3. Bloques de texto principales */
+
+/* 3. Bloques de texto principales (Corregido en paso anterior) */
 .main-content > div:not(.card), .jumbotron-optifire { 
     background-color: rgba(0, 0, 0, 0.8) !important; 
     color: var(--optifire-light-text) !important; 
@@ -46,6 +47,10 @@ body, .main-content { background-color: transparent !important; }
     border: none !important; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
 }
+.main-content p, .main-content p * {
+    color: var(--optifire-light-text) !important;
+}
+
 
 /* 4. TARJETAS/BLOQUES DE CONTENIDO (Fondo Oscuro + Texto Claro) */
 .card, .hero-banner, .col-md-4 .shadow-sm { 
@@ -69,7 +74,7 @@ body, .main-content { background-color: transparent !important; }
 }
 
 
-/* 6. DASHBOARD: Sidebar y Contenido Principal (SOLUCIÓN DEFINITIVA) */
+/* 6. DASHBOARD: Sidebar y Contenido Principal */
 
 /* Sidebar: Fondo Oscuro y Título Blanco */
 .opciones-dashboard, .sidebar { 
@@ -84,7 +89,7 @@ body, .main-content { background-color: transparent !important; }
     color: var(--optifire-light-text) !important;
 }
 
-/* Enlaces del Sidebar (CRÍTICO: Letras y Enlaces Blancos) */
+/* Enlaces del Sidebar */
 .opciones-dashboard a, .sidebar a, .opciones-dashboard a *, .sidebar a * {
     color: var(--optifire-light-text) !important; 
 }
@@ -103,8 +108,8 @@ body, .main-content { background-color: transparent !important; }
 /* CRÍTICO: ESTILOS DE LA TABLA (GESTIÓN DE USUARIOS) */
 
 /* CORRECCIÓN 1: FUERZA EL FONDO OSCURO EN LA TABLA COMPLETA */
-.table, .table-striped, .table-bordered { 
-    background-color: rgba(33, 37, 41, 0.85) !important; 
+.table, .table-striped, .table-bordered, .table tbody, .table tbody tr { 
+    background-color: rgba(33, 37, 41, 0.85) !important; /* Gris oscuro para el cuerpo */
     border-collapse: collapse !important; 
 }
 
@@ -120,10 +125,12 @@ body, .main-content { background-color: transparent !important; }
     border-bottom: 2px solid var(--optifire-secondary) !important; 
 }
 
-/* Cuerpo de la tabla: Aseguramos el fondo oscuro */
-.table tbody tr {
-    background-color: transparent !important; /* Usamos el fondo oscuro de la tabla */
+/* ¡SOLUCIÓN FINAL DE ALTA ESPECIFICIDAD PARA LAS CELDAS! */
+.table tbody tr td, .table tbody tr td * {
+    background-color: transparent !important; /* Forzar el uso del fondo de la tabla (gris oscuro) */
+    color: var(--optifire-light-text) !important; /* Forzar el texto BLANCO */
 }
+
 
 /* 7. Restauración de los Alerts (¡Todo al día!) */
 .alert {
