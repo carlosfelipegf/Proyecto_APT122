@@ -1,0 +1,35 @@
+/*
+ * Archivo: animaciones.css
+ * Define la animación de fondo (fuego con degradados en movimiento).
+ */
+
+/* 1. Definición de la Animación (Movimiento del degradado) */
+@keyframes animar-fuego {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 0%; }
+}
+
+/* 2. Estilos del Contenedor de Fondo (.fondo-animado-fuego) */
+.fondo-animado-fuego {
+    position: fixed; /* CRÍTICO: Lo fija al viewport, independientemente del scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Cubre el 100% de la altura y anchura del viewport */
+    z-index: -1; /* CRÍTICO: Lo envía detrás de todo el contenido HTML */
+    
+    /* Degradado que define los colores del fuego */
+    background: linear-gradient(135deg, 
+        rgba(255, 69, 0, 0.75) 0%,      /* Rojo Oscuro/Naranja */
+        rgba(255, 140, 0, 0.65) 50%,     /* Naranja Brillante */
+        rgba(255, 215, 0, 0.55) 75%,     /* Amarillo Oro */
+        rgba(255, 0, 0, 0.45) 100%       /* Rojo Intenso */
+    );
+    
+    /* El tamaño es grande para que el movimiento sea sutil */
+    background-size: 400% 400%; 
+    
+    /* Aplica la animación */
+    animation: animar-fuego 30s ease infinite; 
+}

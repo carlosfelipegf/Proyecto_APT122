@@ -7,12 +7,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
+    <video autoplay muted loop id="video-fondo">
+        <source src="{% static 'video/flames_bg.mp4' %}" type="video/mp4">
+        Tu navegador no soporta el video de fondo.
+    </video>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-optifire shadow-sm">
       <div class="container">
         <a class="navbar-brand text-white fw-bold" href="/">
-            <i class="fa-solid fa-fire-extinguisher me-2"></i> Optifire   
+            <i class="fa-solid fa-fire-extinguisher me-2"></i> Optifire   
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>

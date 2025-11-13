@@ -1,136 +1,133 @@
-/* Definición de la paleta de colores de Optifire */
+/* ========================================================== */
+/* PALETA DE COLORES Y ESTILOS BASE DE OPTIFIRE (SOLUCIÓN DEFINITIVA) */
+/* ========================================================== */
+
+/* 1. Definición de la paleta de colores profesionales */
 :root {
-    --optifire-red: #8B0000; /* Rojo oscuro o borgoña, similar al logo de la web de referencia */
-    --optifire-secondary: #FF4500; /* Naranja rojizo para el énfasis */
-    --optifire-light: #f8f9fa; /* Color claro para fondos */
+    --optifire-red: #8B0000; 
+    --optifire-secondary: #FF4500; 
+    --optifire-light-text: #FFFFFF; /* Texto CLARO para contraste */
+    --optifire-dark-text: #212529; 
+    --optifire-dark-bg: #212529; 
+    --optifire-sidebar-bg: #343A40; 
+    --optifire-tech-blue: #17A2B8; 
+    --optifire-hover-shadow: rgba(255, 140, 0, 0.5); 
 }
 
-/* 1. Fondo de la barra de navegación y Footer */
-.bg-optifire {
-    background-color: var(--optifire-red) !important;
-}
-
-/* 2. Estilo de los botones principales (Login, Aprobar, etc.) */
+/* ... Estilos de estructura (no se modifican) ... */
+.bg-optifire { background-color: var(--optifire-red) !important; }
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
     background-color: var(--optifire-secondary) !important;
     border-color: var(--optifire-secondary) !important;
     color: white !important;
 }
+a { color: var(--optifire-secondary); }
+a:hover { color: var(--optifire-red); }
+.icon-lg, .card i { font-size: 3rem; color: var(--optifire-tech-blue) !important; }
 
-/* 3. Estilo de los botones secundarios (Rechazar, etc.) */
-.btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
-    background-color: var(--optifire-red) !important;
-    border-color: var(--optifire-red) !important;
-    color: white !important;
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+.main-content { flex: 1 0 auto; padding-top: 20px; padding-bottom: 20px; }
+
+/* 1. Video de Fondo (No tocar) */
+#video-fondo {
+    position: fixed !important; top: 0 !important; left: 0 !important;
+    width: 100% !important; height: 100% !important; 
+    object-fit: cover !important; z-index: -1 !important; 
+    filter: brightness(0.35) contrast(1.2) sepia(0.3); 
+}
+/* 2. Hacemos que la página en general sea transparente */
+body, .main-content { background-color: transparent !important; }
+/* 3. Bloques de texto principales */
+.main-content > div:not(.card), .jumbotron-optifire { 
+    background-color: rgba(0, 0, 0, 0.8) !important; 
+    color: var(--optifire-light-text) !important; 
+    padding: 40px; border-radius: 8px; margin-bottom: 20px;
+    border: none !important; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
 }
 
-/* 4. Banner de la página de inicio (index.html) */
-.hero-banner {
-    background-color: var(--optifire-light);
-    border-bottom: 5px solid var(--optifire-secondary);
-    padding: 60px 0;
-    margin-bottom: 40px;
-}
-
-/* 5. Asegurar que el contenido no se oculte detrás del navbar y que el footer esté abajo */
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-.main-content {
-    flex: 1 0 auto; /* Permite que el contenido ocupe el espacio restante */
-}
-
-/* 6. Estilos específicos para la gestión de solicitudes */
-.card-solicitud {
-    border-left: 5px solid var(--optifire-red);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-}
-
-.status-badge {
-    padding: .35em .65em;
-    font-size: .75em;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25rem;
-}
-
-.status-pendiente {
-    color: #fff;
-    background-color: var(--optifire-secondary);
-}
-
-/* --- Efecto Hover para Tarjetas de Servicio --- */
-
-/* 1. Define el estado base de la tarjeta */
-.border-optifire-secondary {
-    /* Esto es lo más importante: 
-      le dice al navegador que cualquier cambio en 'transform' o 'box-shadow' 
-      debe animarse suavemente durante 0.3 segundos.
-    */
-    transition: transform 0.3s ease-in-out, box-shadow 0.5s ease-in-out;
-  }
-  
-  /* 2. Define lo que pasa cuando pones el mouse encima (:hover) */
-  .border-optifire-secondary:hover {
-    /* 'translateY(-5px)' mueve la tarjeta 5px hacia arriba.
-      'scale(1.03)' la hace un 3% más grande.
-    */
-    transform: translateY(-5px) scale(1.08);
-    
-    /* Opcional: Hacemos la sombra un poco más grande 
-      para aumentar el efecto de "elevación".
-    */
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
-  }
-
-/* --- Alternativa: Efecto de Color --- */
-
-/* 1. Define la transición para el color */
-.border-optifire-secondary,
-.feature-icon {
-  transition: all 0.3s ease-in-out;
-  
-  /* Asumimos que tu color 'optifire-secondary' es un naranja.
-    (Ajusta este color si es necesario) 
-  */
-  color: #FD7E14; 
-}
-
-/* 2. Define el estado :hover */
-.border-optifire-secondary:hover {
-  /* Hacemos el borde más grueso y de un color más oscuro */
-  border-width: 2px;
-  border-color: #E65100 !important; /* Un naranja más oscuro */
-}
-/* 3. Cambiamos el color del ícono (que está DENTRO de la tarjeta) */
-.border-optifire-secondary:hover .feature-icon {
-  color: #E65100; /* El mismo naranja más oscuro */
-}
-/* --- Efecto Hover para Tarjetas de Características (Seguridad, Proceso, etc.) --- */
-
-/* 1. Define el estado base de la tarjeta */
-.col-md-4 .shadow-sm {
-    /* Le decimos que anime suavemente cualquier cambio 
-       en 'transform' y 'box-shadow'
-    */
+/* 4. TARJETAS/BLOQUES DE CONTENIDO (Fondo Oscuro + Texto Claro) */
+.card, .hero-banner, .col-md-4 .shadow-sm { 
+    background-color: rgba(33, 37, 41, 0.95) !important; 
+    color: var(--optifire-light-text) !important; 
+    border: 1px solid var(--optifire-secondary) !important; 
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5) !important; 
+    border-radius: 0.375rem !important;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
-  
-  /* 2. Define lo que pasa cuando pones el mouse encima (:hover) */
-  .col-md-4 .shadow-sm:hover {
-    /* La movemos 5px hacia arriba y la agrandamos un 3% */
-    transform: translateY(-5px) scale(1.08);
-    
-    /* Opcional: Aumentamos la sombra para el efecto de "elevación" */
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
-  }
+}
+.card *, .hero-banner *, .col-md-4 .shadow-sm * {
+    color: var(--optifire-light-text) !important;
+}
+.card i, .hero-banner i, .col-md-4 .shadow-sm i {
+    color: var(--optifire-tech-blue) !important; 
+}
+/* 5. EFECTO HOVER EN TARJETAS */
+.card:hover, .hero-banner:hover, .col-md-4 .shadow-sm:hover {
+    transform: translateY(-5px) scale(1.02); 
+    box-shadow: 0 1rem 3rem var(--optifire-hover-shadow) !important;
+}
 
+
+/* 6. DASHBOARD: Sidebar y Contenido Principal (SOLUCIÓN DEFINITIVA) */
+
+/* Sidebar: Fondo Oscuro y Título Blanco */
+.opciones-dashboard, .sidebar { 
+    background-color: var(--optifire-sidebar-bg) !important; 
+    border-right: 2px solid var(--optifire-secondary) !important; 
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); 
+    min-height: calc(100vh - 100px); 
+    padding: 15px;
+}
+.opciones-dashboard h1, .opciones-dashboard h2, .opciones-dashboard h3, 
+.sidebar h1, .sidebar h2, .sidebar h3 {
+    color: var(--optifire-light-text) !important;
+}
+
+/* Enlaces del Sidebar (CRÍTICO: Letras y Enlaces Blancos) */
+.opciones-dashboard a, .sidebar a, .opciones-dashboard a *, .sidebar a * {
+    color: var(--optifire-light-text) !important; 
+}
+.opciones-dashboard a:hover *, .sidebar a:hover * {
+    color: var(--optifire-secondary) !important;
+}
+.opciones-dashboard i, .sidebar i {
+    color: var(--optifire-tech-blue) !important; 
+}
+
+/* Contenido Principal del Dashboard */
+.dashboard-content-area, .container-fluid { 
+    color: var(--optifire-light-text) !important; 
+}
+
+/* CRÍTICO: ESTILOS DE LA TABLA (GESTIÓN DE USUARIOS) */
+
+/* CORRECCIÓN 1: FUERZA EL FONDO OSCURO EN LA TABLA COMPLETA */
+.table, .table-striped, .table-bordered { 
+    background-color: rgba(33, 37, 41, 0.85) !important; 
+    border-collapse: collapse !important; 
+}
+
+/* CORRECCIÓN 2: FUERZA EL TEXTO BLANCO EN TODAS LAS CELDAS Y CABECERAS */
+.table, .table th, .table thead th, .table td, .table * {
+    color: var(--optifire-light-text) !important; /* TODO EL TEXTO DEBE SER BLANCO */
+    border-color: rgba(255, 255, 255, 0.1) !important; /* Bordes de filas */
+}
+
+/* Cabecera: Usa un gris más oscuro y borde naranja */
+.table thead th {
+    background-color: var(--optifire-dark-bg) !important; 
+    border-bottom: 2px solid var(--optifire-secondary) !important; 
+}
+
+/* Cuerpo de la tabla: Aseguramos el fondo oscuro */
+.table tbody tr {
+    background-color: transparent !important; /* Usamos el fondo oscuro de la tabla */
+}
+
+/* 7. Restauración de los Alerts (¡Todo al día!) */
+.alert {
+    background-color: #1a531a !important; 
+    border: 1px solid #3c8f3c !important;
+    color: #ccffcc !important; 
+}
