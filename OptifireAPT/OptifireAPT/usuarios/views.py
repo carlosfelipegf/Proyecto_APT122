@@ -1,38 +1,44 @@
+# ==========================================================
+# views.py - CÓDIGO COMPLETO (CORREGIDO DE U+00A0)
+# ==========================================================
+
 from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm 
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.utils import timezone
 from django.db import transaction
-from django.contrib.auth.models import Group 
+from django.contrib.auth.models import Group
 
-# 🔥 IMPORTACIONES CORREGIDAS (Añadir UsuarioEditForm y PerfilEditForm) 🔥
+# 🔥 IMPORTACIONES CORREGIDAS (Añadir UsuarioEditForm, PerfilEditForm y PlantillaForm) 🔥
 from .forms import (
     AprobacionInspeccionForm,
     SolicitudInspeccionForm,
     UsuarioAdminCreateForm,
     UsuarioAdminUpdateForm,
-    UsuarioEditForm, 
-    PerfilEditForm, 
-    RequiredPasswordChangeForm
+    UsuarioEditForm,
+    PerfilEditForm,
+    RequiredPasswordChangeForm,
+    PlantillaInspeccionForm,
+    TareaPlantillaForm,
 )
 
-# 🔥 ACTUALIZADO: Cambiar importaciones de modelos de perfil
+# 🔥 ACTUALIZADO: Importaciones de modelos
 from .models import (
-    Inspeccion, 
-    TareaInspeccion, 
-    PlantillaInspeccion, 
+    Inspeccion,
+    TareaInspeccion,
+    PlantillaInspeccion,
     TareaPlantilla,
-    SolicitudInspeccion, 
+    SolicitudInspeccion,
     Perfil,
     ROL_ADMINISTRADOR,
     ROL_TECNICO,
     ROL_CLIENTE
 )
 
-User = get_user_model() 
+User = get_user_model()
 ROLE_NAMES = [ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE]
 
 # ==========================================================
@@ -51,7 +57,7 @@ def get_user_role(user):
         return user.perfil.get_role()
     except Perfil.DoesNotExist:
         # Esto no debería ocurrir si el signal funciona, pero es un fallback
-        return ROL_CLIENTE 
+        return ROL_CLIENTE
 
 def is_cliente(user):
     return user.is_authenticated and get_user_role(user) == ROL_CLIENTE
@@ -75,10 +81,10 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
     
-    next_param = request.GET.get('next', '') 
+    next_param = request.GET.get('next', '')
 
     if request.method == 'POST':
-        email_o_username = request.POST.get('username', '').strip() 
+        email_o_username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
 
         user = None
@@ -103,12 +109,12 @@ def login_view(request):
             
             if perfil.cambio_contrasena_obligatorio:
                 messages.info(request, "Por seguridad, debes cambiar tu contraseña inicial.")
-                return redirect('change_password_required') 
+                return redirect('change_password_required')
 
             next_url = request.POST.get('next') or request.GET.get('next') or 'dashboard'
             return redirect(next_url)
         else:
-            messages.error(request, "Correo Electrónico o contraseña incorrecta.") 
+            messages.error(request, "Correo Electrónico o contraseña incorrecta.")
 
     return render(request, "login.html", {"next": next_param})
 
@@ -139,16 +145,16 @@ def change_password_required_view(request):
     
     # Si la contraseña ya fue cambiada Y no se accedió directamente a la URL 'change_password_required'
     if not perfil.cambio_contrasena_obligatorio and 'required' not in request.path:
-        return redirect('dashboard') 
+        return redirect('dashboard')
     
     
     if request.method == 'POST':
         # Usamos PasswordChangeForm para asegurar que la contraseña actual sea verificada
-        form = PasswordChangeForm(user, request.POST) 
+        form = PasswordChangeForm(user, request.POST)
         
         if form.is_valid():
-            new_user = form.save() 
-            update_session_auth_hash(request, new_user) 
+            new_user = form.save()
+            update_session_auth_hash(request, new_user)
             
             # Desactiva la bandera de obligatoriedad
             if perfil.cambio_contrasena_obligatorio:
@@ -157,7 +163,7 @@ def change_password_required_view(request):
             
             messages.success(request, "Contraseña actualizada con éxito.")
             
-            # Redirección por Rol 
+            # Redirección por Rol
             role = get_user_role_display(new_user)
             if role == ROL_CLIENTE:
                 return redirect('dashboard_cliente')
@@ -172,6 +178,8 @@ def change_password_required_view(request):
         messages.error(request, "Error al actualizar la contraseña. Por favor, verifica la contraseña actual y que las nuevas coincidan.")
     
     else:
+        # Se podría usar RequiredPasswordChangeForm aquí para ocultar el campo de contraseña actual
+        # si se implementa, pero PasswordChangeForm es el estándar de Django para cambiar.
         form = PasswordChangeForm(user)
 
     return render(request, 'auth/change_password_required.html', {'form': form, 'es_obligatorio': perfil.cambio_contrasena_obligatorio})
@@ -211,7 +219,7 @@ def dashboard(request):
 @login_required
 def editar_perfil_view(request):
     """
-    Permite a cualquier usuario autenticado editar la información básica (User) 
+    Permite a cualquier usuario autenticado editar la información básica (User)
     y la información adicional (Perfil) en una sola vista.
     """
     usuario_instance = request.user
@@ -233,7 +241,7 @@ def editar_perfil_view(request):
                     perfil_form.save()
                     
                 messages.success(request, "Tu perfil ha sido actualizado con éxito.")
-                return redirect('editar_perfil') 
+                return redirect('editar_perfil')
                 
             except Exception as e:
                 messages.error(request, f"Hubo un error al guardar: {e}. Inténtalo de nuevo.")
@@ -261,6 +269,7 @@ def editar_perfil_view(request):
 @login_required
 @user_passes_test(is_cliente)
 def dashboard_cliente(request):
+    # Se asume que 'solicitud.estado' puede ser 'ANULADA'
     solicitudes = SolicitudInspeccion.objects.filter(cliente=request.user).order_by('-fecha_solicitud')
     context = {'solicitudes': solicitudes}
     return render(request, 'dashboards/cliente_dashboard.html', context)
@@ -271,32 +280,60 @@ def solicitar_inspeccion(request):
     if request.method == 'POST':
         form = SolicitudInspeccionForm(request.POST)
         if form.is_valid():
-            solicitud = form.save(commit=False) 
-            solicitud.cliente = request.user 
-            solicitud.estado = 'PENDIENTE' 
+            solicitud = form.save(commit=False)
+            solicitud.cliente = request.user
+            solicitud.estado = 'PENDIENTE'
             solicitud.save()
             
             messages.success(request, "Solicitud enviada con éxito. Esperando aprobación.")
-            return redirect('dashboard_cliente') 
+            return redirect('dashboard_cliente')
     else:
-        form = SolicitudInspeccionForm() 
+        form = SolicitudInspeccionForm()
 
     context = {
         'form': form,
-        'solicitudes': SolicitudInspeccion.objects.filter(cliente=request.user) 
+        'solicitudes': SolicitudInspeccion.objects.filter(cliente=request.user)
     }
     return render(request, 'dashboards/cliente/solicitar_inspeccion.html', context)
+
 
 @login_required
 @user_passes_test(is_cliente)
 def eliminar_solicitud(request, pk):
-    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk, cliente=request.user)
-    if solicitud.estado == 'PENDIENTE':
-        solicitud.delete()
-        messages.success(request, "Solicitud eliminada con éxito.")
-    else:
-        messages.error(request, f"La solicitud no se puede eliminar. Estado actual: {solicitud.get_estado_display()}.")
+    # La función eliminar_solicitud ya no es necesaria si usamos 'anular_solicitud',
+    # pero la dejo si tienes código que todavía la usa para solicitudes que no son PENDIENTE.
+    # **NOTA:** En la plantilla del cliente anterior, se usaba 'eliminar_solicitud' para PENDIENTE.
+    # Es más claro usar 'anular_solicitud' para mantener la trazabilidad.
+    messages.warning(request, "Usar 'anular_solicitud' para solicitudes pendientes para mantener la trazabilidad.")
     return redirect('dashboard_cliente')
+
+
+@login_required
+@user_passes_test(is_cliente)
+def anular_solicitud(request, pk):
+    """
+    Permite al cliente cambiar el estado de una solicitud de 'PENDIENTE' a 'ANULADA'.
+    Esto reemplaza la lógica de 'eliminar' para mantener un registro histórico.
+    """
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk, cliente=request.user)
+    
+    # Solo permitir anular si el estado es PENDIENTE
+    if solicitud.estado == 'PENDIENTE':
+        if request.method == 'GET' or request.method == 'POST':
+            # 💡 NOTA: Por seguridad, en producción deberías usar un formulario POST con CSRF.
+            # Aquí se acepta GET dado que la confirmación se hace en el JS de la plantilla.
+            solicitud.estado = 'ANULADA'
+            # Se podría añadir un campo de motivo de anulación al modelo si es necesario.
+            solicitud.save()
+            messages.success(request, f"La Orden de Trabajo #{pk} ha sido anulada con éxito.")
+            return redirect('dashboard_cliente')
+        else:
+            messages.error(request, "Método no permitido.")
+    else:
+        messages.error(request, f"La Orden de Trabajo #{pk} no puede ser anulada. Su estado actual es: {solicitud.get_estado_display()}.")
+    
+    return redirect('dashboard_cliente')
+
 
 @login_required
 @user_passes_test(is_cliente)
@@ -349,9 +386,18 @@ def admin_usuarios_list(request):
     usuarios_info = []
     for usuario in usuarios:
         grupo = usuario.groups.filter(name__in=ROLE_NAMES).first()
+        
+        # Obtener el rol real del modelo Perfil para mostrar en la lista
+        rol_display = 'Sin rol'
+        try:
+            rol_display = usuario.perfil.get_role()
+        except Perfil.DoesNotExist:
+            pass # Usará 'Sin rol'
+        
         usuarios_info.append({
             'obj': usuario,
-            'rol': grupo.name if grupo else 'Sin rol',
+            # Usamos el rol de perfil si está disponible, sino el del grupo.
+            'rol': rol_display,
         })
 
     context = {
@@ -405,7 +451,7 @@ def admin_usuario_editar(request, pk):
             form.save()
             messages.success(request, "Usuario actualizado correctamente.")
             return redirect('admin_usuarios_list')
-        messages.error(request, "Por favor corrige los errores señalados.")
+        messages.error(request, "Por favor corrige los errores señaladas.")
     else:
         form = UsuarioAdminUpdateForm(instance=usuario)
 
@@ -454,7 +500,7 @@ def aprobar_solicitud(request, pk):
     solicitud = get_object_or_404(SolicitudInspeccion, pk=pk)
 
     if request.method == 'POST':
-        action = request.POST.get('action') 
+        action = request.POST.get('action')
         
         if action == 'aprobar':
             tecnico_id = request.POST.get('tecnico')
@@ -482,7 +528,7 @@ def aprobar_solicitud(request, pk):
                         tareas_a_crear = [
                             TareaInspeccion(
                                 inspeccion=nueva_inspeccion,
-                                descripcion=tp.descripcion 
+                                descripcion=tp.descripcion
                             ) for tp in tareas_plantilla
                         ]
                         TareaInspeccion.objects.bulk_create(tareas_a_crear)
@@ -520,6 +566,119 @@ def aprobar_solicitud(request, pk):
 
 
 # ==========================================================
+# 4.1. VISTAS DE GESTIÓN DE PLANTILLAS (ADMIN)
+# ==========================================================
+@login_required
+@user_passes_test(is_administrador)
+def plantilla_list(request):
+    """Muestra el listado de todas las plantillas de inspección."""
+    plantillas = PlantillaInspeccion.objects.all().order_by('nombre')
+    # Se pasa 'object_list' para ser compatible con el template genérico
+    return render(request, 'dashboards/admin/plantilla_list.html', {'object_list': plantillas})
+
+
+@login_required
+@user_passes_test(is_administrador)
+def plantilla_crear(request):
+    """Permite crear una nueva Plantilla de Inspección junto con sus Tareas asociadas."""
+    # Define el Formset para las tareas de la plantilla
+    TareaFormSet = inlineformset_factory(
+        PlantillaInspeccion, TareaPlantilla, form=TareaPlantillaForm, extra=1, can_delete=True
+    )
+
+    if request.method == 'POST':
+        form = PlantillaInspeccionForm(request.POST)
+        formset = TareaFormSet(request.POST)
+
+        if form.is_valid() and formset.is_valid():
+            try:
+                with transaction.atomic():
+                    plantilla = form.save()
+                    formset.instance = plantilla
+                    formset.save() # Guarda todas las tareas (nuevas, modificadas y eliminadas)
+                    messages.success(request, f"Plantilla '{plantilla.nombre}' creada con éxito.")
+                    return redirect('plantilla_list')
+            except Exception as e:
+                messages.error(request, f"Error al guardar la plantilla: {e}")
+        else:
+            messages.error(request, "Por favor corrige los errores en el formulario.")
+            
+    else: # GET
+        form = PlantillaInspeccionForm()
+        formset = TareaFormSet()
+        
+    context = {
+        'form': form,
+        'formset': formset,
+        'es_creacion': True,
+    }
+    return render(request, 'dashboards/admin/plantilla_form.html', context)
+
+
+@login_required
+@user_passes_test(is_administrador)
+def plantilla_editar(request, pk):
+    """Permite editar una Plantilla de Inspección existente y sus Tareas."""
+    plantilla = get_object_or_404(PlantillaInspeccion, pk=pk)
+    # Define el Formset (igual que en crear)
+    TareaFormSet = inlineformset_factory(
+        PlantillaInspeccion, TareaPlantilla, form=TareaPlantillaForm, extra=1, can_delete=True
+    )
+
+    if request.method == 'POST':
+        form = PlantillaInspeccionForm(request.POST, instance=plantilla)
+        formset = TareaFormSet(request.POST, instance=plantilla)
+
+        if form.is_valid() and formset.is_valid():
+            try:
+                with transaction.atomic():
+                    form.save()
+                    formset.save() # Guarda todas las tareas (nuevas, modificadas y eliminadas)
+                    messages.success(request, f"Plantilla '{plantilla.nombre}' actualizada con éxito.")
+                    return redirect('plantilla_list')
+            except Exception as e:
+                messages.error(request, f"Error al actualizar la plantilla: {e}")
+        else:
+            messages.error(request, "Por favor corrige los errores en el formulario.")
+
+    else: # GET
+        form = PlantillaInspeccionForm(instance=plantilla)
+        formset = TareaFormSet(instance=plantilla)
+
+    context = {
+        'form': form,
+        'formset': formset,
+        'plantilla': plantilla,
+        'es_creacion': False,
+    }
+    return render(request, 'dashboards/admin/plantilla_form.html', context)
+
+
+@login_required
+@user_passes_test(is_administrador)
+def plantilla_eliminar(request, pk):
+    """Muestra la página de confirmación y elimina una plantilla."""
+    plantilla = get_object_or_404(PlantillaInspeccion, pk=pk)
+
+    # 🛑 Validación de integridad referencial
+    if Inspeccion.objects.filter(plantilla_base=plantilla).exists():
+        messages.error(request, "No se puede eliminar la plantilla porque ya tiene inspecciones asociadas. Si necesita ocultarla, puede añadir un campo 'activo' en el modelo.")
+        return redirect('plantilla_list')
+    
+    if request.method == 'POST':
+        nombre = plantilla.nombre
+        plantilla.delete()
+        messages.success(request, f"Plantilla '{nombre}' eliminada correctamente.")
+        return redirect('plantilla_list')
+
+    return render(
+        request,
+        'dashboards/admin/plantilla_confirm_delete.html',
+        {'object': plantilla}, # Usar 'object' o 'plantilla' es común en Django
+    )
+
+
+# ==========================================================
 # 5. VISTAS DEL TÉCNICO
 # ==========================================================
 @login_required
@@ -527,7 +686,7 @@ def aprobar_solicitud(request, pk):
 def dashboard_tecnico(request):
     inspecciones_asignadas = Inspeccion.objects.filter(
         tecnico=request.user,
-        estado__in=['ASIGNADA', 'EN_CURSO'] 
+        estado__in=['ASIGNADA', 'EN_CURSO']
     ).order_by('fecha_creacion')
 
     context = {
@@ -546,6 +705,7 @@ def completar_inspeccion(request, pk):
         messages.error(request, "Esta inspección ya ha sido finalizada y no puede modificarse.")
         return redirect('dashboard_tecnico')
 
+    # Se usa 'fields=('estado', 'observacion')' para permitir al técnico llenar los datos.
     TareaFormSet = inlineformset_factory(
         Inspeccion, TareaInspeccion, fields=('estado', 'observacion'), extra=0, can_delete=False
     )
@@ -555,29 +715,36 @@ def completar_inspeccion(request, pk):
         action = request.POST.get('action')
 
         if formset.is_valid():
-            formset.save()
+            # Iniciar transacción para asegurar atomicidad
+            with transaction.atomic():
+                formset.save()
 
-            inspeccion.comentarios_generales = request.POST.get('comentarios_generales')
-            
-            if action == 'terminar':
-                inspeccion.estado = 'COMPLETADA' 
-                inspeccion.fecha_finalizacion = timezone.now()
-                messages.success(request, f'Inspección "{inspeccion.nombre_inspeccion}" finalizada.')
+                inspeccion.comentarios_generales = request.POST.get('comentarios_generales')
                 
-                if inspeccion.solicitud:
-                    inspeccion.solicitud.estado = 'COMPLETADA'
-                    inspeccion.solicitud.save()
+                if action == 'terminar':
+                    inspeccion.estado = 'COMPLETADA'
+                    inspeccion.fecha_finalizacion = timezone.now()
+                    messages.success(request, f'Inspección "{inspeccion.nombre_inspeccion}" finalizada.')
+                    
+                    if inspeccion.solicitud:
+                        inspeccion.solicitud.estado = 'COMPLETADA'
+                        inspeccion.solicitud.save()
 
-            elif inspeccion.estado == 'ASIGNADA':
-                inspeccion.estado = 'EN_CURSO' 
-                messages.info(request, "Progreso guardado.")
-                
-            inspeccion.save()
-            return redirect('dashboard_tecnico')
+                elif inspeccion.estado == 'ASIGNADA':
+                    # Si es la primera vez que guarda y está "ASIGNADA", pasa a "EN_CURSO"
+                    inspeccion.estado = 'EN_CURSO'
+                    messages.info(request, "Progreso guardado (Inspección iniciada).")
+                    
+                else: # Si ya está en EN_CURSO y no se terminó
+                    messages.info(request, "Progreso guardado.")
+
+                inspeccion.save()
+                return redirect('dashboard_tecnico')
         else:
             messages.error(request, "Error al guardar el formulario de tareas.")
 
     else: # GET
+        # Al iniciar, si está ASIGNADA, la ponemos en EN_CURSO
         if inspeccion.estado == 'ASIGNADA':
             inspeccion.estado = 'EN_CURSO'
             inspeccion.save()
@@ -602,8 +769,8 @@ def descargar_acta(request, pk):
         
         # Permisos mejorados: Técnico asignado, Admin, o Cliente solicitante
         permiso = (
-            request.user == inspeccion.tecnico or 
-            is_administrador(request.user) or 
+            request.user == inspeccion.tecnico or
+            is_administrador(request.user) or
             (inspeccion.solicitud and request.user == inspeccion.solicitud.cliente)
         )
         

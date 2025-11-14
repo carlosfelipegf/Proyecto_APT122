@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Gestión de Plantillas{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-clipboard-list"></i> Gestión de Plantillas de Inspección</h2>
+        <a href="{% url 'plantilla_crear' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Crear Nueva Plantilla
+        </a>
+    </div>
+
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card shadow">
+        <div class="card-body">
+            {% if object_list %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Tareas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for plantilla in object_list %}
+                                <tr>
+                                    <td>{{ plantilla.nombre }}</td>
+                                    <td>{{ plantilla.descripcion|default:"N/A"|truncatechars:100 }}</td>
+                                    <td>
+                                        <span class="badge badge-info">{{ plantilla.tareas.count }} Tareas</span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'plantilla_editar' plantilla.pk %}" class="btn btn-sm btn-primary" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'plantilla_eliminar' plantilla.pk %}" class="btn btn-sm btn-danger" title="Eliminar" onclick="return confirm('¿Está seguro de que desea eliminar la plantilla: {{ plantilla.nombre }}? Esta acción es irreversible.')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-warning text-center">
+                    Aún no hay plantillas de inspección creadas.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -48,20 +48,31 @@ urlpatterns = [
     # ==========================================================
     path('cliente/dashboard/', views.dashboard_cliente, name='dashboard_cliente'),
     path('cliente/solicitar/', views.solicitar_inspeccion, name='solicitar_inspeccion'),
-    path('cliente/solicitud/eliminar/<int:pk>/', views.eliminar_solicitud, name='eliminar_solicitud'),
+    
+    # 🔥 RUTA CORREGIDA: Usamos anular_solicitud para el botón 🔥
+    path('cliente/solicitud/anular/<int:pk>/', views.anular_solicitud, name='anular_solicitud'), 
+    
     path('cliente/orden/<int:pk>/', views.detalle_orden, name='detalle_orden'),
     
     # ==========================================================
-    # 3. VISTAS DEL ADMINISTRADOR (💥 Prefijo corregido a 'administrador/' 💥)
+    # 3. VISTAS DEL ADMINISTRADOR
     # ==========================================================
     path('administrador/dashboard/', views.dashboard_administrador, name='dashboard_administrador'),
     path('administrador/solicitudes/<int:pk>/gestionar/', views.aprobar_solicitud, name='aprobar_solicitud'),
     path('administrador/solicitudes/historial/', views.historial_solicitudes, name='historial_solicitudes'),
 
+    # GESTIÓN DE USUARIOS
     path('administrador/usuarios/', views.admin_usuarios_list, name='admin_usuarios_list'),
     path('administrador/usuarios/crear/', views.admin_usuario_crear, name='admin_usuario_crear'),
     path('administrador/usuarios/editar/<int:pk>/', views.admin_usuario_editar, name='admin_usuario_editar'),
     path('administrador/usuarios/eliminar/<int:pk>/', views.admin_usuario_eliminar, name='admin_usuario_eliminar'),
+
+    # 🔥 GESTIÓN DE PLANTILLAS 🔥
+    path('administrador/plantillas/', views.plantilla_list, name='plantilla_list'),
+    path('administrador/plantillas/crear/', views.plantilla_crear, name='plantilla_crear'),
+    path('administrador/plantillas/editar/<int:pk>/', views.plantilla_editar, name='plantilla_editar'),
+    path('administrador/plantillas/eliminar/<int:pk>/', views.plantilla_eliminar, name='plantilla_eliminar'),
+
 
     # ==========================================================
     # 4. VISTAS DEL TÉCNICO

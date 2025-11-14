@@ -1,5 +1,3 @@
-# usuarios/models.py (CÓDIGO COMPLETO Y UNIFICADO)
-
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -139,7 +137,7 @@ class TareaPlantilla(models.Model):
 
 
 # ==========================================================
-# 3. MODELO DE SOLICITUD (SIN CAMBIOS)
+# 3. MODELO DE SOLICITUD (CON CAMBIOS)
 # ==========================================================
 
 ESTADOS_SOLICITUD = [
@@ -147,6 +145,9 @@ ESTADOS_SOLICITUD = [
     ('APROBADA', 'Aprobada (Inspección Creada)'),
     ('RECHAZADA', 'Rechazada'),
     ('COMPLETADA', 'Inspección Finalizada'),
+    # 🔥 NUEVOS ESTADOS 🔥
+    ('ANULACION_SOLICITADA', 'Anulación Solicitada'),
+    ('ANULADA', 'Anulada'),
 ]
 
 class SolicitudInspeccion(models.Model):
@@ -166,12 +167,14 @@ class SolicitudInspeccion(models.Model):
     observaciones_cliente = models.TextField(blank=True, null=True, verbose_name="Observaciones o Requerimientos Adicionales")
 
     estado = models.CharField(
-        max_length=20, 
+        max_length=25, # Aumentado el max_length para el nuevo estado
         choices=ESTADOS_SOLICITUD, 
         default='PENDIENTE',
         verbose_name="Estado de la Solicitud"
     )
     motivo_rechazo = models.TextField(blank=True, null=True, verbose_name="Motivo del Rechazo (Admin)")
+    # 🔥 Nuevo campo para el motivo de anulación del cliente 🔥
+    motivo_anulacion = models.TextField(blank=True, null=True, verbose_name="Motivo de Solicitud de Anulación (Cliente)")
 
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
     

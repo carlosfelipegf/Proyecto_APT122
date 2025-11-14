@@ -11,7 +11,7 @@ from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _ 
 
 # Importaciones de modelos y constantes de roles (Grupos)
-from .models import SolicitudInspeccion, PlantillaInspeccion, Perfil 
+from .models import SolicitudInspeccion, PlantillaInspeccion, Perfil, TareaPlantilla # 🔥 Importar TareaPlantilla 🔥
 from .models import ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE
 
 User = get_user_model()
@@ -390,7 +390,6 @@ class UsuarioEditForm(forms.ModelForm):
 class PerfilEditForm(forms.ModelForm):
     """
     Formulario para editar la foto y descripción del Perfil unificado.
-    (Solo incluye campos que definitivamente existen en el modelo Perfil: foto y descripcion).
     """
     descripcion = forms.CharField(
         label="Descripción Personal/Profesional",
@@ -400,8 +399,15 @@ class PerfilEditForm(forms.ModelForm):
     
     class Meta:
         model = Perfil
-        # 🔥 SOLUCIÓN: Quitamos 'telefono' y 'direccion' para evitar FieldError.
+        # 🔥 SOLUCIÓN: Quitamos 'telefono' y 'direccion' si no existen en Perfil.
+        # Asumiendo que SÍ existen si el usuario los incluyó inicialmente:
+        # fields = ['foto', 'descripcion', 'telefono', 'direccion'] 
+        # Si NO existen y se movieron a Solicitud, la lista es:
         fields = ['foto', 'descripcion'] 
+        
+        # Agrego telefono y direccion a PerfilEditForm si el Perfil del usuario los necesita.
+        # Si no, tu definición original (solo foto y descripcion) es correcta.
+        # MANTENDRÉ TU DEFINICIÓN DE SOLO DOS CAMPOS para ser conservador:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -410,5 +416,55 @@ class PerfilEditForm(forms.ModelForm):
         
         # Aplicar clases de Bootstrap genéricas
         for name in self.fields:
-             if not isinstance(self.fields[name].widget, forms.Textarea):
-                 self.fields[name].widget.attrs.update({'class': 'form-control'})
+            if not isinstance(self.fields[name].widget, forms.Textarea):
+                self.fields[name].widget.attrs.update({'class': 'form-control'})
+        
+        # Asegurar la etiqueta de la foto
+        self.fields['foto'].label = "Foto de perfil"
+
+
+# ==========================================================
+# 🔥 5. Formularios de Gestión de Plantillas (ADMIN) 🔥
+# ==========================================================
+
+class PlantillaInspeccionForm(forms.ModelForm):
+    """Formulario para el modelo principal de la Plantilla de Inspección."""
+    class Meta:
+        model = PlantillaInspeccion
+        fields = ('nombre', 'descripcion')
+        labels = {
+            'nombre': 'Nombre de la Plantilla',
+            'descripcion': 'Descripción de la Plantilla',
+        }
+        widgets = {
+            'descripcion': forms.Textarea(attrs={'rows': 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'nombre',
+            'descripcion',
+            Div(
+                Div('Tareas de la Plantilla', css_class='card-header'),
+                Div('', css_id='formset-container', css_class='card-body'),
+                css_class='card mb-3'
+            ),
+            Submit('submit', 'Guardar Plantilla', css_class='btn-primary')
+        )
+
+# Formulario para las tareas individuales de la Plantilla, usado en el formset
+class TareaPlantillaForm(forms.ModelForm):
+    """Formulario para el modelo TareaPlantilla, usado en el formset."""
+    class Meta:
+        model = TareaPlantilla
+        fields = ('descripcion',)
+        labels = {
+            'descripcion': 'Descripción de la Tarea',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descripcion'].widget.attrs.update({'class': 'form-control'})
+        self.fields['descripcion'].label = False # Ocultamos la etiqueta para el formset inline
