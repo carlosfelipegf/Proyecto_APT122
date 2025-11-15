@@ -73,6 +73,57 @@ body, .main-content { background-color: transparent !important; }
     box-shadow: 0 1rem 3rem var(--optifire-hover-shadow) !important;
 }
 
+/* Separación: evitar que elementos (ej. botón) queden pegados al borde */
+.hero-banner {
+    padding-bottom: 1.5rem !important;
+}
+
+/* Estilos específicos para el formulario de login: texto de inputs legible */
+.login-card .form-control {
+    color: #000 !important;
+}
+.login-card .form-control::placeholder {
+    color: rgba(0,0,0,0.6) !important;
+}
+
+/* Asegurar que los inputs dentro de tarjetas (p. ej. cambio de contraseña) sean legibles */
+.card .form-control, .card textarea.form-control, .card select.form-control {
+    color: #000 !important;
+}
+.card .form-control::placeholder, .card textarea.form-control::placeholder {
+    color: rgba(0,0,0,0.6) !important;
+}
+
+/* Perfil: imagen por encima de la tarjeta (no encima superpuesta) */
+.profile-img-wrapper {
+    /* coloca la imagen centrada y ligeramente separada de la tarjeta */
+    margin-bottom: 0.5rem;
+}
+.profile-img-wrapper img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+}
+
+/* Leyenda para la imagen de perfil cuando se usa la imagen por defecto */
+.profile-caption {
+    display: block;
+    text-align: center;
+    margin-top: 0.35rem;
+    color: #ffffff; /* forzar texto claro */
+}
+
+/* Encabezado de tarjeta: evitar fondo blanco que oculte texto blanco */
+.card .card-header.bg-light {
+    background-color: rgba(33, 37, 41, 0.95) !important; /* coincidir con el fondo oscuro de .card */
+    border-bottom: 1px solid var(--optifire-secondary) !important;
+}
+.card .card-header h5,
+.card .card-header .m-0 {
+    color: var(--optifire-light-text) !important; /* forzar texto claro legible */
+}
+
 
 /* 6. DASHBOARD: Sidebar y Contenido Principal */
 
