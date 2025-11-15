@@ -6,26 +6,35 @@
 
 {% block content %}
     {# ----------------------------------------------------------------------------------------------------- #}
-    {# CORRECCIÓN DE ESTILO Y ESTRUCTURA #}
-    {# 1. Se utiliza la clase personalizada 'optifire-sidebar-bg' para el color gris oscuro del menú lateral. #}
-    {# 2. Se asegura que el contenido principal ('main') use 'flex-grow-1' y tenga el fondo oscuro de la app. #}
+    {# ESTRUCTURA DEL DASHBOARD (Sidebar + Contenido Principal) #}
+    {# Utiliza clases CSS personalizadas para el color de fondo (optifire-sidebar-bg y optifire-dark-bg). #}
     {# ----------------------------------------------------------------------------------------------------- #}
-    <div class="d-flex w-100"> 
+    <div class="d-flex w-100 min-vh-100"> 
+        
         {# Sidebar para navegación del dashboard #}
-        {# Reemplazamos 'bg-light' por la clase que usa tu variable CSS: optifire-sidebar-bg. #}
-        <nav class="sidebar optifire-sidebar-bg text-white p-4" style="min-width: 250px; height: 100vh;">
+        <nav class="sidebar optifire-sidebar-bg text-white p-4 d-flex flex-column" style="min-width: 250px;">
             
-            <h4 class="mb-4 text-white">Opciones de {{ request.user.username|title|default:"Usuario" }}</h4> 
+            <h4 class="mb-4 text-white border-bottom pb-2">Opciones de {{ request.user.username|title|default:"Usuario" }}</h4> 
             
-            {# BLOQUE 1: dashboard_menu - El contenido de admin_menu.html, etc., se incluye aquí. #}
+            {# BLOQUE 1: dashboard_menu - El contenido de menú específico se inserta aquí. #}
             {% block dashboard_menu %}
-                <ul class="nav flex-column">
+                <ul class="nav flex-column flex-grow-1">
                     <li class="nav-item">
                         {# Aseguramos texto blanco para visibilidad #}
                         <a class="nav-link text-white active" href="{% url 'dashboard' %}"> 
                             <i class="fas fa-chart-line me-2"></i> Panel de Control
                         </a>
                     </li>
+                    <li class="nav-item">
+                        {# Enlace de ejemplo, si necesitas más links por defecto #}
+                        <a class="nav-link text-white" href="#"> 
+                            <i class="fas fa-info-circle me-2"></i> Información General
+                        </a>
+                    </li>
+                </ul>
+                
+                {# Enlace de Cerrar Sesión en la parte inferior del sidebar #}
+                <ul class="nav flex-column mt-auto pt-2 border-top">
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="{% url 'logout' %}">
                             <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
@@ -36,16 +45,16 @@
         </nav>
         
         {# Contenido principal del dashboard #}
-        {# Usamos flex-grow-1 para que ocupe todo el ancho restante y el fondo negro. #}
         <main class="p-4 flex-grow-1 optifire-dark-bg text-white">
             
-            {# BLOQUE 2: dashboard_content - Aquí se inserta el contenido de usuarios_list.html, etc. #}
+            {# BLOQUE 2: dashboard_content - Aquí se inserta el contenido específico de cada página. #}
             {% block dashboard_content %}
                 
-                <h1 class="text-white">Bienvenido, {{ request.user.first_name|default:request.user.username|title }}</h1>
-                <p class="alert alert-warning text-dark">
-                    Tu rol ({{ request.user.groups.all.0.name|default:"Usuario" }}) no tiene un dashboard específico asignado.
+                <h1 class="text-white mb-4">Bienvenido, {{ request.user.first_name|default:request.user.username|title }}</h1>
+                <p class="alert alert-info text-dark rounded-3 shadow-sm">
+                    Tu rol ({{ request.user.groups.all.0.name|default:"Usuario" }}) te da acceso a las opciones del menú.
                 </p>
+                
             {% endblock dashboard_content %}
 
         </main>

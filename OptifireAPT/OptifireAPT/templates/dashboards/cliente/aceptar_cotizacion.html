@@ -1,0 +1,76 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Aprobar Cotización | Optifire{% endblock %}
+
+{% block dashboard_content %}
+    <h1 class="mb-4 text-warning"><i class="fas fa-hand-holding-usd me-2"></i> Gestión de Cotización #{{ solicitud.id }}</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} text-dark">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow mt-4 optifire-dark-bg border border-warning text-white">
+        <div class="card-body">
+            <h4 class="card-title text-info mb-4">Detalles de la Cotización</h4>
+            
+            <p><strong>Dirección:</strong> {{ solicitud.direccion }}</p>
+            <p><strong>Maquinaria:</strong> {{ solicitud.maquinaria }}</p>
+            <p><strong>Técnico Pre-Asignado:</strong> {{ solicitud.tecnico_asignado.get_full_name|default:solicitud.tecnico_asignado.username }}</p>
+            <hr class="border-warning">
+            
+            <h5 class="text-white">Monto y Detalle</h5>
+            <p class="h3 text-success"><strong>Monto:</strong> ${{ solicitud.monto_cotizacion }}</p>
+            <p><strong>Detalle de la Orden:</strong></p>
+            <div class="alert alert-dark border-info">{{ solicitud.detalle_cotizacion|linebreaksbr|default:"No se proporcionó un detalle específico." }}</div>
+            
+            <p class="mt-4 alert alert-danger text-dark">
+                <strong>ATENCIÓN:</strong> Al **Aceptar** la cotización, se creará la Orden de Trabajo final y se asignará al técnico.
+            </p>
+            
+            <form method="post" action="{% url 'aceptar_cotizacion_cliente' solicitud.pk %}" class="mt-4">
+                {% csrf_token %}
+                
+                <div class="d-flex justify-content-between">
+                    {# ACCIÓN ACEPTAR #}
+                    <button type="submit" name="action" value="aceptar" 
+                            class="btn btn-success btn-lg"
+                            onclick="return confirm('¿Confirma que desea ACEPTAR y crear la Orden de Trabajo por ${{ solicitud.monto_cotizacion }}?');">
+                        <i class="fas fa-check-circle me-2"></i> Aceptar y Pagar
+                    </button>
+                    
+                    {# ACCIÓN RECHAZAR - Usa un modal para el motivo #}
+                    <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#rechazoModal">
+                        <i class="fas fa-times-circle me-2"></i> Rechazar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    {# Modal para el Motivo de Rechazo #}
+    <div class="modal fade" id="rechazoModal" tabindex="-1" aria-labelledby="rechazoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title" id="rechazoModalLabel">Motivo de Rechazo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'aceptar_cotizacion_cliente' solicitud.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="rechazar">
+                    <div class="modal-body">
+                        <p>Por favor, ingrese el motivo por el cual rechaza esta cotización:</p>
+                        <textarea name="motivo_rechazo" rows="4" class="form-control bg-secondary text-white border-warning" required></textarea>
+                    </div>
+                    <div class="modal-footer border-warning">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Confirmar Rechazo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock dashboard_content %}

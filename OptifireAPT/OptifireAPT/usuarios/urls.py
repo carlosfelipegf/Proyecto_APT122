@@ -5,6 +5,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from .views import aceptar_cotizacion_cliente
 
 urlpatterns = [
     # ==========================================================
@@ -51,14 +52,14 @@ urlpatterns = [
     
     # 🔥 RUTA CORREGIDA: Usamos anular_solicitud para el botón 🔥
     path('cliente/solicitud/anular/<int:pk>/', views.anular_solicitud, name='anular_solicitud'), 
-    
+    path('cliente/cotizacion/<int:pk>/', aceptar_cotizacion_cliente, name='aceptar_cotizacion_cliente'),
     path('cliente/orden/<int:pk>/', views.detalle_orden, name='detalle_orden'),
     
     # ==========================================================
     # 3. VISTAS DEL ADMINISTRADOR
     # ==========================================================
     path('administrador/dashboard/', views.dashboard_administrador, name='dashboard_administrador'),
-    path('administrador/solicitudes/<int:pk>/gestionar/', views.aprobar_solicitud, name='aprobar_solicitud'),
+    path('administrador/solicitudes/<int:pk>/gestionar/', views.gestionar_solicitud, name='gestionar_solicitud'),
     path('administrador/solicitudes/historial/', views.historial_solicitudes, name='historial_solicitudes'),
 
     # GESTIÓN DE USUARIOS

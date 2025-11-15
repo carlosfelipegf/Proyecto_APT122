@@ -43,7 +43,7 @@
                             <td>{{ solicitud.maquinaria|truncatechars:50 }}</td>
                             <td>{{ solicitud.fecha_solicitud|date:"d M Y H:i" }}</td>
                             <td>
-                                <a href="{% url 'aprobar_solicitud' pk=solicitud.pk %}" class="btn btn-sm btn-primary">
+                                <a href="{% url 'gestionar_solicitud' pk=solicitud.pk %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-check-circle"></i> Revisar/Aprobar
                                 </a>
                             </td>

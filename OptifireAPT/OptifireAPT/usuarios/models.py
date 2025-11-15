@@ -20,7 +20,7 @@ ROL_TECNICO = 'Técnico'
 ROL_CLIENTE = 'Cliente'
 
 # -------------------------------------------------------------------
-# 🔥 MODELO PERFIL UNIFICADO (Reemplaza ProfileBase y PerfilTecnico) 🔥
+# 🔥 MODELO PERFIL UNIFICADO (SIN CAMBIOS) 🔥
 # -------------------------------------------------------------------
 class Perfil(models.Model):
     """
@@ -54,8 +54,6 @@ class Perfil(models.Model):
     )
 
     # Campos Específicos (para uso futuro, aunque la lógica es por código)
-    # Ejemplo: calificacion_tecnico, calificacion_cliente, etc.
-    # Por ahora, los dejaremos simples ya que se calcularán en la vista si es necesario.
     
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
@@ -141,13 +139,15 @@ class TareaPlantilla(models.Model):
 # ==========================================================
 
 ESTADOS_SOLICITUD = [
-    ('PENDIENTE', 'Pendiente de Aprobación'),
-    ('APROBADA', 'Aprobada (Inspección Creada)'),
-    ('RECHAZADA', 'Rechazada'),
+    ('PENDIENTE_ADMIN', 'Pendiente de Revisión (Admin)'), # Admin debe cotizar
+    ('COTIZANDO', 'Pendiente de Aprobación (Cliente)'), # 🔥 NUEVO ESTADO 🔥
+    ('APROBADA_CLIENTE', 'Aprobada por Cliente (Lista para Técnico)'), # 🔥 NUEVO ESTADO 🔥
+    ('RECHAZADA', 'Rechazada por Admin/Cliente'),
+    ('ANULADA', 'Anulada por Cliente'),
+    ('EN_CURSO', 'En Curso (Técnico)'), # Se puede usar el estado de Inspección si se prefiere
     ('COMPLETADA', 'Inspección Finalizada'),
-    # 🔥 NUEVOS ESTADOS 🔥
-    ('ANULACION_SOLICITADA', 'Anulación Solicitada'),
-    ('ANULADA', 'Anulada'),
+    # Mantengo ANULACION_SOLICITADA por si lo usas en otro lado
+    ('ANULACION_SOLICITADA', 'Anulación Solicitada'), 
 ]
 
 class SolicitudInspeccion(models.Model):
@@ -166,14 +166,32 @@ class SolicitudInspeccion(models.Model):
     maquinaria = models.TextField(verbose_name="Maquinaria / Servicio Requerido") 
     observaciones_cliente = models.TextField(blank=True, null=True, verbose_name="Observaciones o Requerimientos Adicionales")
 
+    # 🔥 CAMPOS NUEVOS PARA EL FLUJO DE COTIZACIÓN 🔥
+    monto_cotizacion = models.DecimalField(
+        max_digits=10, 
+        decimal_places=0, 
+        null=True, 
+        blank=True, 
+        verbose_name="Monto Cotizado (CLP)"
+    )
+    
+    tecnico_asignado = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='ordenes_asignadas',
+        verbose_name="Técnico Pre-Asignado"
+    )
+    
     estado = models.CharField(
         max_length=25, # Aumentado el max_length para el nuevo estado
         choices=ESTADOS_SOLICITUD, 
-        default='PENDIENTE',
+        default='PENDIENTE_ADMIN', # Cambiado el default
         verbose_name="Estado de la Solicitud"
     )
     motivo_rechazo = models.TextField(blank=True, null=True, verbose_name="Motivo del Rechazo (Admin)")
-    # 🔥 Nuevo campo para el motivo de anulación del cliente 🔥
+    # Nuevo campo para el motivo de anulación del cliente
     motivo_anulacion = models.TextField(blank=True, null=True, verbose_name="Motivo de Solicitud de Anulación (Cliente)")
 
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
@@ -183,7 +201,7 @@ class SolicitudInspeccion(models.Model):
 
 
 # ==========================================================
-# 4. MODELOS DE INSPECCIÓN (SIN CAMBIOS)
+# 4. MODELOS DE INSPECCIÓN (CON EL CAMPO FALTANTE AÑADIDO)
 # ==========================================================
 
 ESTADOS_INSPECCION = [
@@ -221,6 +239,10 @@ class Inspeccion(models.Model):
     
     nombre_inspeccion = models.CharField(max_length=200, verbose_name="Título de la Inspección")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    
+    # 🔥 CAMPO FALTANTE AÑADIDO: NECESARIO PARA ALMACENAR LA FECHA ASIGNADA 🔥
+    fecha_programada = models.DateField(verbose_name="Fecha Programada", null=True, blank=True)
+    
     comentarios_generales = models.TextField(blank=True, null=True, verbose_name="Comentarios Finales")
     
     estado = models.CharField(

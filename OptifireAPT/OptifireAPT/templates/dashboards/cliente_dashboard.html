@@ -40,6 +40,7 @@
 </ul>
 {% endblock dashboard_menu %}
 
+---
 
 {# -------------------------------------------------------------------------------------------------- #}
 {# 2. BLOQUE DE CONTENIDO PRINCIPAL - Tabla de solicitudes #}
@@ -51,23 +52,21 @@
         Bienvenido, <span class="font-weight-bold">{{ request.user.first_name|default:request.user.username|title }}</span>. Aquí puedes gestionar tus Órdenes de trabajo.
     </p>
     
-    {# Ajustamos la tarjeta para que coincida con el tema oscuro de Optifire #}
     <div class="card shadow mt-4 optifire-dark-bg border border-warning">
         <div class="card-body">
-             
+            
             <h3 class="h4 font-weight-bold text-white mb-4">Mis Ordenes</h3>
 
             {# Mensajes de éxito/error #}
             {% if messages %}
                 {% for message in messages %}
-                    {# Aseguramos que los mensajes de alerta sean compatibles con el fondo oscuro #}
+                    {# Usamos alert-{{ message.tags }} que mapea 'success', 'warning', 'error' a clases Bootstrap #}
                     <div class="alert alert-{{ message.tags }} text-dark">{{ message }}</div>
                 {% endfor %}
             {% endif %}
 
             {% if solicitudes %}
                 <div class="table-responsive">
-                    {# CLASES CORREGIDAS: Usamos table-dark en lugar de table-striped/table-bordered estándar #}
                     <table class="table table-dark table-hover mb-0 border-warning"> 
                         <thead>
                             <tr>
@@ -86,20 +85,22 @@
                                 <td class="align-middle">{{ solicitud.direccion }}</td>
                                 <td class="align-middle">{{ solicitud.maquinaria|truncatechars:30 }}</td>
                                 <td class="align-middle">
-                                    {# Lógica de colores de badge #}
+                                    {# 🔥 Lógica de colores de badge ACTUALIZADA con 'COTIZANDO' 🔥 #}
                                     <span class="badge 
                                         {% if solicitud.estado == 'PENDIENTE' %} bg-warning text-dark
-                                        {% elif solicitud.estado == 'APROBADA' %} bg-primary text-white
+                                        {% elif solicitud.estado == 'COTIZANDO' %} bg-info text-white
+                                        {% elif solicitud.estado == 'APROBADA' or solicitud.estado == 'ASIGNADA' or solicitud.estado == 'EN_CURSO' %} bg-primary text-white
                                         {% elif solicitud.estado == 'RECHAZADA' %} bg-danger text-white
                                         {% elif solicitud.estado == 'ANULADA' %} bg-secondary text-white 
-                                        {% else %} bg-success text-white 
+                                        {% elif solicitud.estado == 'COMPLETADA' %} bg-success text-white 
+                                        {% else %} bg-light text-dark 
                                         {% endif %}">
                                         {{ solicitud.get_estado_display }}
                                     </span>
                                 </td>
                                 <td class="align-middle">{{ solicitud.fecha_solicitud|date:"d M Y" }}</td>
                                 <td class="align-middle">
-                                    {# LÓGICA DE ACCIONES #}
+                                    {# 🔥 LÓGICA DE ACCIONES ACTUALIZADA 🔥 #}
                                     {% if solicitud.estado == 'PENDIENTE' %}
                                         <a href="{% url 'anular_solicitud' solicitud.pk %}" 
                                             class="btn btn-sm btn-danger" 
@@ -107,13 +108,24 @@
                                             title="Anular la orden de trabajo">
                                             Anular
                                         </a>
+                                        
+                                    {% elif solicitud.estado == 'COTIZANDO' %}
+                                        {# Redirigimos al cliente a la nueva vista para aceptar/rechazar #}
+                                        <a href="{% url 'aceptar_cotizacion_cliente' solicitud.pk %}" 
+                                            class="btn btn-sm btn-warning text-dark" 
+                                            title="Revisar y gestionar la cotización">
+                                            <i class="fas fa-hand-holding-usd"></i> Cotizar
+                                        </a>
+
                                     {% elif solicitud.estado == 'ANULADA' %}
-                                        <span class="text-secondary">Anulada por Cliente</span>
+                                        <span class="text-secondary">Anulada</span>
+                                        
                                     {% elif solicitud.estado != 'RECHAZADA' %}
                                         {# Muestra Ver detalle si fue aprobada/asignada/en curso/completada #}
                                         <a href="{% url 'detalle_orden' solicitud.pk %}" class="btn btn-sm btn-info text-white" title="Ver Detalles y Descargar Acta">
                                             <i class="fas fa-eye"></i> Ver detalle
                                         </a>
+                                        
                                     {% else %}
                                         <span class="text-muted">Rechazada</span>
                                     {% endif %}
