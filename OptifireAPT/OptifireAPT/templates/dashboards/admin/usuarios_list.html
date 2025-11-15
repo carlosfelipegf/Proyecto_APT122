@@ -51,14 +51,18 @@
                             {% if usuario.is_superuser and not request.user.is_superuser %}
                                 <span class="text-muted">Acciones restringidas</span>
                             {% else %}
-                                <a class="btn btn-sm btn-outline-primary" href="{% url 'admin_usuario_editar' usuario.pk %}">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-                                {% if usuario != request.user and not usuario.is_superuser %}
-                                    <a class="btn btn-sm btn-outline-danger ms-2" href="{% url 'admin_usuario_eliminar' usuario.pk %}">
-                                        <i class="fas fa-trash"></i> Eliminar
+                                <div class="action-buttons">
+                                    <a class="action-icon-btn edit" href="{% url 'admin_usuario_editar' usuario.pk %}">
+                                        <span class="action-icon" aria-hidden="true"><i class="fas fa-edit"></i></span>
+                                        <span class="action-label">Editar</span>
                                     </a>
-                                {% endif %}
+                                    {% if usuario != request.user and not usuario.is_superuser %}
+                                        <a class="action-icon-btn delete" href="{% url 'admin_usuario_eliminar' usuario.pk %}">
+                                            <span class="action-icon" aria-hidden="true"><i class="fas fa-trash"></i></span>
+                                            <span class="action-label">Eliminar</span>
+                                        </a>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         </td>
                     </tr>
