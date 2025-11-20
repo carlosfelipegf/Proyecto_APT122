@@ -3,43 +3,64 @@
 {% block title %}Inicio | Optifire{% endblock %}
 
 {% block content %}
-<header class="hero-banner text-center">
+<!-- Hero Section -->
+<section class="hero-section">
     <div class="container">
-        <h1 class="display-3 fw-bold text-dark">
-            <i class="fa-solid fa-screwdriver-wrench me-3 text-secondary"></i>
+        <h1 class="hero-title">
+            Potencia y Seguridad <br>
+            <span class="text-brand">Para Tus Activos</span>
         </h1>
-        <p class="lead text-muted">Automatización de Procesos para la eficiencia y seguridad en sus activos.</p>
-        
-        <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-4 shadow-lg">
-            <i class="fa-solid fa-right-to-bracket me-2"></i> Iniciar Sesión en la Plataforma
+        <p class="hero-subtitle">
+            Plataforma integral para la gestión, monitoreo y automatización de procesos de seguridad industrial. Eficiencia garantizada.
+        </p>
+        <a href="{% url 'login' %}" class="btn btn-brand btn-lg">
+            Comenzar Ahora <i class="fa-solid fa-arrow-right ms-2"></i>
         </a>
     </div>
-</header>
+</section>
 
-<section class="container mt-5">
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <div class="p-4 border rounded shadow-sm">
-                <i class="fa-solid fa-shield-halved fa-3x text-success mb-3"></i>
-                <h4 class="fw-bold">Seguridad Total</h4>
-                <p class="text-muted">Aseguramos que sus equipos cumplan con todas las normativas de seguridad vigentes.</p>
-            </div>
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-5 mb-3">Nuestras Características</h2>
+            <p class="text-muted lead">Todo lo que necesitas para gestionar tu seguridad</p>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="p-4 border rounded shadow-sm">
-                <i class="fa-solid fa-gears fa-3x text-info mb-3"></i>
-                <h4 class="fw-bold">Proceso Automatizado</h4>
-                <p class="text-muted">Digitalizamos sus inspecciones para reducir errores y tiempos muertos.</p>
+        
+        <div class="features-grid">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="feature-title">Seguridad Total</h3>
+                <p class="feature-text">
+                    Cumplimiento normativo garantizado con nuestros protocolos de inspección automatizados y actualizados.
+                </p>
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="p-4 border rounded shadow-sm">
-                <i class="fa-solid fa-user-check fa-3x text-primary mb-3"></i>
-                <h4 class="fw-bold">Técnicos Certificados</h4>
-                <p class="text-muted">Asignación eficiente a personal calificado con perfiles profesionales verificados.</p>
+
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Gestión Ágil</h3>
+                <p class="feature-text">
+                    Optimiza tiempos de respuesta y asignación de recursos con nuestra plataforma de gestión inteligente.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Reportes en Tiempo Real</h3>
+                <p class="feature-text">
+                    Visualiza el estado de tus activos y genera reportes detallados al instante para la toma de decisiones.
+                </p>
             </div>
         </div>
     </div>
 </section>
-
 {% endblock %}

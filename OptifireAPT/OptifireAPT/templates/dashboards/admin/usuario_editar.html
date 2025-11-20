@@ -8,8 +8,8 @@
 {% block dashboard_content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h1 class="h3 text-dark fw-bold mb-1">Crear Nuevo Usuario</h1>
-        <p class="text-muted mb-0">Registra un nuevo usuario en el sistema y asígnale un rol.</p>
+        <h1 class="h3 text-dark fw-bold mb-1">Editar Usuario</h1>
+        <p class="text-muted mb-0">Actualiza la información y el rol del usuario.</p>
     </div>
     <a href="{% url 'admin_usuarios_list' %}" class="btn btn-outline-secondary btn-sm">
         <i class="fas fa-arrow-left me-1"></i> Volver
@@ -18,7 +18,7 @@
 
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white border-bottom py-3">
-        <h6 class="m-0 fw-bold text-primary"><i class="fas fa-user-plus me-2"></i> Formulario de Registro</h6>
+        <h6 class="m-0 fw-bold text-primary"><i class="fas fa-user-edit me-2"></i> Datos de {{ usuario.username }}</h6>
     </div>
     <div class="card-body">
         <form method="post">
@@ -28,8 +28,8 @@
 
             <div class="d-flex justify-content-end mt-4 pt-3 border-top">
                 <a href="{% url 'admin_usuarios_list' %}" class="btn btn-secondary me-2">Cancelar</a>
-                <button type="submit" class="btn btn-success">
-                    <i class="fas fa-save me-2"></i> Crear Usuario
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i> Guardar Cambios
                 </button>
             </div>
         </form>

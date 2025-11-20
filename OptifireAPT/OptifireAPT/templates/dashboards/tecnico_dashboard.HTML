@@ -1,30 +1,82 @@
 {% extends "base_dashboard.html" %}
+{% load static %}
 
 {% block dashboard_menu %}
-<ul class="nav flex-column">
-    <li class="nav-item"><a class="nav-link active" href="{% url 'dashboard_tecnico' %}"><i class="fas fa-hammer"></i> Mis Inspecciones</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'perfil_tecnico' %}"><i class="fas fa-user-circle"></i> Mi Perfil Profesional</a></li>
-    <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
-</ul>
+    {% include "includes/tecnico_menu.html" %}
 {% endblock dashboard_menu %}
 
 {% block dashboard_content %}
-<h1>Bienvenido, {{ user.username|title }} (Técnico)</h1>
-<p class="alert alert-info">Tu función es completar las inspecciones que te han sido asignadas.</p>
-
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 text-dark fw-bold mb-1">Panel Técnico</h1>
+        <p class="text-muted mb-0">Gestiona y completa tus inspecciones asignadas.</p>
+    </div>
+</div>
 
 {% if inspecciones_asignadas %}
-    <h3>Inspecciones Asignadas</h3>
-    <ul>
-    {% for inspeccion in inspecciones_asignadas %}
-        <li>
-            {{ inspeccion.nombre_inspeccion }} - Estado: {{ inspeccion.estado }}
-            <a href="{% url 'completar_inspeccion' inspeccion.pk %}">Gestionar</a>
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-bottom border-primary border-3 py-3">
+            <h6 class="m-0 fw-bold text-primary">
+                <i class="fas fa-clipboard-list me-2"></i> Inspecciones Pendientes ({{ inspecciones_asignadas|length }})
+            </h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">OT #</th>
+                            <th>Inspección</th>
+                            <th>Fecha Programada</th>
+                            <th>Estado</th>
+                            <th class="text-end pe-4">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for inspeccion in inspecciones_asignadas %}
+                        <tr>
+                            <td class="ps-4 fw-bold">#{{ inspeccion.solicitud.id|default:inspeccion.id }}</td>
+                            <td>
+                                <div class="fw-bold">{{ inspeccion.nombre_inspeccion }}</div>
+                                <small class="text-muted">{{ inspeccion.solicitud.direccion|default:"Sin dirección" }}</small>
+                            </td>
+                            <td>
+                                {% if inspeccion.fecha_programada %}
+                                    <i class="far fa-calendar-alt me-1 text-muted"></i> {{ inspeccion.fecha_programada|date:"d M, Y" }}
+                                {% else %}
+                                    <span class="text-muted">--</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge rounded-pill
+                                    {% if inspeccion.estado == 'ASIGNADA' %} bg-warning text-dark
+                                    {% elif inspeccion.estado == 'EN_CURSO' %} bg-primary
+                                    {% elif inspeccion.estado == 'COMPLETADA' %} bg-success
+                                    {% else %} bg-secondary
+                                    {% endif %}">
+                                    {{ inspeccion.get_estado_display }}
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{% url 'completar_inspeccion' inspeccion.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit me-1"></i> Gestionar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% else %}
-    <p>No tienes inspecciones asignadas o en curso actualmente.</p>
+    <div class="alert alert-info border-0 shadow-sm d-flex align-items-center" role="alert">
+        <i class="fas fa-info-circle fa-2x me-3"></i>
+        <div>
+            <h5 class="alert-heading mb-1">Sin asignaciones</h5>
+            <p class="mb-0">No tienes inspecciones asignadas o en curso actualmente.</p>
+        </div>
+    </div>
 {% endif %}
 
 {% endblock dashboard_content %}

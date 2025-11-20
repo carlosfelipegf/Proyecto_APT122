@@ -1,69 +1,164 @@
-/* Definición de la paleta de colores de Optifire */
 :root {
-    --optifire-red: #8B0000; /* Rojo oscuro o borgoña, similar al logo de la web de referencia */
-    --optifire-secondary: #FF4500; /* Naranja rojizo para el énfasis */
-    --optifire-light: #f8f9fa; /* Color claro para fondos */
-}
+    /* Paleta de Colores Corporativa */
+    --primary-color: #DC281E;
+    --secondary-color: #F05A22;
+    --accent-color: #FFC20E;
+    --background-color: #F9F9F9;
+    --container-color: #FFFFFF;
+    --text-main: #1F1F1F;
+    --text-secondary: #757575;
 
-/* 1. Fondo de la barra de navegación y Footer */
-.bg-optifire {
-    background-color: var(--optifire-red) !important;
-}
+    /* Gradientes */
+    --brand-gradient: linear-gradient(90deg, #DC281E 0%, #F05A22 100%);
 
-/* 2. Estilo de los botones principales (Login, Aprobar, etc.) */
-.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-    background-color: var(--optifire-secondary) !important;
-    border-color: var(--optifire-secondary) !important;
-    color: white !important;
-}
-
-/* 3. Estilo de los botones secundarios (Rechazar, etc.) */
-.btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
-    background-color: var(--optifire-red) !important;
-    border-color: var(--optifire-red) !important;
-    color: white !important;
-}
-
-/* 4. Banner de la página de inicio (index.html) */
-.hero-banner {
-    background-color: var(--optifire-light);
-    border-bottom: 5px solid var(--optifire-secondary);
-    padding: 60px 0;
-    margin-bottom: 40px;
-}
-
-/* 5. Asegurar que el contenido no se oculte detrás del navbar y que el footer esté abajo */
-html, body {
-    height: 100%;
+    /* Espaciado y Bordes */
+    --border-radius: 8px;
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 body {
+    background-color: var(--background-color);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
-.main-content {
-    flex: 1 0 auto; /* Permite que el contenido ocupe el espacio restante */
+/* Navbar Personalizado */
+.navbar-custom {
+    background-color: var(--container-color);
+    box-shadow: var(--shadow-soft);
+    padding: 1rem 2rem;
 }
 
-/* 6. Estilos específicos para la gestión de solicitudes */
-.card-solicitud {
-    border-left: 5px solid var(--optifire-red);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+.navbar-brand-text {
+    color: var(--primary-color) !important;
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.status-badge {
-    padding: .35em .65em;
-    font-size: .75em;
-    font-weight: 700;
-    line-height: 1;
+.nav-link-custom {
+    color: var(--text-main) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link-custom:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Botones */
+.btn-brand {
+    background: var(--brand-gradient);
+    color: white !important;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-brand:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 40, 30, 0.3);
+    color: white !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: var(--background-color);
+    padding: 6rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25rem;
 }
 
-.status-pendiente {
-    color: #fff;
-    background-color: var(--optifire-secondary);
+.hero-title {
+    color: var(--text-main);
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Features Section */
+.features-section {
+    padding: 5rem 0;
+    background-color: var(--background-color);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background-color: var(--container-color);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    border-top: 4px solid transparent;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-top: 4px solid var(--accent-color);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.feature-title {
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.feature-text {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Footer */
+.footer-custom {
+    background-color: var(--container-color);
+    border-top: 1px solid #eee;
+    padding: 2rem 0;
+    margin-top: auto;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* Utility */
+.text-brand {
+    color: var(--primary-color) !important;
 }

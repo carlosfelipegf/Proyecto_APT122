@@ -1,0 +1,29 @@
+<ul class="nav flex-column flex-grow-1">
+    {# AÑADIDO: Mi Perfil #}
+    <li class="nav-item mb-2">
+        <a class="nav-link {% if request.resolver_match.url_name == 'editar_perfil' %}active{% endif %}" href="{% url 'editar_perfil' %}">
+            <i class="fas fa-user-circle me-2"></i> Mi Perfil
+        </a>
+    </li>
+    
+    {# Mis Solicitudes (Página Actual) #}
+    <li class="nav-item mb-2">
+        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_cliente' %}active{% endif %}" href="{% url 'dashboard_cliente' %}"> 
+            <i class="fas fa-list-alt me-2"></i> Mis Ordenes
+        </a>
+    </li>
+    
+    {# Solicitar Inspeccion / Orden de Trabajo (Unificado) #}
+    <li class="nav-item mb-2">
+        <a class="nav-link {% if request.resolver_match.url_name == 'solicitar_inspeccion' %}active{% endif %}" href="{% url 'solicitar_inspeccion' %}">
+            <i class="fas fa-plus-circle me-2"></i> Nueva Orden
+        </a>
+    </li>
+    
+    {# Salir (Deslogearse) #}
+    <li class="nav-item mt-auto pt-3 border-top">
+        <a class="nav-link text-danger fw-bold" href="{% url 'logout' %}">
+            <i class="fas fa-sign-out-alt me-2"></i> Salir
+        </a>
+    </li>
+</ul>

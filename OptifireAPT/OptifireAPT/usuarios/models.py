@@ -1,44 +1,84 @@
-# usuarios/models.py (CÓDIGO COMPLETO SANETIZADO)
-
 from django.db import models
-from django.conf import settings 
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group 
+from django.contrib.auth.models import Group
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from datetime import datetime
 
-# Obtenemos el modelo User estándar (auth.User)
 User = get_user_model()
 
 # -------------------------------------------------------------------
-# CONSTANTES DE ROL 
+# CONSTANTES DE ROL
 # -------------------------------------------------------------------
 ROL_ADMINISTRADOR = 'Administrador'
 ROL_TECNICO = 'Técnico'
 ROL_CLIENTE = 'Cliente'
 
 # -------------------------------------------------------------------
-# MODELO PERFIL TÉCNICO
+# MODELO PERFIL UNIFICADO (SIN CAMBIOS)
 # -------------------------------------------------------------------
-class PerfilTecnico(models.Model):
-    """Modelo para la información adicional del técnico (foto, descripción)."""
+class Perfil(models.Model):
+    """
+    Modelo de perfil unificado para todos los usuarios.
+    """
     usuario = models.OneToOneField(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name='perfil_tecnico'
+        User,
+        on_delete=models.CASCADE,
+        related_name='perfil'
     )
-    foto = models.ImageField(upload_to='perfiles/fotos/', blank=True, null=True, verbose_name="Foto de Perfil")
-    descripcion_profesional = models.TextField(blank=True, null=True, verbose_name="Descripción Profesional")
-
+    cambio_contrasena_obligatorio = models.BooleanField(
+        default=True,
+        verbose_name="Cambio de Contraseña Obligatorio"
+    )
+    foto = models.ImageField(
+        upload_to='perfiles/fotos/', 
+        blank=True, 
+        null=True, 
+        verbose_name="Foto de Perfil"
+    )
+    descripcion = models.TextField(
+        max_length=500, 
+        blank=True, 
+        null=True, 
+        verbose_name="Descripción Personal/Profesional"
+    )
+    # Otros campos...
+    
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
 
+    def get_role(self):
+        """Retorna el rol principal del usuario."""
+        if self.usuario.is_superuser:
+            return ROL_ADMINISTRADOR
+        if self.usuario.groups.filter(name=ROL_ADMINISTRADOR).exists():
+            return ROL_ADMINISTRADOR
+        if self.usuario.groups.filter(name=ROL_TECNICO).exists():
+            return ROL_TECNICO
+        if self.usuario.groups.filter(name=ROL_CLIENTE).exists():
+            return ROL_CLIENTE
+        return 'Sin Rol'
+    
+    @property
+    def total_ordenes_solicitadas(self):
+        return self.usuario.solicitudes_enviadas.count()
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(usuario=instance)
+    try:
+        instance.perfil.save()
+    except Perfil.DoesNotExist:
+        Perfil.objects.create(usuario=instance)
+
 
 # ==========================================================
-# 2. MODELOS DE PLANTILLA
+# 2. MODELOS DE PLANTILLA (SIN CAMBIOS)
 # ==========================================================
 
 class PlantillaInspeccion(models.Model):
-    """Modelo para las plantillas maestras de inspección."""
     nombre = models.CharField(max_length=200, unique=True, verbose_name="Nombre de la Plantilla")
     descripcion = models.TextField(blank=True, null=True, verbose_name="Descripción General")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -47,7 +87,6 @@ class PlantillaInspeccion(models.Model):
         return self.nombre
 
 class TareaPlantilla(models.Model): 
-    """Tareas predefinidas que componen una PlantillaInspeccion."""
     plantilla = models.ForeignKey(
         PlantillaInspeccion, 
         related_name='tareas_base', 
@@ -67,18 +106,26 @@ class TareaPlantilla(models.Model):
 
 
 # ==========================================================
-# 3. MODELO DE SOLICITUD
+# 3. MODELO DE SOLICITUD (CORRECCIÓN DE CONSTANTES DE ESTADO)
 # ==========================================================
 
+# 🔥 CORRECCIÓN CRUCIAL: Renombrar 'PENDIENTE_ADMIN' a 'PENDIENTE' para coincidir con las vistas
+# Y 'APROBADA_CLIENTE' a 'APROBADA' para simplificar la creación de la Inspección
 ESTADOS_SOLICITUD = [
-    ('PENDIENTE', 'Pendiente de Aprobación'),
-    ('APROBADA', 'Aprobada (Inspección Creada)'),
-    ('RECHAZADA', 'Rechazada'),
+    # Paso 1: Cliente solicita
+    ('PENDIENTE', 'Pendiente de Revisión (Admin)'), 
+    # Paso 2: Admin envía cotización (esperando el cliente)
+    ('COTIZANDO', 'Pendiente de Aprobación (Cliente)'), 
+    # Paso 3: Cliente aprueba. Se crea la Inspección y pasa a ser ASIGNADA para el técnico
+    ('APROBADA', 'Aprobada por Cliente (Orden de Trabajo Creada)'), 
+    # Paso 4: Técnico termina el trabajo
     ('COMPLETADA', 'Inspección Finalizada'),
+    # Estados de cierre
+    ('RECHAZADA', 'Rechazada por Admin/Cliente'),
+    ('ANULADA', 'Anulada por Cliente'),
 ]
 
 class SolicitudInspeccion(models.Model):
-    # Campo vital para la lógica de roles y vistas
     cliente = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -93,14 +140,39 @@ class SolicitudInspeccion(models.Model):
     maquinaria = models.TextField(verbose_name="Maquinaria / Servicio Requerido") 
     observaciones_cliente = models.TextField(blank=True, null=True, verbose_name="Observaciones o Requerimientos Adicionales")
 
+    monto_cotizacion = models.DecimalField(
+        max_digits=10, 
+        decimal_places=0, 
+        null=True, 
+        blank=True, 
+        verbose_name="Monto Cotizado (CLP)"
+    )
+    
+    detalle_cotizacion = models.TextField(
+        blank=True, 
+        null=True, 
+        verbose_name="Detalle de la Cotización / Observaciones del Admin"
+    )
+    
+    tecnico_asignado = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        limit_choices_to={'groups__name': ROL_TECNICO}, # Sugerencia para Admin
+        related_name='ordenes_asignadas',
+        verbose_name="Técnico Pre-Asignado"
+    )
+    
+    fecha_programada = models.DateField(verbose_name="Fecha Programada (Sugerida)", null=True, blank=True)
+    
     estado = models.CharField(
-        max_length=20, 
+        max_length=25,
         choices=ESTADOS_SOLICITUD, 
-        default='PENDIENTE',
+        default='PENDIENTE', # Ajustado el default
         verbose_name="Estado de la Solicitud"
     )
-    motivo_rechazo = models.TextField(blank=True, null=True, verbose_name="Motivo del Rechazo (Admin)")
-
+    motivo_rechazo = models.TextField(blank=True, null=True, verbose_name="Motivo del Rechazo")
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -108,7 +180,7 @@ class SolicitudInspeccion(models.Model):
 
 
 # ==========================================================
-# 4. MODELOS DE INSPECCIÓN
+# 4. MODELOS DE INSPECCIÓN (SIN CAMBIOS)
 # ==========================================================
 
 ESTADOS_INSPECCION = [
@@ -118,7 +190,7 @@ ESTADOS_INSPECCION = [
 ]
 
 class Inspeccion(models.Model):
-    """Modelo para la instancia de inspección asignada a un técnico."""
+    """Modelo para la instancia de inspección asignada a un técnico (Orden de Trabajo)."""
     
     solicitud = models.OneToOneField(
         SolicitudInspeccion,
@@ -130,7 +202,7 @@ class Inspeccion(models.Model):
     )
     
     tecnico = models.ForeignKey(
-        User, # Referencia al auth.User
+        User, 
         on_delete=models.PROTECT, 
         related_name='inspecciones_asignadas',
         verbose_name="Técnico Asignado"
@@ -146,6 +218,8 @@ class Inspeccion(models.Model):
     
     nombre_inspeccion = models.CharField(max_length=200, verbose_name="Título de la Inspección")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_programada = models.DateField(verbose_name="Fecha Programada", null=True, blank=True)
+    
     comentarios_generales = models.TextField(blank=True, null=True, verbose_name="Comentarios Finales")
     
     estado = models.CharField(
@@ -159,7 +233,6 @@ class Inspeccion(models.Model):
     def __str__(self):
         return f"Inspección {self.id} - {self.nombre_inspeccion} ({self.tecnico.username})"
 
-# Opciones de estado para cada tarea individual
 CHOICES_ESTADO_TAREA = [
     ('B', 'Bueno (Cumple)'),
     ('M', 'Malo (No Cumple)'),

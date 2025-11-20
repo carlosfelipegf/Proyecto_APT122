@@ -1,29 +1,39 @@
 {% extends 'base.html' %} 
 
 {% load static %}
-{# Nota: Se asume que estás usando la variable 'request.user' en tu contexto de Django #}
 
 {% block title %}Dashboard | Optifire{% endblock %}
 
 {% block content %}
-    <div class="d-flex">
+    {# ----------------------------------------------------------------------------------------------------- #}
+    {# ESTRUCTURA DEL DASHBOARD (Sidebar + Contenido Principal) #}
+    {# TEMA CLARO: Sidebar blanco, Fondo gris suave #}
+    {# ----------------------------------------------------------------------------------------------------- #}
+    <div class="d-flex w-100 min-vh-100 bg-light"> 
+        
         {# Sidebar para navegación del dashboard #}
-        <nav class="sidebar bg-light p-3 border-end" style="min-width: 250px; height: 100vh;">
-            {# Usamos request.user para asegurar que la variable esté disponible #}
-            <h4 class="mb-4">Opciones de {{ request.user.username|title|default:"Usuario" }}</h4> 
+        <nav class="sidebar bg-white border-end p-4 d-flex flex-column shadow-sm" style="min-width: 260px;">
             
-            {# BLOQUE 1: dashboard_menu - Este bloque se sobrescribe en las plantillas específicas (cliente, admin, etc.) #}
+            <h5 class="mb-4 text-dark border-bottom pb-3 fw-bold">
+                <i class="fa-solid fa-user-gear me-2 text-brand"></i>
+                {{ request.user.username|title|default:"Usuario" }}
+            </h5> 
+            
+            {# BLOQUE 1: dashboard_menu - El contenido de menú específico se inserta aquí. #}
             {% block dashboard_menu %}
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        {# Apunta al dashboard principal, que redirigirá según el rol #}
-                        <a class="nav-link active" href="{% url 'dashboard' %}"> 
-                            <i class="fas fa-chart-line"></i> Dashboard
+                <ul class="nav flex-column flex-grow-1">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link text-secondary active-link" href="{% url 'dashboard' %}"> 
+                            <i class="fas fa-chart-line me-2"></i> Panel de Control
                         </a>
                     </li>
+                </ul>
+                
+                {# Enlace de Cerrar Sesión en la parte inferior del sidebar #}
+                <ul class="nav flex-column mt-auto pt-3 border-top">
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="{% url 'logout' %}">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        <a class="nav-link text-danger fw-bold" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
                         </a>
                     </li>
                 </ul>
@@ -33,15 +43,40 @@
         {# Contenido principal del dashboard #}
         <main class="p-4 flex-grow-1">
             
-            {# BLOQUE 2: dashboard_content - Este es el contenido principal que las plantillas hijas llenarán #}
+            {# BLOQUE 2: dashboard_content - Aquí se inserta el contenido específico de cada página. #}
             {% block dashboard_content %}
-                {# Contenido por defecto si una plantilla hija no lo sobrescribe #}
-                <h1>Bienvenido, {{ request.user.first_name|default:request.user.username|title }}</h1>
-                <p class="alert alert-warning">
-                    Tu rol ({{ request.user.groups.all.0.name|default:"Usuario" }}) no tiene un dashboard específico asignado.
-                </p>
+                
+                <h1 class="h3 mb-4 text-dark">Bienvenido, {{ request.user.first_name|default:request.user.username|title }}</h1>
+                <div class="alert alert-light border shadow-sm" role="alert">
+                    Tu rol ({{ request.user.groups.all.0.name|default:"Usuario" }}) te da acceso a las opciones del menú.
+                </div>
+                
             {% endblock dashboard_content %}
 
         </main>
     </div>
+
+    <style>
+        /* Estilos específicos para el Dashboard */
+        .sidebar .nav-link {
+            color: #555;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #f8f9fa;
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link.active-link {
+            background-color: #fff0f0; /* Un rojo muy suave */
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+    </style>
 {% endblock content %}
