@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 
 # Importaciones de modelos y constantes de roles (Grupos)
-from .models import SolicitudInspeccion, PlantillaInspeccion 
+from .models import Perfil, SolicitudInspeccion, PlantillaInspeccion 
 from .models import ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE
 
 User = get_user_model()
@@ -320,3 +320,43 @@ class UsuarioAdminUpdateForm(forms.ModelForm):
         role = getattr(self, '_pending_role', None)
         if role and self.instance.pk:
             assign_role_group(self.instance, role)
+
+
+# ==========================================================
+# 4. Formularios para el perfil del usuario
+# ==========================================================
+class UsuarioPerfilForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        labels = {
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+            'email': 'Correo electrónico',
+        }
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.label = labels.get(name, field.label)
+            field.help_text = ''
+
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ('descripcion', 'foto')
+        widgets = {
+            'descripcion': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'foto': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'descripcion': 'Descripción profesional',
+            'foto': 'Foto de perfil',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descripcion'].required = False
+        self.fields['foto'].required = False
