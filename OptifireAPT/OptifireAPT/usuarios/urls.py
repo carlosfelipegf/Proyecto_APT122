@@ -21,13 +21,8 @@ urlpatterns = [
     path('dashboard/cliente/', views.dashboard_cliente, name='dashboard_cliente'),
     path('solicitar-inspeccion/', views.solicitar_inspeccion, name='solicitar_inspeccion'),
     path('solicitud/detalle/<int:pk>/', views.detalle_orden, name='detalle_orden'),
-    # Aquí está el cambio: usamos 'anular_solicitud'
     path('solicitud/anular/<int:pk>/', views.anular_solicitud, name='anular_solicitud'), 
     path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
-    
-    # Nota: Si tienes una funcionalidad de cotización, agrégala aquí. 
-    # Por ahora dejamos el placeholder si tu template lo pide:
-    # path('solicitud/cotizacion/<int:pk>/', views.aceptar_cotizacion_cliente, name='aceptar_cotizacion_cliente'),
 
     # =========================================
     # RUTAS TÉCNICO
@@ -35,6 +30,9 @@ urlpatterns = [
     path('dashboard/tecnico/', views.dashboard_tecnico, name='dashboard_tecnico'),
     path('inspeccion/completar/<int:pk>/', views.completar_inspeccion, name='completar_inspeccion'),
     path('perfil/tecnico/', views.perfil_tecnico, name='perfil_tecnico'),
+
+    # 🚨 NUEVA RUTA PARA EL PDF (Puede usarla Cliente, Técnico o Admin) 🚨
+    path('inspeccion/acta/<int:pk>/', views.descargar_acta, name='descargar_acta'),
 
     # =========================================
     # RUTAS ADMINISTRADOR

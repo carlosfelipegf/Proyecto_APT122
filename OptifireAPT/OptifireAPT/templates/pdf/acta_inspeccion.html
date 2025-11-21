@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acta #{{ inspeccion.id }}</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 12px; color: #333; line-height: 1.4; }
+        .header { text-align: center; border-bottom: 2px solid #DC281E; padding-bottom: 10px; margin-bottom: 20px; }
+        .header h1 { color: #DC281E; margin: 0; text-transform: uppercase; }
+        .section-title { background: #f0f0f0; padding: 5px; font-weight: bold; border-left: 5px solid #DC281E; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        td, th { border: 1px solid #ddd; padding: 6px; text-align: left; vertical-align: top; }
+        th { background: #f9f9f9; }
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; color: #777; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>OPTIFIRE</h1>
+        <h3>Acta de Inspección Técnica N° {{ inspeccion.id }}</h3>
+    </div>
+
+    <div class="section-title">1. Información General</div>
+    <table>
+        <tr>
+            <td width="50%">
+                <strong>Cliente:</strong> {{ inspeccion.solicitud.nombre_cliente }} {{ inspeccion.solicitud.apellido_cliente|default:"" }}<br>
+                <strong>Dirección:</strong> {{ inspeccion.solicitud.direccion }}<br>
+                <strong>Teléfono:</strong> {{ inspeccion.solicitud.telefono }}
+            </td>
+            <td width="50%">
+                <strong>Fecha:</strong> {{ inspeccion.fecha_finalizacion|date:"d/m/Y"|default:"En Curso" }}<br>
+                <strong>Técnico:</strong> {{ inspeccion.tecnico.get_full_name|default:inspeccion.tecnico.username }}<br>
+                <strong>Estado:</strong> {{ inspeccion.get_estado_display }}
+            </td>
+        </tr>
+    </table>
+
+    <div class="section-title">2. Equipo Inspeccionado</div>
+    <p style="padding: 5px; border: 1px solid #eee;">{{ inspeccion.solicitud.maquinaria|linebreaksbr }}</p>
+
+    <div class="section-title">3. Checklist de Control</div>
+    <table>
+        <thead>
+            <tr>
+                <th width="5%">#</th>
+                <th width="40%">Punto de Control</th>
+                <th width="15%">Estado</th>
+                <th width="40%">Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarea in tareas %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ tarea.descripcion }}</td>
+                <td>
+                    {% if tarea.estado == 'B' %} <span style="color:green; font-weight:bold;">BUENO</span>
+                    {% elif tarea.estado == 'M' %} <span style="color:red; font-weight:bold;">MALO</span>
+                    {% elif tarea.estado == 'N/A' %} <span style="color:gray;">N/A</span>
+                    {% else %} PENDIENTE {% endif %}
+                </td>
+                <td>{{ tarea.observacion|default:"-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if inspeccion.comentarios_generales %}
+    <div class="section-title">4. Conclusiones Técnicas</div>
+    <p style="padding: 10px; background: #fafafa; border: 1px solid #eee;">
+        {{ inspeccion.comentarios_generales|linebreaksbr }}
+    </p>
+    {% endif %}
+
+    <div style="margin-top: 80px; display: flex; justify-content: space-between; text-align: center;">
+        <div style="width: 40%; border-top: 1px solid #000; padding-top: 5px;">Firma Técnico</div>
+        <div style="width: 40%; border-top: 1px solid #000; padding-top: 5px;">Recepción Cliente</div>
+    </div>
+
+    <div class="footer">Generado por Sistema Optifire - {% now "d/m/Y H:i" %}</div>
+</body>
+</html>

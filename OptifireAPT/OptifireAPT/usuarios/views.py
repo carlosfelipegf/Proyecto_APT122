@@ -6,6 +6,9 @@ from django.forms import inlineformset_factory
 from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
 
 # Importamos formularios
 from .forms import (
@@ -373,3 +376,36 @@ def editar_perfil(request):
         user_form = UsuarioPerfilForm(instance=usuario)
         perfil_form = PerfilForm(instance=perfil)
     return render(request, 'perfil/perfil_editar.html', {'user_form': user_form, 'perfil_form': perfil_form})
+
+@login_required
+def descargar_acta(request, pk):
+    # 1. Obtener la inspección
+    inspeccion = get_object_or_404(Inspeccion, pk=pk)
+    
+    # 2. Validación de seguridad: Solo dueño, técnico o admin pueden verla
+    es_autorizado = (
+        request.user == inspeccion.tecnico or 
+        request.user == inspeccion.solicitud.cliente or 
+        is_administrador(request.user)
+    )
+    
+    if not es_autorizado:
+        messages.error(request, "No tienes permiso para ver este documento.")
+        return redirect('dashboard')
+
+    # 3. Generar el HTML en memoria usando el template que creamos
+    html_string = render_to_string('pdf/acta_inspeccion.html', {
+        'inspeccion': inspeccion,
+        'tareas': inspeccion.tareas.all()
+    })
+    
+    # 4. Convertir a PDF usando WeasyPrint
+    response = HttpResponse(content_type='application/pdf')
+    filename = f"Acta_OT_{inspeccion.id}.pdf"
+    
+    # 'inline' abre el PDF en el navegador. Si prefieres descarga directa, cambia a 'attachment'
+    response['Content-Disposition'] = f'inline; filename="{filename}"'
+    
+    HTML(string=html_string).write_pdf(response)
+    
+    return response
