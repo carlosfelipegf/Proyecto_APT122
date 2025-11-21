@@ -9,10 +9,10 @@
     {# ESTRUCTURA DEL DASHBOARD (Sidebar + Contenido Principal) #}
     {# TEMA CLARO: Sidebar blanco, Fondo gris suave #}
     {# ----------------------------------------------------------------------------------------------------- #}
-    <div class="d-flex min-vh-100 bg-light"> 
+    <div class="d-flex w-100 min-vh-100 bg-light"> 
         
         {# Sidebar para navegación del dashboard #}
-        <nav class="sidebar bg-white border-end p-4 d-flex flex-column shadow-sm" style="width: 260px; flex-shrink: 0;">
+        <nav class="sidebar bg-white border-end p-4 d-flex flex-column shadow-sm" style="min-width: 260px;">
             
             <h5 class="mb-4 text-dark border-bottom pb-3 fw-bold">
                 <i class="fa-solid fa-user-gear me-2 text-brand"></i>
@@ -41,59 +41,23 @@
         </nav>
         
         {# Contenido principal del dashboard #}
-        <main class="dashboard-main flex-grow-1" style="min-width: 0;">
-            <div class="dashboard-container">
-                {# BLOQUE 2: dashboard_content - Aquí se inserta el contenido específico de cada página. #}
-                {% block dashboard_content %}
-                    
-                    <h1 class="h3 mb-4 text-dark">Bienvenido, {{ request.user.first_name|default:request.user.username|title }}</h1>
-                    <div class="alert alert-light border shadow-sm" role="alert">
-                        Tu rol ({{ request.user.groups.all.0.name|default:"Usuario" }}) te da acceso a las opciones del menú.
-                    </div>
-                    
-                {% endblock dashboard_content %}
-            </div>
+        <main class="p-4 flex-grow-1">
+            
+            {# BLOQUE 2: dashboard_content - Aquí se inserta el contenido específico de cada página. #}
+            {% block dashboard_content %}
+                
+                <h1 class="h3 mb-4 text-dark">Bienvenido, {{ request.user.first_name|default:request.user.username|title }}</h1>
+                <div class="alert alert-light border shadow-sm" role="alert">
+                    Tu rol ({{ request.user.groups.all.0.name|default:"Usuario" }}) te da acceso a las opciones del menú.
+                </div>
+                
+            {% endblock dashboard_content %}
+
         </main>
     </div>
 
     <style>
         /* Estilos específicos para el Dashboard */
-        
-        /* Fix Flexbox container to prevent overflow issues */
-        .d-flex.min-vh-100 {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-        
-        .dashboard-main {
-            padding: 1.5rem;
-            width: 100%;
-            min-width: 0; /* CRITICAL: Allows flex child to shrink below content size */
-            overflow-x: auto; /* Enables horizontal scroll if needed */
-        }
-        
-        .dashboard-container {
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
-        }
-        
-        .dashboard-container .card {
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        .dashboard-container .table-responsive {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: auto !important; /* Force horizontal scroll */
-            -webkit-overflow-scrolling: touch;
-            display: block; /* Ensures scroll works properly */
-        }
-        .sidebar {
-            overflow-y: auto;
-        }
         .sidebar .nav-link {
             color: #555;
             padding: 0.75rem 1rem;
@@ -113,15 +77,6 @@
         .sidebar .nav-link i {
             width: 20px;
             text-align: center;
-        }
-        
-        @media (max-width: 768px) {
-            .dashboard-main {
-                padding: 1rem;
-            }
-            .sidebar {
-                min-width: 200px;
-            }
         }
     </style>
 {% endblock content %}

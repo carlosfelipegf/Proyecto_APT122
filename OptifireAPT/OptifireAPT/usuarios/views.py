@@ -8,11 +8,11 @@ from django.db import transaction
 
 from .forms import (
     AprobacionInspeccionForm,
-    PerfilForm,
     SolicitudInspeccionForm,
     UsuarioAdminCreateForm,
     UsuarioAdminUpdateForm,
     UsuarioPerfilForm,
+    PerfilForm,
 )
 from django.contrib.auth.models import Group 
 
@@ -173,41 +173,6 @@ def detalle_orden(request, pk):
     }
     
     return render(request, 'dashboards/cliente/detalle_orden.html', context)
-
-
-# ==========================================================
-# 3.1 Vista de perfil compartida
-# ==========================================================
-@login_required
-def editar_perfil(request):
-    perfil, _ = Perfil.objects.get_or_create(usuario=request.user)
-
-    if request.method == 'POST':
-        user_form = UsuarioPerfilForm(request.POST, instance=request.user)
-        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
-
-        if user_form.is_valid() and perfil_form.is_valid():
-            user_form.save()
-            perfil_form.save()
-            messages.success(request, "Perfil actualizado correctamente.")
-            return redirect('editar_perfil')
-
-        messages.error(request, "Por favor corrige los errores del formulario.")
-    else:
-        user_form = UsuarioPerfilForm(instance=request.user)
-        perfil_form = PerfilForm(instance=perfil)
-
-    group_names = list(request.user.groups.values_list('name', flat=True))
-    rol = get_user_role_display(request.user)
-
-    context = {
-        'user_form': user_form,
-        'perfil_form': perfil_form,
-        'group_names': group_names,
-        'rol': rol,
-    }
-
-    return render(request, 'perfil/perfil_editar.html', context)
 
 
 # ==========================================================
@@ -485,7 +450,45 @@ def completar_inspeccion(request, pk):
 @login_required
 @user_passes_test(is_tecnico)
 def perfil_tecnico(request):
-    return redirect('editar_perfil')
+    perfil, _ = Perfil.objects.get_or_create(usuario=request.user)
+
+    if request.method == 'POST':
+        perfil.descripcion = request.POST.get('descripcion_profesional', '').strip()
+        if request.FILES.get('foto'):
+            perfil.foto = request.FILES['foto']
+
+        perfil.save()
+        messages.success(request, "Perfil profesional actualizado.")
+        return redirect('perfil_tecnico')
+
+    # Compatibilidad con la plantilla existente
+    perfil.descripcion_profesional = perfil.descripcion
+
+    context = {'perfil': perfil}
+    return render(request, 'dashboards/tecnico/perfil.html', context)
+
+@login_required
+def editar_perfil(request):
+    usuario = request.user
+    perfil, created = Perfil.objects.get_or_create(usuario=usuario)
+
+    if request.method == 'POST':
+        user_form = UsuarioPerfilForm(request.POST, instance=usuario)
+        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
+
+        if user_form.is_valid() and perfil_form.is_valid():
+            user_form.save()
+            perfil_form.save()
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect('editar_perfil')
+    else:
+        user_form = UsuarioPerfilForm(instance=usuario)
+        perfil_form = PerfilForm(instance=perfil)
+
+    return render(request, 'perfil/perfil_editar.html', {
+        'user_form': user_form,
+        'perfil_form': perfil_form
+    })
 
 @login_required
 def descargar_acta(request, pk):

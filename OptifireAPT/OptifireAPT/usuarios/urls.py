@@ -16,7 +16,6 @@ urlpatterns = [
     path('cliente/', views.dashboard_cliente, name='dashboard_cliente'),
     path('administrador/', views.dashboard_administrador, name='dashboard_administrador'),
     path('tecnico/', views.dashboard_tecnico, name='dashboard_tecnico'),
-    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
     
     # ----------------------------------------
     # 2. VISTAS DE CLIENTE
@@ -31,6 +30,8 @@ urlpatterns = [
     # URL para descargar el acta (Agregada para resolver el NoReverseMatch)
     path('inspeccion/<int:pk>/descargar_acta/', views.descargar_acta, name='descargar_acta'),
     
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
+
     # ----------------------------------------
     # 3. VISTAS DE ADMINISTRADOR
     # ----------------------------------------
