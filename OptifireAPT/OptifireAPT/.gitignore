@@ -1,2 +1,12 @@
-# Entorno Virtual
-OptifireAPT/OptifireAPT/APT/
+# --- Entornos Virtuales ---
+APT/
+venv/
+env/
+
+# --- Archivos temporales de Python 
+__pycache__/
+*.pyc
+
+# --- Archivos de Sistema ---
+.DS_Store
+Thumbs.db
