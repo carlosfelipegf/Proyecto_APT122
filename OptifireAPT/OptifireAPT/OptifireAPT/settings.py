@@ -58,8 +58,8 @@ ROOT_URLCONF = 'OptifireAPT.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "Templates"],  # Aquí apunta a tu carpeta Templates global
-        'APP_DIRS': True, # <--- ¡CLAVE! Esto permite a Django buscar templates dentro de la carpeta 'templates' de cada INSTALLED_APP (incluyendo crispy_forms y crispy_bootstrap5).
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -120,16 +120,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-# settings.py
-
-# Esto ya deberías tener:
 STATIC_URL = '/static/'
-
-# Agrega esto:
-import os
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

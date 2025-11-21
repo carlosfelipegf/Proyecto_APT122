@@ -1,73 +1,157 @@
-{% extends "base_dashboard.html" %}
+{% extends 'base_dashboard.html' %}
+{% load static %}
 
 {% block dashboard_menu %}
-    {% include "includes/admin_menu.html" %} 
+    {% include "includes/admin_menu.html" %}
 {% endblock dashboard_menu %}
 
 {% block dashboard_content %}
-<h1>Gestionar Solicitud #{{ solicitud.id }}</h1>
-<a href="{% url 'dashboard_administrador' %}" class="btn btn-sm btn-secondary mb-3">← Volver al Dashboard</a>
-
-<div class="card mb-4">
-    <div class="card-header">Detalles de la Solicitud</div>
-    <div class="card-body">
-        <p><strong>Cliente:</strong> {{ solicitud.nombre_cliente }} ({{ solicitud.cliente.username }})</p>
-        <p><strong>Maquinaria:</strong> {{ solicitud.maquinaria }}</p>
-        <p><strong>Dirección:</strong> {{ solicitud.direccion }}</p>
-        <p><strong>Teléfono:</strong> {{ solicitud.telefono }}</p>
-        <p><strong>Estado:</strong> <span class="badge bg-warning text-dark">{{ solicitud.get_estado_display }}</span></p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <h2>1. Aprobar y Asignar</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="aprobar">
-
-            <div class="mb-3">
-                <label for="nombre_inspeccion" class="form-label">Nombre de la Inspección</label>
-                <input type="text" class="form-control" id="nombre_inspeccion" name="nombre_inspeccion" value="Inspección de {{ solicitud.maquinaria }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="tecnico" class="form-label">Asignar Técnico</label>
-                <select class="form-select" id="tecnico" name="tecnico" required>
-                    <option value="">Selecciona un Técnico</option>
-                    {% for tecnico in tecnicos %}
-                        <option value="{{ tecnico.id }}">{{ tecnico.username }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="plantilla" class="form-label">Seleccionar Plantilla</label>
-                <select class="form-select" id="plantilla" name="plantilla" required>
-                    <option value="">Selecciona una Plantilla</option>
-                    {% for plantilla in plantillas %}
-                        <option value="{{ plantilla.id }}">{{ plantilla.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Aprobar y Asignar Inspección</button>
-        </form>
-    </div>
+<div class="container-fluid px-0">
     
-    <div class="col-md-6">
-        <h2>2. Rechazar Solicitud</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="rechazar">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 text-dark fw-bold mb-0">
+            <i class="fas fa-clipboard-check me-2"></i>Gestionar Solicitud #{{ solicitud.id }}
+        </h1>
+        <a href="{% url 'dashboard_administrador' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Volver
+        </a>
+    </div>
 
-            <div class="mb-3">
-                <label for="motivo_rechazo" class="form-label">Motivo del Rechazo</label>
-                <textarea class="form-control" id="motivo_rechazo" name="motivo_rechazo" rows="3" required></textarea>
+    <div class="row">
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-light fw-bold border-bottom">
+                    <i class="fas fa-user me-2"></i>Datos del Cliente
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="text-muted small text-uppercase fw-bold">Cliente</label>
+                        <p class="fw-bold mb-0">{{ solicitud.nombre_cliente }} {{ solicitud.apellido_cliente|default:"" }}</p>
+                        <small class="text-muted">{{ solicitud.cliente.email }}</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small text-uppercase fw-bold">Dirección</label>
+                        <p class="mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ solicitud.direccion }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small text-uppercase fw-bold">Teléfono</label>
+                        <p class="mb-0"><i class="fas fa-phone me-1"></i> {{ solicitud.telefono }}</p>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="text-muted small text-uppercase fw-bold">Maquinaria / Requerimiento</label>
+                        <div class="p-3 bg-light rounded border mt-1">
+                            {{ solicitud.maquinaria|linebreaks }}
+                        </div>
+                    </div>
+                    {% if solicitud.observaciones_cliente %}
+                    <div class="mb-3">
+                        <label class="text-muted small text-uppercase fw-bold">Observaciones Adicionales</label>
+                        <p class="fst-italic text-secondary mb-0">"{{ solicitud.observaciones_cliente }}"</p>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
-            
-            <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i> Rechazar</button>
-        </form>
+        </div>
+
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white fw-bold border-bottom py-3">
+                    <i class="fas fa-cogs me-2"></i>Acciones Administrativas
+                </div>
+                <div class="card-body p-4">
+                    
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active fw-bold" id="pills-approve-tab" data-bs-toggle="pill" data-bs-target="#pills-approve" type="button" role="tab">
+                                <i class="fas fa-check-circle me-2"></i>Crear Orden de Trabajo
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-danger fw-bold" id="pills-reject-tab" data-bs-toggle="pill" data-bs-target="#pills-reject" type="button" role="tab">
+                                <i class="fas fa-times-circle me-2"></i>Rechazar Solicitud
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        
+                        <div class="tab-pane fade show active" id="pills-approve" role="tabpanel">
+                            <div class="alert alert-info small">
+                                <i class="fas fa-info-circle me-1"></i> Al aprobar, se creará una <strong>Inspección</strong> y se asignará al técnico seleccionado.
+                            </div>
+
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="aprobar">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Nombre para la Inspección (OT)</label>
+                                    <input type="text" name="nombre_inspeccion" class="form-control" 
+                                           value="Inspección de {{ solicitud.maquinaria|truncatechars:20 }} - {{ solicitud.nombre_cliente }}" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Asignar Técnico</label>
+                                        <select name="tecnico" class="form-select" required>
+                                            <option value="">-- Seleccionar Técnico --</option>
+                                            {% for tecnico in tecnicos %}
+                                                <option value="{{ tecnico.id }}">{{ tecnico.first_name }} {{ tecnico.last_name }} ({{ tecnico.username }})</option>
+                                            {% empty %}
+                                                <option disabled>No hay técnicos registrados</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Fecha Programada</label>
+                                        <input type="date" name="fecha_programada" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Plantilla de Inspección</label>
+                                    <select name="plantilla" class="form-select" required>
+                                        <option value="">-- Seleccionar Plantilla Base --</option>
+                                        {% for plantilla in plantillas %}
+                                            <option value="{{ plantilla.id }}">{{ plantilla.nombre }}</option>
+                                        {% empty %}
+                                            <option disabled>No hay plantillas creadas</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="form-text">Define qué puntos de control deberá revisar el técnico.</div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success py-2 fw-bold">
+                                        <i class="fas fa-check me-2"></i> Generar Orden y Asignar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-reject" role="tabpanel">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="rechazar">
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-danger">Motivo del Rechazo</label>
+                                    <textarea name="motivo_rechazo" class="form-control" rows="4" placeholder="Explique por qué se rechaza la solicitud..." required></textarea>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger py-2 fw-bold">
+                                        <i class="fas fa-times me-2"></i> Confirmar Rechazo
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock dashboard_content %}

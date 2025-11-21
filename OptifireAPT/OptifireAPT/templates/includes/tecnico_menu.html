@@ -1,19 +1,12 @@
 <ul class="nav flex-column flex-grow-1">
-    <li class="nav-item mb-2">
+    <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}" href="{% url 'dashboard_tecnico' %}">
-           <i class="fas fa-clipboard-list me-2"></i> Ordenes Asignadas
+            <i class="fas fa-clipboard-list"></i> Asignaciones
         </a>
     </li>
-    
-    <li class="nav-item mb-2">
-        <a class="nav-link {% if request.resolver_match.url_name == 'editar_perfil' %}active{% endif %}" href="{% url 'editar_perfil' %}">
-           <i class="fas fa-user-circle me-2"></i> Mi Perfil
-        </a>
-    </li>
-
-    <li class="nav-item mt-auto pt-3 border-top">
-        <a class="nav-link text-danger fw-bold" href="{% url 'logout' %}">
-            <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'perfil_tecnico' %}active{% endif %}" href="{% url 'perfil_tecnico' %}">
+            <i class="fas fa-id-card"></i> Perfil Profesional
         </a>
     </li>
 </ul>

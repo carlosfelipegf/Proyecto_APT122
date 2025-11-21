@@ -1,348 +1,127 @@
-# usuarios/forms.py
-
 from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, Div
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group
-
-# Importaciones de modelos y constantes de roles (Grupos)
-from .models import SolicitudInspeccion, PlantillaInspeccion, Perfil 
-from .models import ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE
-
-User = get_user_model()
-
-ROLE_NAMES = [ROL_ADMINISTRADOR, ROL_TECNICO, ROL_CLIENTE]
-ROLE_CHOICES = (
-    (ROL_ADMINISTRADOR, "Administrador"),
-    (ROL_TECNICO, "Técnico"),
-    (ROL_CLIENTE, "Cliente"),
+from django.contrib.auth.models import User, Group
+from django.core.exceptions import ValidationError
+from .models import (
+    SolicitudInspeccion, 
+    Perfil, 
+    Roles, 
+    EstadoSolicitud
 )
 
-SPANISH_LABELS_COMMON = {
-    'username': 'Nombre de usuario',
-    'first_name': 'Nombre',
-    'last_name': 'Apellido',
-    'email': 'Correo electrónico',
-    'rol': 'Rol del usuario',
-    'is_active': 'Usuario activo',
-}
-
-SPANISH_HELP_TEXTS_CREATE = {
-    'username': 'Obligatorio. 150 caracteres o menos. Solo letras, números y @/./+/-/_.',
-    'email': 'Opcional. Se utiliza para notificaciones.',
-    'password1': 'Debe tener al menos 8 caracteres y no puede ser completamente numérica.',
-    'password2': 'Introduce la misma contraseña nuevamente para confirmarla.',
-}
-
-SPANISH_HELP_TEXTS_UPDATE = {
-    'username': 'Obligatorio. 150 caracteres o menos. Solo letras, números y @/./+/-/_.',
-    'email': 'Opcional. Se utiliza para notificaciones.',
-}
-
-
-def assign_role_group(user, role_name):
-    """Ensure the user belongs only to the selected role group."""
-    if role_name not in ROLE_NAMES:
-        return
-
-    groups_to_clear = Group.objects.filter(name__in=ROLE_NAMES)
-    user.groups.remove(*groups_to_clear)
-
-    group, _ = Group.objects.get_or_create(name=role_name)
-    user.groups.add(group)
-
-    user.is_staff = role_name == ROL_ADMINISTRADOR
-
-
 # ==========================================================
-# 1. Formulario para el Cliente (Solicitud)
+# 1. FORMULARIO DE SOLICITUD (CLIENTE)
 # ==========================================================
 class SolicitudInspeccionForm(forms.ModelForm):
-    
     class Meta:
         model = SolicitudInspeccion
         fields = [
-            'nombre_cliente', 
-            'apellido_cliente', 
-            'direccion', 
-            'telefono', 
-            'maquinaria', 
-            'observaciones_cliente'
+            'nombre_cliente', 'apellido_cliente', 
+            'direccion', 'telefono', 
+            'maquinaria', 'observaciones_cliente'
         ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.layout = Layout(
-            Row(
-                Column('nombre_cliente', css_class='form-group col-md-6 mb-0'),
-                Column('apellido_cliente', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('direccion', css_class='form-group col-md-8 mb-0'),
-                Column('telefono', css_class='form-group col-md-4 mb-0'),
-                css_class='form-row'
-            ),
-            'maquinaria',
-            'observaciones_cliente',
-            
-            Submit('submit', 'Crear Solicitud de Inspección', css_class='btn-success mt-4')
-        )
+        widgets = {
+            'nombre_cliente': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
+            'apellido_cliente': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu apellido'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Dirección exacta de la inspección'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+56 9 ...'}),
+            'maquinaria': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Describe la maquinaria o equipo a inspeccionar'}),
+            'observaciones_cliente': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Instrucciones adicionales (opcional)'}),
+        }
 
 # ==========================================================
-# 2. Formulario para el Administrador (Aprobación/Rechazo)
+# 2. FORMULARIOS DE ADMINISTRACIÓN DE USUARIOS
 # ==========================================================
-class AprobacionInspeccionForm(forms.Form):
+class UsuarioAdminCreateForm(forms.ModelForm):
+    """Formulario para que el Admin cree usuarios y les asigne Rol."""
+    rol = forms.ChoiceField(choices=Roles.choices, label="Rol del Usuario", widget=forms.Select(attrs={'class': 'form-select'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Contraseña")
     
-    # Campo oculto para manejar la acción de forma clara en la vista
-    ACCIONES = (
-        ('APROBAR', 'Aprobar Solicitud y Asignar'),
-        ('RECHAZAR', 'Rechazar Solicitud'),
-    )
-    accion = forms.ChoiceField(
-        choices=ACCIONES, 
-        initial='APROBAR', 
-        label="Acción a realizar",
-        widget=forms.Select(attrs={'onchange': 'toggleFields(this.value)'}) 
-    )
-    
-    # 🚨 SOLUCIÓN: Filtrar por GRUPO DE DJANGO, NO por campo 'rol' inexistente 🚨
-    tecnico = forms.ModelChoiceField(
-        queryset=User.objects.filter(groups__name=ROL_TECNICO).order_by('first_name'), 
-        label="Técnico a asignar",
-        required=False 
-    )
-    plantilla = forms.ModelChoiceField(
-        queryset=PlantillaInspeccion.objects.all(),
-        label="Plantilla de Inspección",
-        required=False 
-    )
-    
-    motivo_rechazo = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': 3}), 
-        required=False, 
-        label="Motivo del Rechazo (Requerido si se rechaza)"
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        
-        # Este campo será llenado automáticamente con un nombre basado en la solicitud
-        self.fields['nombre_inspeccion'] = forms.CharField(
-            max_length=200, 
-            label="Título de la Inspección", 
-            required=False, 
-            initial="Inspección de [Cliente]" # Se inicializará en la vista
-        )
-
-        self.helper.layout = Layout(
-            'accion',
-            
-            # Campos de APROBACIÓN
-            Div(
-                'nombre_inspeccion',
-                'tecnico',
-                'plantilla',
-                css_id='aprobacion-fields',
-            ),
-            
-            # Campos de RECHAZO
-            Div(
-                'motivo_rechazo',
-                css_id='rechazo-fields',
-                style="display:none;"
-            ),
-            
-            Submit('submit', 'Confirmar Acción', css_class='btn-primary mt-3')
-        )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        accion = cleaned_data.get('accion')
-
-        if accion == 'APROBAR':
-            if not cleaned_data.get('tecnico'):
-                self.add_error('tecnico', "Debe seleccionar un técnico para aprobar la solicitud.")
-            if not cleaned_data.get('plantilla'):
-                self.add_error('plantilla', "Debe seleccionar una plantilla para aprobar la solicitud.")
-            
-        elif accion == 'RECHAZAR':
-            if not cleaned_data.get('motivo_rechazo'):
-                self.add_error('motivo_rechazo', "Debe ingresar un motivo para rechazar la solicitud.")
-                
-        return cleaned_data
-
-
-# ==========================================================
-# 3. Formularios de Administración de Usuarios
-# ==========================================================
-class UsuarioAdminCreateForm(UserCreationForm):
-    rol = forms.ChoiceField(choices=ROLE_CHOICES, label="Rol del Usuario")
-    is_active = forms.BooleanField(label="Usuario activo", required=False, initial=True)
-
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
-        fields = (
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'is_active',
-        )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for name, field in self.fields.items():
-            widget = field.widget
-            if isinstance(widget, forms.CheckboxInput):
-                widget.attrs['class'] = 'form-check-input'
-            elif isinstance(widget, forms.Select):
-                widget.attrs['class'] = 'form-select'
-            else:
-                widget.attrs['class'] = 'form-control'
-
-        for name, label in {**SPANISH_LABELS_COMMON, 'password1': 'Contraseña', 'password2': 'Confirmar contraseña'}.items():
-            if name in self.fields:
-                self.fields[name].label = label
-
-        for name, help_text in SPANISH_HELP_TEXTS_CREATE.items():
-            if name in self.fields:
-                self.fields[name].help_text = help_text
+        fields = ['username', 'first_name', 'last_name', 'email', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.email = self.cleaned_data.get('email')
-        user.is_active = self.cleaned_data.get('is_active', True)
-        user.is_staff = self.cleaned_data['rol'] == ROL_ADMINISTRADOR
-
+        user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
-            assign_role_group(user, self.cleaned_data['rol'])
-        else:
-            # Defer group assignment until the instance is persisted.
-            self._pending_role = self.cleaned_data['rol']
-
+            # Asignar Grupo basado en el Rol seleccionado
+            rol_seleccionado = self.cleaned_data['rol']
+            grupo, _ = Group.objects.get_or_create(name=rol_seleccionado)
+            user.groups.add(grupo)
+            # Asegurar que tenga perfil
+            Perfil.objects.get_or_create(usuario=user)
         return user
 
-    def save_m2m(self):
-        super().save_m2m()
-        role = getattr(self, '_pending_role', None)
-        if role and self.instance.pk:
-            assign_role_group(self.instance, role)
-
-
 class UsuarioAdminUpdateForm(forms.ModelForm):
-    rol = forms.ChoiceField(choices=ROLE_CHOICES, label="Rol del Usuario")
-    password1 = forms.CharField(
-        label="Nueva contraseña",
-        widget=forms.PasswordInput,
-        required=False,
-        strip=False,
-    )
-    password2 = forms.CharField(
-        label="Confirmar contraseña",
-        widget=forms.PasswordInput,
-        required=False,
-        strip=False,
-    )
+    """Formulario para editar usuarios existentes (sin password obligatoria)."""
+    rol = forms.ChoiceField(choices=Roles.choices, label="Rol del Usuario", widget=forms.Select(attrs={'class': 'form-select'}))
 
     class Meta:
         model = User
-        fields = (
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'is_active',
-        )
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_active']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        role_group = self.instance.groups.filter(name__in=ROLE_NAMES).first()
-        if role_group:
-            self.fields['rol'].initial = role_group.name
-        self.fields['password1'].help_text = 'Deja en blanco para mantener la contraseña actual.'
-        self.fields['password2'].help_text = 'Confirma la nueva contraseña si decides cambiarla.'
-        for field in self.fields.values():
-            widget = field.widget
-            if isinstance(widget, forms.CheckboxInput):
-                widget.attrs['class'] = 'form-check-input'
-            elif isinstance(widget, forms.Select):
-                widget.attrs['class'] = 'form-select'
+        # Pre-seleccionar el rol actual
+        if self.instance.pk:
+            grupos = self.instance.groups.values_list('name', flat=True)
+            if Roles.ADMINISTRADOR in grupos:
+                self.initial['rol'] = Roles.ADMINISTRADOR
+            elif Roles.TECNICO in grupos:
+                self.initial['rol'] = Roles.TECNICO
             else:
-                widget.attrs['class'] = 'form-control'
-
-        for name, label in {**SPANISH_LABELS_COMMON, 'password1': 'Nueva contraseña', 'password2': 'Confirmar contraseña'}.items():
-            if name in self.fields:
-                self.fields[name].label = label
-
-        for name, help_text in SPANISH_HELP_TEXTS_UPDATE.items():
-            if name in self.fields:
-                self.fields[name].help_text = help_text
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get('password1')
-        password2 = cleaned_data.get('password2')
-
-        if password1 or password2:
-            if password1 != password2:
-                self.add_error('password2', "Las contraseñas no coinciden.")
-
-        return cleaned_data
+                self.initial['rol'] = Roles.CLIENTE
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        password1 = self.cleaned_data.get('password1')
-        role = self.cleaned_data['rol']
-
-        if password1:
-            user.set_password(password1)
-
-        user.is_staff = role == ROL_ADMINISTRADOR
-
         if commit:
             user.save()
-            assign_role_group(user, role)
-        else:
-            self._pending_role = role
-
+            # Actualizar Rol
+            user.groups.clear()
+            rol_seleccionado = self.cleaned_data['rol']
+            grupo, _ = Group.objects.get_or_create(name=rol_seleccionado)
+            user.groups.add(grupo)
         return user
 
-    def save_m2m(self):
-        super().save_m2m()
-        role = getattr(self, '_pending_role', None)
-        if role and self.instance.pk:
-            assign_role_group(self.instance, role)
-
-
+# ==========================================================
+# 3. FORMULARIOS DE PERFIL (Usuario Normal)
+# ==========================================================
 class UsuarioPerfilForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
 class PerfilForm(forms.ModelForm):
     class Meta:
         model = Perfil
         fields = ['foto', 'descripcion']
-        labels = {
-            'foto': 'Foto de Perfil',
-            'descripcion': 'Descripción Profesional'
+        widgets = {
+            'foto': forms.FileInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+
+# ==========================================================
+# 4. FORMULARIO DE APROBACIÓN (Admin
+class AprobacionInspeccionForm(forms.Form):
+    # Este formulario es manejado principalmente en el HTML manualmente,
+    # pero lo dejamos aquí para que la importación en views.py no falle.
+    pass

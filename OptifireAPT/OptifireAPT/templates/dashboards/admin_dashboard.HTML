@@ -7,7 +7,10 @@
 
 {% block dashboard_content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 text-dark fw-bold">Panel de Control</h1>
+    <div>
+        <h1 class="h3 text-dark fw-bold mb-1">Panel de Control</h1>
+        <p class="text-muted mb-0">Gestiona usuarios y solicitudes de inspección.</p>
+    </div>
     <a class="btn btn-primary shadow-sm" href="{% url 'admin_usuarios_list' %}">
         <i class="fas fa-users-cog me-2"></i> Gestionar Usuarios
     </a>
