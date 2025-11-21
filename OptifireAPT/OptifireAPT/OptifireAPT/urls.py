@@ -1,11 +1,9 @@
-# urls.py ARREGLADO
-
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings             # Configuración del proyecto
+from django.conf.urls.static import static   # Función para servir archivos estáticos/media
 
-# 1. Importaciones de Vistas
-# Es mejor importar solo las vistas necesarias.
-# Agrupa todas las vistas públicas y de autenticación que irán en la raíz.
+# Importaciones de Vistas
 from usuarios.views import (
     home, 
     login_view, 
@@ -14,8 +12,7 @@ from usuarios.views import (
     dashboard 
 )
 
-
-# 2. Definición de urlpatterns (SOLO UNA VEZ)
+# Definición de urlpatterns
 urlpatterns = [
     # ----------------------------------------
     # A. RUTAS PÚBLICAS Y DE AUTENTICACIÓN (RAÍZ)
@@ -33,8 +30,13 @@ urlpatterns = [
     # ----------------------------------------
     # C. RUTAS INTERNAS DE LA APLICACIÓN (BAJO /usuarios/)
     # ----------------------------------------
-    # Esto manejará todas las URLs privadas y de gestión, como /usuarios/dashboard/, 
-    # /usuarios/nueva_inspeccion/, etc.
     path('usuarios/', include('usuarios.urls')), 
-    
-] # <--- ¡Este corchete de cierre es crucial!
+]
+
+# ----------------------------------------
+# D. CONFIGURACIÓN PARA MOSTRAR IMÁGENES (MEDIA)
+# ----------------------------------------
+# Esto es vital: Django no sirve archivos subidos por el usuario (fotos de perfil)
+# por defecto. Debemos agregar esta ruta manualmente cuando estamos en modo DEBUG.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

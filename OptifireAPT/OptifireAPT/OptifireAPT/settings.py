@@ -142,3 +142,7 @@ LOGIN_REDIRECT_URL = '/usuarios/' # Redirige a la nueva vista del inspector/usua
 
 # URL a donde redirigir después de cerrar sesión
 LOGOUT_REDIRECT_URL = '/'
+
+# Configuración de Archivos Multimedia (Fotos de perfil, documentos, etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
