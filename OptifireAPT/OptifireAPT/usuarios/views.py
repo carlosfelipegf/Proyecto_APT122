@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
+from django.http import JsonResponse
+from .models import Notificacion 
 
 # Importamos formularios
 from .forms import (
@@ -17,7 +19,8 @@ from .forms import (
     UsuarioAdminCreateForm, 
     UsuarioAdminUpdateForm,
     UsuarioPerfilForm, 
-    PerfilForm
+    TecnicoPerfilForm, 
+    ClientePerfilForm , 
 )
 
 # Importamos los Modelos y las NUEVAS CLASES DE CONSTANTES
@@ -253,14 +256,17 @@ def completar_inspeccion(request, pk):
         messages.info(request, "Esta inspección ya está finalizada.")
         return redirect('dashboard_tecnico')
 
+    # 1. AGREGA 'imagen_evidencia' A LOS CAMPOS PERMITIDOS
     TareaFormSet = inlineformset_factory(
         Inspeccion, TareaInspeccion,
-        fields=('estado', 'observacion'),
+        fields=('estado', 'observacion', 'imagen_evidencia'), # <--- ¡AQUÍ!
         extra=0, can_delete=False
     )
 
     if request.method == 'POST':
-        formset = TareaFormSet(request.POST, instance=inspeccion)
+        # 2. AGREGA 'request.FILES' PARA PROCESAR LA SUBIDA DE ARCHIVOS
+        formset = TareaFormSet(request.POST, request.FILES, instance=inspeccion) # <--- ¡AQUÍ!
+        
         if formset.is_valid():
             formset.save()
             inspeccion.comentarios_generales = request.POST.get('comentarios_generales')
@@ -279,8 +285,8 @@ def completar_inspeccion(request, pk):
                 if inspeccion.estado == EstadoInspeccion.ASIGNADA:
                     inspeccion.estado = EstadoInspeccion.EN_CURSO
                 inspeccion.save()
-                messages.success(request, "Progreso guardado.")
-                return redirect('dashboard_tecnico')
+                messages.success(request, "Progreso guardado (con fotos).")
+                return redirect('dashboard_tecnico') # Recargar para ver las fotos
     else:
         formset = TareaFormSet(instance=inspeccion)
 
@@ -292,15 +298,30 @@ def completar_inspeccion(request, pk):
 @login_required
 @user_passes_test(is_tecnico)
 def perfil_tecnico(request):
-    perfil, _ = Perfil.objects.get_or_create(usuario=request.user)
+    usuario = request.user
+    perfil, _ = Perfil.objects.get_or_create(usuario=usuario)
+
     if request.method == 'POST':
-        perfil.descripcion = request.POST.get('descripcion_profesional', '').strip()
-        if request.FILES.get('foto'):
-            perfil.foto = request.FILES['foto']
-        perfil.save()
-        messages.success(request, "Perfil actualizado.")
-    
-    return render(request, 'dashboards/tecnico/perfil.html', {'perfil': perfil})
+        # Usamos el formulario de Usuario (para nombre/email) 
+        user_form = UsuarioPerfilForm(request.POST, instance=usuario)
+        # Y el formulario ESPECÍFICO de Técnico (para región, ciudad, etc.)
+        perfil_form = TecnicoPerfilForm(request.POST, request.FILES, instance=perfil)
+
+        if user_form.is_valid() and perfil_form.is_valid():
+            user_form.save()
+            perfil_form.save()
+            messages.success(request, "Perfil profesional actualizado correctamente.")
+            return redirect('perfil_tecnico')
+    else:
+        user_form = UsuarioPerfilForm(instance=usuario)
+        perfil_form = TecnicoPerfilForm(instance=perfil)
+
+    # Renderizamos la plantilla bonita
+    return render(request, 'dashboards/tecnico/perfil.html', {
+        'user_form': user_form,
+        'perfil_form': perfil_form,
+        'perfil': perfil # Pasamos el objeto perfil para datos de solo lectura
+    })
 
 # ==========================================================
 # 5. VISTAS CLIENTE
@@ -362,20 +383,29 @@ def anular_solicitud(request, pk):
 
 @login_required
 def editar_perfil(request):
+    # Vista para el perfil del CLIENTE (y usuarios generales)
     usuario = request.user
     perfil, _ = Perfil.objects.get_or_create(usuario=usuario)
+    
     if request.method == 'POST':
         user_form = UsuarioPerfilForm(request.POST, instance=usuario)
-        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        # 🚨 CAMBIO AQUÍ: Usamos ClientePerfilForm
+        perfil_form = ClientePerfilForm(request.POST, request.FILES, instance=perfil)
+        
         if user_form.is_valid() and perfil_form.is_valid():
             user_form.save()
             perfil_form.save()
-            messages.success(request, "Perfil actualizado.")
+            messages.success(request, "Perfil actualizado correctamente.")
             return redirect('editar_perfil')
     else:
         user_form = UsuarioPerfilForm(instance=usuario)
-        perfil_form = PerfilForm(instance=perfil)
-    return render(request, 'perfil/perfil_editar.html', {'user_form': user_form, 'perfil_form': perfil_form})
+        # 🚨 CAMBIO AQUÍ TAMBIÉN
+        perfil_form = ClientePerfilForm(instance=perfil)
+        
+    return render(request, 'perfil/perfil_editar.html', {
+        'user_form': user_form, 
+        'perfil_form': perfil_form
+    })
 
 @login_required
 def descargar_acta(request, pk):
@@ -409,3 +439,21 @@ def descargar_acta(request, pk):
     HTML(string=html_string).write_pdf(response)
     
     return response
+
+@login_required
+def marcar_notificacion_leida(request, pk):
+    """
+    Marca una notificación como leída vía AJAX para que no vuelva a aparecer.
+    Solo permite modificar notificaciones que pertenezcan al usuario actual.
+    """
+    if request.method == 'GET':
+        # Buscamos la notificación asegurando que sea del usuario logueado (Seguridad)
+        notif = get_object_or_404(Notificacion, pk=pk, usuario=request.user)
+        
+        # Cambiamos el estado
+        notif.leido = True
+        notif.save()
+        
+        return JsonResponse({'status': 'ok', 'mensaje': 'Notificación marcada como leída'})
+    
+    return JsonResponse({'status': 'error'}, status=400)

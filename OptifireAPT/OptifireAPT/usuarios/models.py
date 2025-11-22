@@ -41,14 +41,31 @@ class EstadoTarea(models.TextChoices):
 
 class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
-    foto = models.ImageField(upload_to='perfiles/fotos/', blank=True, null=True)
-    descripcion = models.TextField(max_length=500, blank=True, null=True)
-    # Eliminé cambio_contrasena_obligatorio si no lo usas activamente para limpiar
+    
+    # --- CAMPOS COMUNES (Para todos) ---
+    foto = models.ImageField(upload_to='perfiles/fotos/', blank=True, null=True, verbose_name="Foto de Perfil")
+    descripcion = models.TextField(max_length=500, blank=True, null=True, verbose_name="Descripción / Bio")
+    telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono")
+    direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección (Base)")
+    
+    # --- CAMPOS ESPECÍFICOS DE UBICACIÓN (Útiles para ambos) ---
+    region = models.CharField(max_length=100, blank=True, null=True, verbose_name="Región")
+    ciudad = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ciudad")
+    
+    # --- CAMPOS SOLO TÉCNICO ---
+    # El cliente tendrá esto vacío (NULL)
+    fecha_contratacion = models.DateField(blank=True, null=True, verbose_name="Fecha de Contratación")
+    
+    # --- CAMPOS SOLO CLIENTE (Ejemplos, agrega los que necesites) ---
+    # El técnico tendrá esto vacío (NULL)
+    rut_empresa = models.CharField(max_length=20, blank=True, null=True, verbose_name="RUT Empresa")
+    rubro = models.CharField(max_length=100, blank=True, null=True, verbose_name="Rubro")
 
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
 
     def get_role(self):
+        # (Tu lógica de roles se mantiene igual)
         if self.usuario.is_superuser: return Roles.ADMINISTRADOR
         if self.usuario.groups.filter(name=Roles.ADMINISTRADOR).exists(): return Roles.ADMINISTRADOR
         if self.usuario.groups.filter(name=Roles.TECNICO).exists(): return Roles.TECNICO
@@ -181,3 +198,30 @@ class TareaInspeccion(models.Model):
 
     def __str__(self):
         return f"{self.descripcion} ({self.get_estado_display()})"
+    
+    descripcion = models.CharField(max_length=255, verbose_name="Punto de Control")
+    
+    # NUEVO CAMPO: Imagen de Evidencia
+    imagen_evidencia = models.ImageField(
+        upload_to='inspecciones/evidencias/', 
+        blank=True, 
+        null=True,
+        verbose_name="Imagen de Evidencia"
+    )
+
+    estado = models.CharField(
+        max_length=50, 
+        choices=EstadoTarea.choices, 
+        default=EstadoTarea.PENDIENTE,
+        verbose_name= "Estado de la Tarea"
+    )
+
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificaciones')
+    mensaje = models.CharField(max_length=255)
+    enlace = models.CharField(max_length=255, blank=True, null=True) # Para ir a ver la foto
+    leido = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notificación para {self.usuario.username}: {self.mensaje}"

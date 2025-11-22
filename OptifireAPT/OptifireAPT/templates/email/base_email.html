@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Notificación Optifire{% endblock %}</title>
+    <style>
+        /* Estilos en línea para compatibilidad con clientes de correo */
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }
+        .container { width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 5px; overflow: hidden; }
+        .header { background-color: #DC281E; padding: 20px 0; text-align: center; color: white; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { padding: 30px; line-height: 1.6; color: #333; }
+        .content p { margin: 0 0 15px; }
+        .button-container { text-align: center; margin: 25px 0; }
+        .button { background-color: #F05A22; color: white !important; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; }
+        .footer { background-color: #f0f0f0; padding: 20px; text-align: center; font-size: 11px; color: #777; border-top: 1px solid #e0e0e0; }
+        .logo-text { font-size: 20px; font-weight: bold; color: white; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div style="padding: 20px;">
+        <div class="container">
+            <div class="header">
+                 <a href="#" class="logo-text">OPTIFIRE</a>
+            </div>
+            <div class="content">
+                {% block content %}
+                    {# Contenido específico del correo #}
+                {% endblock content %}
+            </div>
+            <div class="footer">
+                Este correo fue enviado automáticamente por Optifire. Por favor, no responda a esta dirección.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

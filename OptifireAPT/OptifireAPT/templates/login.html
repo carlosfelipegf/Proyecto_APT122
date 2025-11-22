@@ -1,52 +1,50 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Iniciar Sesión - Optifire APT{% endblock %}
+{% block title %}Iniciar Sesión | Optifire{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-  <div class="col-md-6 col-lg-5">
-    <div class="card shadow-sm p-4">
-      <h2 class="text-center mb-4">Iniciar Sesión</h2>
+<div class="container d-flex align-items-center justify-content-center flex-grow-1 py-5">
+    
+    <div class="card shadow-lg border-0 rounded-4" style="width: 100%; max-width: 450px;">
+        <div class="card-body p-5">
+            
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-dark">Bienvenido</h2>
+                <p class="text-muted">Ingresa a tu cuenta Optifire</p>
+            </div>
 
-      <!-- Mensajes desde Django -->
-      {% if messages %}
-        {% for m in messages %}
-          <div class="alert alert-{{ m.tags|default:'danger' }}" role="alert">{{ m }}</div>
-        {% endfor %}
-      {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2 small">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
 
-      <!-- Mensaje de error manual -->
-      {% if error_message %}
-        <div class="alert alert-danger" role="alert">{{ error_message }}</div>
-      {% endif %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label fw-bold small text-uppercase text-muted">Usuario</label>
+                    <input type="text" name="username" class="form-control form-control-lg bg-light border-0" placeholder="Ej: soycliente" required id="id_username">
+                </div>
 
-      <form id="loginForm" method="post" novalidate>
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="username" class="form-label">Usuario</label>
-          <input type="text" class="form-control" id="username" name="username" required
-                 pattern="^[A-Za-z0-9]{4,}$"
-                 title="El usuario debe tener al menos 4 caracteres y solo letras o números.">
+                <div class="mb-4">
+                    <label for="id_password" class="form-label fw-bold small text-uppercase text-muted">Contraseña</label>
+                    <input type="password" name="password" class="form-control form-control-lg bg-light border-0" placeholder="••••••••" required id="id_password">
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-brand btn-lg fw-bold">
+                        Entrar
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <a href="#" class="small text-decoration-none text-muted">¿Olvidaste tu contraseña?</a>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <input type="password" class="form-control" id="password" name="password" required
-                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
-                 title="Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.">
-        </div>
-
-        <div id="errorMsg" class="text-danger small mb-2"></div>
-
-        <button type="submit" class="btn btn-primary w-100">Entrar</button>
-      </form>
-
-      <p class="text-center mt-3 mb-0 text-muted small">
-        ¿Olvidaste tu contraseña? <a href="#" class="text-decoration-none">Recupérala aquí</a>
-      </p>
     </div>
-  </div>
+
 </div>
-
-
-</script>
 {% endblock %}
