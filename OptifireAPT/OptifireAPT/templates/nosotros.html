@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Nosotros | Optifire APT{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section (Variant for Inner Pages) -->
+<section class="hero-section py-5" style="padding-top: 4rem; padding-bottom: 4rem;">
+    <div class="container text-center">
+        <h1 class="hero-title mb-3" style="font-size: 3rem;">
+            <i class="fa-solid fa-hard-hat text-brand me-3"></i>Liderazgo en Gestión
+        </h1>
+        <p class="hero-subtitle mx-auto" style="max-width: 900px;">
+            Somos la consultora tecnológica que potencia la seguridad, mantenimiento y la eficiencia operativa en la industria minera, portuaria y de transporte.
+        </p>
+    </div>
+</section>
+
+<!-- Mission & Vision Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-md-6">
+                <div class="p-4 border-start border-4 border-danger h-100 shadow-sm rounded-end bg-light">
+                    <h2 class="fw-bold mb-3 text-brand"><i class="fa-solid fa-bullseye me-2"></i>Nuestra Misión</h2>
+                    <p class="lead text-dark mb-3 fw-semibold">
+                        Proporcionar soluciones digitales robustas y servicios técnicos expertos.
+                    </p>
+                    <p class="text-secondary">
+                        Nuestro objetivo es agilizar los procesos en términos de tiempo, esfuerzo y productividad de los Administradores e Inspectores, minimizando los riesgos operacionales y extendiendo la vida útil de sus activos.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 border-start border-4 border-warning h-100 shadow-sm rounded-end bg-light">
+                    <h2 class="fw-bold mb-3 text-brand"><i class="fa-solid fa-eye me-2"></i>Nuestra Visión</h2>
+                    <p class="lead text-dark mb-3 fw-semibold">
+                        Ser el referente tecnológico y de servicio a nivel nacional.
+                    </p>
+                    <p class="text-secondary">
+                        Buscamos que cada usuario del Sistema GMD tenga una plataforma fiable que garantice la confidencialidad y fortalezca la capacidad operativa de la organización, promoviendo una gestión más eficiente, precisa y sustentable.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pilares Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-6 mb-3">Nuestros Pilares de Servicio</h2>
+            <p class="text-muted">Automatización y eficiencia garantizada</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3 class="feature-title">Mantención y Diagnóstico</h3>
+                <p class="feature-text">
+                    Digitalizamos las pautas de mantenimiento preventivo y correctivo. Los técnicos completan reportes detallados en campo, asegurando el cumplimiento.
+                </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="feature-title">Registro y Trazabilidad</h3>
+                <p class="feature-text">
+                    Monitoreo y análisis de inspecciones por vehículo. El acceso a datos históricos garantiza una trazabilidad completa y seguridad normativa.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <h3 class="feature-title">Coordinación Centralizada</h3>
+                <p class="feature-text">
+                    Automatizamos la generación de actas e informes técnicos. Gestión eficiente de roles para una coordinación y facturación precisa.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 text-center">
+    <div class="container">
+        <div class="p-5 rounded-3 bg-white shadow-sm border">
+            <h3 class="fw-bold mb-3">¿Listo para optimizar la gestión de su maquinaria?</h3>
+            <p class="text-muted mb-4">Confíe en la plataforma que automatiza y profesionaliza la seguridad de sus activos.</p>
+            <a href="{% url 'login' %}" class="btn btn-brand btn-lg">
+                <i class="fa-solid fa-right-to-bracket me-2"></i> Iniciar Sesión
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
