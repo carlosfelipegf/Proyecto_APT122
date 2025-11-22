@@ -1,0 +1,17 @@
+<ul class="nav flex-column flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_administrador' %}active{% endif %}" href="{% url 'dashboard_administrador' %}">
+            <i class="fas fa-chart-line"></i> Resumen
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if 'usuario' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'admin_usuarios_list' %}">
+            <i class="fas fa-users-cog"></i> Usuarios
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if 'historial' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'historial_solicitudes' %}">
+            <i class="fas fa-history"></i> Historial
+        </a>
+    </li>
+</ul>
