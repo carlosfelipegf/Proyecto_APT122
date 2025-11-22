@@ -1,4 +1,3 @@
-# usuarios/urls.py
 from django.urls import path
 from django.contrib.auth import views as auth_views # Importamos vistas de auth de Django
 from . import views
@@ -62,4 +61,28 @@ urlpatterns = [
     # Estas rutas serán llamadas por JavaScript para obtener y marcar como leídas las notificaciones
     path('api/notifications/get/', views.get_notifications, name='get_notifications_api'),
     path('api/notifications/read/', views.mark_as_read, name='mark_as_read_api'),
+    
+    # ----------------------------------------
+    # H. 🔄 RUTAS DE RECUPERACIÓN DE CONTRASEÑA (SOLUCIÓN) 🔄
+    # ----------------------------------------
+    # 1. Envía el correo de reseteo: El botón de "Recuperar Contraseña" debe apuntar a este nombre de URL.
+    path('password-reset/', 
+         auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), 
+         name='password_reset'
+    ),
+    # 2. Pantalla de confirmación de correo enviado.
+    path('password-reset/done/', 
+         auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), 
+         name='password_reset_done'
+    ),
+    # 3. Formulario para ingresar la nueva contraseña (recibida por email).
+    path('password-reset-confirm/<uidb64>/<token>/', 
+         auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), 
+         name='password_reset_confirm'
+    ),
+    # 4. Pantalla de éxito después de cambiar la contraseña.
+    path('password-reset-complete/', 
+         auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), 
+         name='password_reset_complete'
+    ),
 ]

@@ -146,3 +146,30 @@ LOGOUT_REDIRECT_URL = '/'
 # Configuración de Archivos Multimedia (Fotos de perfil, documentos, etc.)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# ==============================================================================
+# CONFIGURACIÓN DE CORREO ELECTRÓNICO (SMTP) - ¡PARA RECUPERACIÓN DE CONTRASEÑA!
+# ==============================================================================
+
+# 1. Backend: Usa el backend SMTP para enviar correos reales.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# 2. Host (Servidor de Correo): Por ejemplo, Gmail.
+EMAIL_HOST = 'smtp.gmail.com'
+
+# 3. Puerto: 587 es el estándar para STARTTLS.
+EMAIL_PORT = 587             
+
+# 4. Seguridad: Habilitar TLS (Transport Layer Security).
+EMAIL_USE_TLS = True         
+
+# 5. Credenciales: ¡REEMPLAZA ESTOS VALORES!
+# IMPORTANTE: Si usas Gmail, necesitas generar una "Contraseña de Aplicación"
+# y usarla aquí en lugar de tu contraseña principal.
+EMAIL_HOST_USER = 'tu_email@gmail.com'  # <-- TU CORREO DE ENVÍO
+EMAIL_HOST_PASSWORD = 'TU_CONTRASEÑA_O_CLAVE_DE_APLICACION' # <-- TU CLAVE/CONTRASEÑA
+
+# Opcionales, pero buenas prácticas:
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER # Para correos de error del servidor
