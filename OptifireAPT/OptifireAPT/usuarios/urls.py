@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('nosotros/', views.nosotros_view, name='nosotros'),
+    path('notificacion/leida/<int:pk>/', views.marcar_notificacion_leida, name='marcar_notificacion_leida'),
 
     # =========================================
     # ROUTER CENTRAL (DASHBOARD)

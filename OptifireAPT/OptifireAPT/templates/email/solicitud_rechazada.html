@@ -1,0 +1,18 @@
+{% extends 'email/base_email.html' %}
+{% block title %}Solicitud N°{{ solicitud.pk }} Rechazada{% endblock %}
+
+{% block content %}
+    <p>Estimado/a <strong>{{ solicitud.nombre_cliente }}</strong>,</p>
+
+    <p>Lamentamos informarle que su solicitud de inspección N°{{ solicitud.pk }} para el equipo **{{ solicitud.maquinaria }}** ha sido <strong>RECHAZADA</strong> por nuestro equipo administrativo.</p>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <p style="font-size: 16px; font-weight: bold; color: #DC281E;">Motivo del Rechazo:</p>
+    <p style="border: 1px solid #DC281E; padding: 15px; background-color: #fff0f0; border-radius: 4px; font-style: italic;">
+        {{ solicitud.motivo_rechazo|default:"Motivo no especificado. Por favor contacte a soporte." }}
+    </p>
+    
+    <p style="margin-top: 30px;">Si desea más información o tiene alguna duda, por favor, póngase en contacto con nuestro equipo de soporte.</p>
+    <p>Atentamente,<br>El equipo de Optifire</p>
+{% endblock content %}

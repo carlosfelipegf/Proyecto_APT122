@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'usuarios.context_processors.notificaciones_usuario',
             ],
         },
     },
@@ -146,3 +147,35 @@ LOGOUT_REDIRECT_URL = '/'
 # Configuración de Archivos Multimedia (Fotos de perfil, documentos, etc.)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# -------------------------------------------------------------
+# CONFIGURACIÓN DE CORREO ELECTRÓNICO (Para Desarrollo)
+# -------------------------------------------------------------
+
+# Esto hace que todos los correos se impriman en la consola (terminal)
+# en lugar de ser enviados realmente. Ideal para pruebas.
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+
+# Esta dirección se usa como remitente en la función send_mail
+# La pusimos en signals.py, así que debe estar aquí.
+#DEFAULT_FROM_EMAIL = 'Optifire <notificaciones@optifire.cl>'
+
+# -------------------------------------------------------------
+# CONFIGURACIÓN DE CORREO ELECTRÓNICO (PRODUCCIÓN/REAL)
+# -------------------------------------------------------------
+
+#  CAMBIO CLAVE: Cambiamos de 'console' a 'smtp' para enviar correos reales
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+
+# Configuración del servidor (Estándar para Gmail/Outlook)
+EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP de Google
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True          # Usar seguridad TLS
+
+# 🚨 CREDENCIALES (DEBES REEMPLAZAR ESTAS LÍNEAS) 🚨
+# IMPORTANTE: Reemplaza con tus datos reales
+EMAIL_HOST_USER = 'guerraflorescarlos@gmail.com'         # Ejemplo: notificaciones@optifire.cl
+EMAIL_HOST_PASSWORD = 'xoka fbky asgg sjij ' # <-- Aquí va la contraseña de aplicación generada
+
+# Remitente por defecto
+DEFAULT_FROM_EMAIL = 'Optifire <notificaciones@optifire.cl>'

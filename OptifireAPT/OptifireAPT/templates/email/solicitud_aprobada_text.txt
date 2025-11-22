@@ -1,0 +1,14 @@
+Estimado/a cliente,
+
+¡Buenas noticias! Su solicitud de inspección N°{{ solicitud.pk }} ha sido APROBADA y ASIGNADA.
+
+Detalles de Asignación:
+------------------------------------------------------
+Técnico Asignado: {{ tecnico_nombre }}
+Fecha Programada: {% if solicitud.inspeccion.fecha_programada %}{{ solicitud.inspeccion.fecha_programada|date:"d M Y" }}{% else %}No definida aún.{% endif %}
+------------------------------------------------------
+
+Puede ver los detalles y el seguimiento de su orden de trabajo en su panel de cliente.
+
+Atentamente,
+El equipo de Optifire

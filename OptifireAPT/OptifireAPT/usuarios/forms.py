@@ -98,8 +98,10 @@ class UsuarioAdminUpdateForm(forms.ModelForm):
         return user
 
 # ==========================================================
-# 3. FORMULARIOS DE PERFIL (Usuario Normal)
+# 3. FORMULARIOS DE PERFIL (DIVIDIDOS POR ROL)
 # ==========================================================
+
+# Formulario base para datos del modelo USER (Nombre, Apellido, Email)
 class UsuarioPerfilForm(forms.ModelForm):
     class Meta:
         model = User
@@ -110,17 +112,41 @@ class UsuarioPerfilForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
-class PerfilForm(forms.ModelForm):
+# Formulario EXCLUSIVO para Técnicos (Ve región, ciudad, etc.)
+class TecnicoPerfilForm(forms.ModelForm):
     class Meta:
         model = Perfil
-        fields = ['foto', 'descripcion']
+        # 1. AGREGAMOS 'fecha_contratacion' A LA LISTA DE CAMPOS
+        fields = ['foto', 'telefono', 'region', 'ciudad', 'descripcion', 'fecha_contratacion']
+        
         widgets = {
             'foto': forms.FileInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+56 9...'}),
+            'region': forms.TextInput(attrs={'class': 'form-control'}),
+            'ciudad': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Experiencia y certificaciones'}),
+            
+            # 2. AGREGAMOS EL WIDGET DE CALENDARIO
+            'fecha_contratacion': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+# Formulario EXCLUSIVO para Clientes (Ve empresa, rubro, dirección)
+class ClientePerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['foto', 'telefono', 'direccion', 'rubro', 'rut_empresa', 'descripcion']
+        widgets = {
+            'foto': forms.FileInput(attrs={'class': 'form-control'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Dirección casa matriz'}),
+            'rubro': forms.TextInput(attrs={'class': 'form-control'}),
+            'rut_empresa': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Información sobre la empresa...'}),
         }
 
 # ==========================================================
-# 4. FORMULARIO DE APROBACIÓN (Admin
+# 4. FORMULARIO DE APROBACIÓN (Admin)
+# ==========================================================
 class AprobacionInspeccionForm(forms.Form):
     # Este formulario es manejado principalmente en el HTML manualmente,
     # pero lo dejamos aquí para que la importación en views.py no falle.

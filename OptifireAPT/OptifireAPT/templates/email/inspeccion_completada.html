@@ -1,0 +1,21 @@
+{% extends 'email/base_email.html' %}
+{% block title %}Inspección N°{{ solicitud.inspeccion.pk }} Finalizada{% endblock %}
+
+{% block content %}
+    <p>Estimado/a <strong>{{ solicitud.nombre_cliente }}</strong>,</p>
+
+    <h2 style="color: #008000; margin-top: 10px;">¡Servicio Completado!</h2>
+
+    <p>Nos complace informarle que la inspección técnica N°{{ solicitud.inspeccion.pk }} para el equipo **{{ solicitud.maquinaria }}** ha sido <strong>FINALIZADA</strong> exitosamente por el técnico asignado.</p>
+    
+    <p style="margin-top: 20px;">El **Acta Técnica Oficial** se encuentra lista para su revisión y descarga en su portal de cliente.</p>
+
+    <div class="button-container">
+        <a href="http://127.0.0.1:8000/usuarios/solicitud/detalle/{{ solicitud.pk }}/" class="button">
+            Descargar Acta y Reporte Final
+        </a>
+    </div>
+
+    <p style="font-size: 12px; margin-top: 30px;">Gracias por confiar en Optifire.</p>
+    <p>Saludos cordiales.</p>
+{% endblock content %}
