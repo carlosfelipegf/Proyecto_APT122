@@ -47,7 +47,7 @@ class Perfil(models.Model):
     descripcion = models.TextField(max_length=500, blank=True, null=True, verbose_name="Descripción / Bio")
     telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono")
     direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección (Base)")
-    
+    rut = models.CharField(max_length=12, blank=True, null=True, verbose_name="RUT", unique=True)
     # --- CAMPOS ESPECÍFICOS DE UBICACIÓN (Útiles para ambos) ---
     region = models.CharField(max_length=100, blank=True, null=True, verbose_name="Región")
     ciudad = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ciudad")

@@ -155,13 +155,26 @@ def admin_usuario_editar(request, pk):
 @login_required
 @user_passes_test(is_administrador)
 def admin_usuario_eliminar(request, pk):
-    usuario = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        usuario.delete()
-        messages.success(request, "Usuario eliminado.")
-        return redirect('admin_usuarios_list')
-    return render(request, 'dashboards/admin/usuario_confirm_delete.html', {'usuario_objetivo': usuario})
+    usuario_a_eliminar = get_object_or_404(User, pk=pk)
 
+    # 1. PROTECCIÓN DE SUICIDIO DIGITAL
+    # Impedimos que el admin se borre a sí mismo mientras está logueado
+    if usuario_a_eliminar == request.user:
+        messages.error(request, "No puedes eliminar tu propia cuenta de administrador mientras la usas.")
+        return redirect('admin_usuarios_list')
+
+    # 2. LOGICA DE ELIMINACIÓN
+    # Aquí ya no hay restricción de "is_superuser", así que puedes borrar a otros admins.
+    if request.method == 'POST':
+        nombre = usuario_a_eliminar.username
+        usuario_a_eliminar.delete()
+        messages.success(request, f"El usuario administrador '{nombre}' ha sido eliminado correctamente.")
+        return redirect('admin_usuarios_list')
+
+    return render(request, 'dashboards/admin/usuario_confirm_delete.html', {
+        'usuario_objetivo': usuario_a_eliminar
+    })
+    
 @login_required
 @user_passes_test(is_administrador)
 def aprobar_solicitud(request, pk):
