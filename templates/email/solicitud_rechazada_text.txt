@@ -1,0 +1,11 @@
+Estimado/a cliente,
+
+Lamentamos informarle que su solicitud de inspección N°{{ solicitud.pk }} ha sido RECHAZADA por nuestro equipo administrativo.
+
+Motivo del Rechazo:
+{{ solicitud.motivo_rechazo }}
+
+Si tiene alguna duda o desea enviar una nueva solicitud, no dude en contactarnos.
+
+Saludos cordiales,
+El equipo de Optifire

@@ -1,0 +1,143 @@
+{% extends "base_dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Completar Inspección | Optifire{% endblock %}
+
+{% block dashboard_menu %}
+    {% include "includes/tecnico_menu.html" %}
+{% endblock dashboard_menu %}
+
+{% block dashboard_content %}
+<div class="container-fluid px-0">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 text-dark fw-bold mb-1">
+                <i class="fas fa-clipboard-check me-2"></i>Gestión de Inspección
+            </h1>
+            <p class="text-muted mb-0">Completa el checklist y sube la evidencia fotográfica.</p>
+        </div>
+        <a href="{% url 'dashboard_tecnico' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Volver al Tablero
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-light border-bottom py-3">
+                    <h6 class="m-0 fw-bold text-primary"><i class="fas fa-info-circle me-2"></i> Detalles de la Orden</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="small text-muted fw-bold text-uppercase">Orden de Trabajo</label>
+                        <p class="fw-bold text-dark mb-0 fs-5">#{{ inspeccion.solicitud.id|default:inspeccion.id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase">Inspección</label>
+                        <p class="mb-0 fw-bold">{{ inspeccion.nombre_inspeccion }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase">Cliente</label>
+                        <p class="mb-0">{{ inspeccion.solicitud.cliente.get_full_name|default:inspeccion.solicitud.cliente.username|title }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase">Dirección / Ubicación</label>
+                        <p class="mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ inspeccion.solicitud.direccion|default:"No especificada" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase">Maquinaria</label>
+                        <p class="mb-0 bg-light p-2 rounded border">{{ inspeccion.solicitud.maquinaria|default:"No especificada" }}</p>
+                    </div>
+                    <div>
+                        <label class="small text-muted fw-bold text-uppercase">Fecha Programada</label>
+                        <p class="mb-0 fw-bold text-primary">
+                            {% if inspeccion.fecha_programada %}
+                                <i class="far fa-calendar-alt me-1"></i> {{ inspeccion.fecha_programada|date:"d M, Y" }}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 mb-4">
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ formset.management_form }}
+
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 fw-bold text-primary"><i class="fas fa-camera me-2"></i> Checklist y Evidencia</h6>
+                        <span class="badge bg-light text-dark border">{{ formset.total_form_count }} Puntos</span>
+                    </div>
+                    <div class="card-body bg-light p-3">
+                        
+                        {% for form in formset %}
+                            <div class="card border-0 shadow-sm mb-3">
+                                <div class="card-body">
+                                    {{ form.id }}
+                                    
+                                    <div class="d-flex align-items-center mb-3 border-bottom pb-2">
+                                        <span class="badge bg-primary rounded-circle me-2" style="width: 25px; height: 25px; display: flex; align-items: center; justify-content: center;">{{ forloop.counter }}</span>
+                                        <h6 class="fw-bold mb-0 text-dark">{{ form.instance.descripcion }}</h6>
+                                    </div>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            {{ form.estado|as_crispy_field }}
+                                        </div>
+                                        <div class="col-md-8">
+                                            {{ form.observacion|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <label class="form-label fw-bold small text-muted mb-2">
+                                            <i class="fas fa-paperclip me-1"></i> Evidencia Fotográfica
+                                        </label>
+                                        
+                                        {{ form.imagen_evidencia|as_crispy_field }}
+                                        
+                                        {% if form.instance.imagen_evidencia %}
+                                            <div class="mt-2 p-2 bg-light border rounded d-flex align-items-center">
+                                                <i class="fas fa-image text-success me-2"></i>
+                                                <span class="small me-2">Imagen cargada actualmente</span>
+                                                <a href="{{ form.instance.imagen_evidencia.url }}" target="_blank" class="btn btn-sm btn-outline-primary ms-auto">Ver imagen</a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <label for="id_comentarios_generales" class="form-label fw-bold text-primary">
+                            <i class="fas fa-comment-alt me-2"></i> Comentarios Finales / Conclusiones
+                        </label>
+                        <textarea name="comentarios_generales" id="id_comentarios_generales" rows="4" class="form-control" placeholder="Escribe aquí las observaciones generales de la inspección...">{{ inspeccion.comentarios_generales|default:"" }}</textarea>
+                        
+                        <div class="d-flex justify-content-end align-items-center mt-4 pt-3 border-top gap-2">
+                            <button type="submit" name="action" value="guardar" class="btn btn-outline-primary fw-bold">
+                                <i class="fas fa-save me-2"></i> Guardar Progreso
+                            </button>
+                            <button type="submit" name="action" value="terminar" class="btn btn-success fw-bold px-4" onclick="return confirm('¿Finalizar inspección? Una vez finalizada no podrás editarla.');">
+                                <i class="fas fa-check-circle me-2"></i> Finalizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}

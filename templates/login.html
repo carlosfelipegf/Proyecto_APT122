@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión | Optifire{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center flex-grow-1 py-5">
+    
+    <div class="card shadow-lg border-0 rounded-4" style="width: 100%; max-width: 450px;">
+        <div class="card-body p-5">
+            
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-dark">Bienvenido</h2>
+                <p class="text-muted">Ingresa a tu cuenta Optifire</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2 small">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="id_username" class="form-label fw-bold small text-uppercase text-muted">Usuario</label>
+                    <input type="text" name="username" class="form-control form-control-lg bg-light border-0" placeholder="Ej: soycliente" required id="id_username">
+                </div>
+
+                <div class="mb-4">
+                    <label for="id_password" class="form-label fw-bold small text-uppercase text-muted">Contraseña</label>
+                    <input type="password" name="password" class="form-control form-control-lg bg-light border-0" placeholder="••••••••" required id="id_password">
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-brand btn-lg fw-bold">
+                        Entrar
+                    </button>
+                </div>
+
+                <div class="text-center mt-3">
+                    ¿Olvidaste tu contraseña? 
+                    <a href="{% url 'password_reset_request' %}" class="text-danger font-weight-bold">Clic aquí</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'email/base_email.html' %}
+{% block title %}Solicitud N°{{ solicitud.pk }} Aprobada y Asignada{% endblock %}
+
+{% block content %}
+    <p>Estimado/a <strong>{{ solicitud.nombre_cliente }}</strong>,</p>
+
+    <p>¡Tenemos buenas noticias! Su solicitud de inspección N°{{ solicitud.pk }} ha sido <strong>APROBADA</strong> por nuestro equipo administrativo.</p>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <p><strong>Detalles de la Inspección:</strong></p>
+    <ul style="list-style-type: none; padding: 0;">
+        <li style="margin-bottom: 5px;"><strong>Equipo:</strong> {{ solicitud.maquinaria }}</li>
+        <li style="margin-bottom: 5px;"><strong>Técnico Asignado:</strong> {{ tecnico_nombre }}</li>
+        #
+        <li style="margin-bottom: 5px;">
+            <strong>Fecha Programada:</strong> 
+            {% if solicitud.inspeccion.fecha_programada %}
+            {{ solicitud.inspeccion.fecha_programada|date:"d M Y" }}
+            {% else %}
+            **Pendiente de asignación.**
+            {% endif %}
+        </li>
+    </ul>
+
+    <div class="button-container">
+        <a href="http://127.0.0.1:8000/usuarios/solicitud/detalle/{{ solicitud.pk }}/" class="button">
+            Ver Seguimiento
+        </a>
+    </div>
+
+    <p>El técnico asignado se pondrá en contacto pronto si requiere coordinación adicional.</p>
+    <p>Atentamente,<br>El equipo de Optifire</p>
+{% endblock content %}

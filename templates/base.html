@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Optifire{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+      <div class="container">
+        <a class="navbar-brand navbar-brand-text" href="/">
+            <i class="fa-solid fa-fire-extinguisher me-2"></i> OPTIFIRE
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="/nosotros/">Nosotros</a></li>
+
+            {% if user.is_authenticated %}
+
+                {# ========================================================== #}
+                {# 🔔 DROPDOWN DE NOTIFICACIONES INTEGRADO EN NAVBAR        #}
+                {# ========================================================== #}
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" id="navbarDropdown" role="button" 
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+
+                        {% if mis_notificaciones %}
+                            <span class="badge rounded-pill bg-danger badge-notification">
+                                {{ mis_notificaciones|length }}
+                            </span>
+                        {% endif %}
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+
+                        {% if mis_notificaciones %}
+                            {% for notificacion in mis_notificaciones %}
+                                <li>
+                                    <a class="dropdown-item notificacion-item"
+                                       href="{{ notificacion.enlace }}"
+                                       data-notif-id="{{ notificacion.pk }}">
+
+                                        <strong>{{ notificacion.mensaje }}</strong>
+                                        <span class="text-muted small d-block">
+                                            {{ notificacion.fecha_creacion|timesince }}
+                                        </span>
+                                    </a>
+                                </li>
+
+                                {% if not forloop.last %}
+                                    <li><hr class="dropdown-divider"></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-center text-primary" href="#">
+                                    Ver todas (futura vista)
+                                </a>
+                            </li>
+
+                        {% else %}
+                            <li>
+                                <a class="dropdown-item text-center text-muted" href="#">
+                                    No hay notificaciones nuevas.
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {# ========================================================== #}
+
+                <li class="nav-item">
+                  <span class="nav-link nav-link-custom me-2">
+                    <i class="fa-solid fa-user me-1"></i> 
+                    Hola, <span class="fw-bold">{{ user.first_name|default:user.username }}</span>
+                  </span>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-custom" href="{% url 'dashboard' %}">
+                        Panel De Control
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn btn-sm btn-outline-dark ms-2" href="{% url 'logout' %}">
+                        Salir
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link btn btn-brand ms-2 text-white" href="{% url 'login' %}">
+                        Iniciar Sesión
+                    </a>
+                </li>
+
+            {% endif %}
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer-custom mt-5 py-3">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 Optifire. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}" defer></script>
+
+    {# ============================================================= #}
+    {# JS PARA MARCAR NOTIFICACIONES COMO LEÍDAS (AJAX)              #}
+    {# ============================================================= #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.notificacion-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notifId = this.getAttribute('data-notif-id');
+
+                    const url = "{% url 'marcar_notificacion_leida' 0 %}".replace('0', notifId);
+
+                    fetch(url)
+                        .then(response => {
+                            if (response.ok) {
+                                console.log(`Notificación ${notifId} marcada como leída.`);
+                                
+                                const li = this.closest('li');
+                                if (li) li.remove();
+                            }
+                        })
+                        .catch(error => console.error('Error al marcar notificación:', error));
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

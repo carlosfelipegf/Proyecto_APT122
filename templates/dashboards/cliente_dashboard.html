@@ -1,0 +1,121 @@
+{% extends "base_dashboard.html" %} 
+{% load static %}
+
+{% block title %}Dashboard Cliente | Optifire{% endblock %}
+
+{# -------------------------------------------------------------------------------------------------- #}
+{# 1. BLOQUE DEL MENÚ LATERAL (SIDEBAR) - Opciones específicas del Cliente #}
+{# -------------------------------------------------------------------------------------------------- #}
+{% block dashboard_menu %}
+    {% include "includes/cliente_menu.html" %}
+{% endblock dashboard_menu %}
+
+{# -------------------------------------------------------------------------------------------------- #}
+{# 2. BLOQUE DE CONTENIDO PRINCIPAL - Tabla de solicitudes #}
+{# -------------------------------------------------------------------------------------------------- #}
+{% block dashboard_content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 text-dark fw-bold mb-1">Mis Ordenes de Trabajo</h1>
+            <p class="text-muted mb-0">Gestiona el estado de tus solicitudes e inspecciones.</p>
+        </div>
+        <a href="{% url 'solicitar_inspeccion' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus me-2"></i> Nueva Solicitud
+        </a>
+    </div>
+    
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            
+            {# Mensajes de éxito/error #}
+            {% if messages %}
+                <div class="p-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if solicitudes %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0"> 
+                        <thead class="bg-light">
+                            <tr>
+                                <th scope="col" class="ps-4 py-3">ID</th>
+                                <th scope="col" class="py-3">Dirección</th>
+                                <th scope="col" class="py-3">Maquinaria</th>
+                                <th scope="col" class="py-3">Estado</th>
+                                <th scope="col" class="py-3">Fecha</th>
+                                <th scope="col" class="text-end pe-4 py-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for solicitud in solicitudes %}
+                            <tr>
+                                <td class="ps-4 fw-bold">#{{ solicitud.id }}</td>
+                                <td>{{ solicitud.direccion }}</td>
+                                <td>{{ solicitud.maquinaria|truncatechars:30 }}</td>
+                                <td>
+                                    <span class="badge rounded-pill
+                                        {% if solicitud.estado == 'PENDIENTE' %} bg-warning text-dark
+                                        {% elif solicitud.estado == 'COTIZANDO' %} bg-info text-dark
+                                        {% elif solicitud.estado == 'APROBADA' or solicitud.estado == 'ASIGNADA' or solicitud.estado == 'EN_CURSO' %} bg-primary
+                                        {% elif solicitud.estado == 'RECHAZADA' %} bg-danger
+                                        {% elif solicitud.estado == 'ANULADA' %} bg-secondary
+                                        {% elif solicitud.estado == 'COMPLETADA' %} bg-success
+                                        {% else %} bg-light text-dark border
+                                        {% endif %}">
+                                        {{ solicitud.get_estado_display }}
+                                    </span>
+                                </td>
+                                <td class="text-muted">{{ solicitud.fecha_solicitud|date:"d M, Y" }}</td>
+                                <td class="text-end pe-4">
+                                    {% if solicitud.estado == 'PENDIENTE' %}
+                                        <a href="{% url 'anular_solicitud' solicitud.pk %}" 
+                                            class="btn btn-sm btn-outline-danger" 
+                                            onclick="return confirm('¿Seguro que quieres anular esta solicitud pendiente? Esta acción no se puede revertir.');"
+                                            title="Anular la orden de trabajo">
+                                            Anular
+                                        </a>
+                                        
+                                    {% elif solicitud.estado == 'COTIZANDO' %}
+                                        <a href="{% url 'aceptar_cotizacion_cliente' solicitud.pk %}" 
+                                            class="btn btn-sm btn-warning text-dark fw-bold" 
+                                            title="Revisar y gestionar la cotización">
+                                            <i class="fas fa-file-invoice-dollar me-1"></i> Cotización
+                                        </a>
+
+                                    {% elif solicitud.estado == 'ANULADA' %}
+                                        <span class="text-muted small fst-italic">Anulada</span>
+                                        
+                                    {% elif solicitud.estado != 'RECHAZADA' %}
+                                        <a href="{% url 'detalle_orden' solicitud.pk %}" class="btn btn-sm btn-outline-primary" title="Ver Detalles">
+                                            Ver detalle
+                                        </a>
+                                        
+                                    {% else %}
+                                        <span class="text-muted small">Rechazada</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-clipboard-list fa-3x text-muted opacity-50"></i>
+                    </div>
+                    <h5 class="text-muted">No tienes órdenes de trabajo activas</h5>
+                    <p class="text-muted mb-4">Comienza creando una nueva solicitud de inspección.</p>
+                    <a href="{% url 'solicitar_inspeccion' %}" class="btn btn-primary">
+                        Crear Primera Orden
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock dashboard_content %}

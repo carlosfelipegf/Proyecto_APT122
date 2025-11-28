@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio | Optifire{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">
+            Potencia y Seguridad <br>
+            <span class="text-brand">Para Tus Activos</span>
+        </h1>
+        <p class="hero-subtitle">
+            Plataforma integral para la gestión, monitoreo y automatización de procesos de seguridad industrial. Eficiencia garantizada.
+        </p>
+        <a href="{% url 'login' %}" class="btn btn-brand btn-lg">
+            Comenzar Ahora <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-5 mb-3">Nuestras Características</h2>
+            <p class="text-muted lead">Todo lo que necesitas para gestionar tu seguridad</p>
+        </div>
+        
+        <div class="features-grid">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="feature-title">Seguridad Total</h3>
+                <p class="feature-text">
+                    Cumplimiento normativo garantizado con nuestros protocolos de inspección automatizados y actualizados.
+                </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Gestión Ágil</h3>
+                <p class="feature-text">
+                    Optimiza tiempos de respuesta y asignación de recursos con nuestra plataforma de gestión inteligente.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Reportes en Tiempo Real</h3>
+                <p class="feature-text">
+                    Visualiza el estado de tus activos y genera reportes detallados al instante para la toma de decisiones.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

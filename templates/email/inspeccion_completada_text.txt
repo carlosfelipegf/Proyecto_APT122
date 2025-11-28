@@ -1,0 +1,12 @@
+Estimado/a cliente,
+
+¡Su servicio ha finalizado!
+
+La inspección N°{{ solicitud.inspeccion.pk }} ha sido COMPLETADA exitosamente.
+
+El acta técnica final (PDF) ya está disponible para su descarga en su portal de cliente.
+
+Gracias por preferir nuestros servicios.
+
+Atentamente,
+El equipo de Optifire

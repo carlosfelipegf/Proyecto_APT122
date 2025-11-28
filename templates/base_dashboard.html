@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <nav class="sidebar">
+        {% block dashboard_menu %}{% endblock %}
+    </nav>
+    
+    <div class="dashboard-content">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+</div>
+
+{# ================================================================= #}
+{# SISTEMA DE NOTIFICACIONES (TOASTS) - Carga la variable mis_notificaciones del context_processor #}
+{# ================================================================= #}
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    
+    {% if mis_notificaciones %}
+        {% for notif in mis_notificaciones %}
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="toast-header bg-primary text-white">
+                    <i class="fas fa-bell me-2"></i>
+                    <strong class="me-auto">Nueva Actividad</strong>
+                    <small class="text-white-50">Reciente</small>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close" onclick="marcarLeido({{ notif.id }})"></button>
+                </div>
+                <div class="toast-body bg-white text-dark shadow-sm">
+                    {{ notif.mensaje }}
+                    {% if notif.enlace %}
+                        <div class="mt-2 pt-2 border-top">
+                            {# Aquí está el enlace, que solo aparece si notif.enlace no es nulo/vacío #}
+                            <a href="{{ notif.enlace }}" class="btn btn-sm btn-outline-primary w-100" onclick="marcarLeido({{ notif.id }})">
+                                <i class="fas fa-eye me-1"></i> Ver Detalle
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+<script>
+    function marcarLeido(id) {
+        // Llama a la vista de Django para marcar la notificación como leída sin recargar (AJAX)
+        fetch(`/usuarios/notificacion/leida/${id}/`, {
+            method: 'GET',
+            headers: {
+                // Esto es una buena práctica para peticiones AJAX
+                'X-Requested-With': 'XMLHttpRequest', 
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if(response.ok) {
+                console.log("Notificación marcada como leída: " + id);
+            }
+        }).catch(error => console.error('Error al marcar como leída:', error));
+    }
+</script>
+
+{% endblock %}
