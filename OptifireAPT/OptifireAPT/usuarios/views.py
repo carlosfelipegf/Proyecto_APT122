@@ -16,6 +16,10 @@ from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.core.mail import EmailMessage # <--- OJO: EmailMessage, no EmailMultiAlternatives
 from django.conf import settings
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.utils import timezone
+import datetime
 
 # Importamos formularios
 from .forms import (
@@ -574,4 +578,72 @@ def enviar_orden_facturacion(request, pk):
         messages.error(request, f"Error al enviar correo: {e}")
 
     return redirect('dashboard_administrador')
+@login_required
+def estadisticas_view(request):
+    user = request.user
+    role = None
+    context = {}
+
+    # 1. Determinar Rol (Asegúrate de que tus funciones is_... existan)
+    if is_administrador(user):
+        role = 'admin'
+    elif is_tecnico(user):
+        role = 'tecnico'
+    elif is_cliente(user):
+        role = 'cliente'
+
+    # 2. Lógica según Rol
+    if role == 'admin':
+        # A. OTs Semanales
+        hoy = timezone.now()
+        hace_una_semana = hoy - datetime.timedelta(days=7)
+        ots_semanales = SolicitudInspeccion.objects.filter(
+            fecha_solicitud__gte=hace_una_semana
+        ).extra(select={'day': 'date(fecha_solicitud)'}).values('day').annotate(count=Count('id')).order_by('day')
+
+        # B. Carga de Técnicos
+        tecnicos_carga = User.objects.filter(groups__name='Técnico').annotate(
+            carga_trabajo=Count('inspecciones_asignadas', filter=Q(inspecciones_asignadas__estado__in=['ASIGNADA', 'EN_CURSO']))
+        ).order_by('carga_trabajo')
+
+        # C. Estados Globales
+        estados_globales = SolicitudInspeccion.objects.values('estado').annotate(total=Count('estado'))
+
+        context = {
+            'role': 'admin',
+            'labels_semana': [entry['day'] for entry in ots_semanales],
+            'data_semana': [entry['count'] for entry in ots_semanales],
+            'labels_tecnicos': [t.username for t in tecnicos_carga],
+            'data_carga': [t.carga_trabajo for t in tecnicos_carga],
+            'labels_estados': [e['estado'] for e in estados_globales],
+            'data_estados': [e['total'] for e in estados_globales],
+        }
+
+    elif role == 'tecnico':
+        mis_inspecciones = Inspeccion.objects.filter(tecnico=user)
+        resumen = mis_inspecciones.values('estado').annotate(total=Count('estado'))
+        context = {
+            'role': 'tecnico',
+            'labels_estado': [item['estado'] for item in resumen],
+            'data_estado': [item['total'] for item in resumen],
+            'total_completadas': mis_inspecciones.filter(estado='COMPLETADA').count()
+        }
+
+    elif role == 'cliente':
+        mis_solicitudes = SolicitudInspeccion.objects.filter(cliente=user)
+        resumen = mis_solicitudes.values('estado').annotate(total=Count('estado'))
+        context = {
+            'role': 'cliente',
+            'labels_solicitudes': [item['estado'] for item in resumen],
+            'data_solicitudes': [item['total'] for item in resumen],
+        }
+
+    return render(request, 'dashboards/estadisticas.html', context)
+def api_disponibilidad_tecnico(request, tecnico_id):
+    ocupadas = Inspeccion.objects.filter(
+        tecnico_id=tecnico_id,
+        estado__in=[EstadoInspeccion.ASIGNADA, EstadoInspeccion.EN_CURSO],
+        fecha_programada__isnull=False
+    ).values_list('fecha_programada', flat=True)
+    return JsonResponse({'fechas_ocupadas': [f.strftime('%Y-%m-%d') for f in ocupadas]})
 # ==========================================================

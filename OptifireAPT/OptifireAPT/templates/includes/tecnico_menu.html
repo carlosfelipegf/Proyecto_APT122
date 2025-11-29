@@ -9,4 +9,9 @@
             <i class="fas fa-id-card"></i> Perfil Profesional
         </a>
     </li>
+    <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'estadisticas' %}active{% endif %}" href="{% url 'estadisticas' %}">
+        <i class="fas fa-chart-bar"></i> Mis Métricas
+    </a>
+    </li>
 </ul>

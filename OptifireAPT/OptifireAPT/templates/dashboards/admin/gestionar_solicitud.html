@@ -6,6 +6,9 @@
 {% endblock dashboard_menu %}
 
 {% block dashboard_content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+
 <div class="container-fluid px-0">
     
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -62,7 +65,7 @@
                 <div class="card-body p-4">
                     
                     <div class="alert alert-info small mb-4 border-0 bg-info-subtle text-info-emphasis">
-                        <i class="fas fa-info-circle me-1"></i> Al aprobar, se creará una <strong>Inspección</strong> y se asignará al técnico seleccionado.
+                        <i class="fas fa-info-circle me-1"></i> Selecciona un técnico para ver su disponibilidad en el calendario.
                     </div>
 
                     <form method="POST">
@@ -78,7 +81,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold small text-uppercase text-secondary">Asignar Técnico</label>
-                                <select name="tecnico" class="form-select" required>
+                                <select name="tecnico" class="form-select" id="select-tecnico" required>
                                     <option value="">-- Seleccionar Técnico --</option>
                                     {% for tecnico in tecnicos %}
                                         <option value="{{ tecnico.id }}">{{ tecnico.first_name }} {{ tecnico.last_name }} ({{ tecnico.username }})</option>
@@ -89,7 +92,10 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold small text-uppercase text-secondary">Fecha Programada</label>
-                                <input type="date" name="fecha_programada" class="form-control" required>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="far fa-calendar-alt"></i></span>
+                                    <input type="text" name="fecha_programada" class="form-control bg-white" id="input-fecha" placeholder="Seleccione un técnico primero..." required readonly>
+                                </div>
                             </div>
                         </div>
 
@@ -110,7 +116,6 @@
                             <button type="submit" class="btn btn-success fw-bold py-2 flex-grow-1">
                                 <i class="fas fa-check me-2"></i> Generar Orden y Asignar
                             </button>
-                            
                             <button type="button" class="btn btn-danger fw-bold py-2 px-4" data-bs-toggle="modal" data-bs-target="#rejectModal">
                                 <i class="fas fa-times me-2"></i> Rechazar
                             </button>
@@ -133,12 +138,11 @@
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="rechazar">
-                
                 <div class="modal-body">
-                    <p class="text-muted mb-3">Estás a punto de rechazar esta solicitud. Por favor, indica el motivo para notificar al cliente.</p>
+                    <p class="text-muted mb-3">Estás a punto de rechazar esta solicitud. Por favor, indica el motivo.</p>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Motivo del Rechazo</label>
-                        <textarea name="motivo_rechazo" class="form-control" rows="4" placeholder="Ej: Falta de disponibilidad, dirección fuera de zona..." required></textarea>
+                        <textarea name="motivo_rechazo" class="form-control" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer bg-light">
@@ -149,4 +153,56 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const fechaInput = document.getElementById('input-fecha');
+    const tecnicoSelect = document.getElementById('select-tecnico');
+    
+    // 1. Configuración inicial del calendario
+    let calendario = flatpickr(fechaInput, {
+        locale: "es",
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: [], // Se llenará dinámicamente
+    });
+
+    // 2. Evento: Cuando cambia el técnico
+    tecnicoSelect.addEventListener('change', function() {
+        const tecnicoId = this.value;
+        
+        if (!tecnicoId) {
+            fechaInput.placeholder = "Seleccione un técnico primero...";
+            fechaInput.disabled = true;
+            return;
+        }
+
+        fechaInput.disabled = false;
+        fechaInput.placeholder = "Buscando disponibilidad...";
+        fechaInput.value = ""; // Limpiar selección anterior
+        calendario.clear();
+
+        // 3. Consultar la API
+        fetch(`/usuarios/api/tecnico/disponibilidad/${tecnicoId}/`)
+            .then(response => {
+                if (!response.ok) throw new Error("Error en la red");
+                return response.json();
+            })
+            .then(data => {
+                // Actualizar calendario con fechas bloqueadas
+                calendario.set('disable', data.fechas_ocupadas);
+                fechaInput.placeholder = "Seleccione una fecha disponible";
+                console.log("Fechas ocupadas:", data.fechas_ocupadas);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                fechaInput.placeholder = "Error al cargar disponibilidad";
+            });
+    });
+});
+</script>
 {% endblock dashboard_content %}

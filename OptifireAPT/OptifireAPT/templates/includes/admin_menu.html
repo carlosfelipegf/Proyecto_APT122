@@ -14,4 +14,9 @@
             <i class="fas fa-history"></i> Historial
         </a>
     </li>
+    <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'estadisticas' %}active{% endif %}" href="{% url 'estadisticas' %}">
+        <i class="fas fa-chart-pie"></i> Estadísticas
+    </a>
+    </li>
 </ul>

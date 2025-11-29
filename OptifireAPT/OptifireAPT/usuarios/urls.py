@@ -16,6 +16,11 @@ urlpatterns = [
     # ROUTER CENTRAL (DASHBOARD)
     # =========================================
     path('dashboard/', views.dashboard, name='dashboard'),
+    #  ESTADÍSTICAS
+    path('estadisticas/', views.estadisticas_view, name='estadisticas'),
+
+    #  CALENDARIO (API)
+    path('api/tecnico/disponibilidad/<int:tecnico_id>/', views.api_disponibilidad_tecnico, name='api_disponibilidad'),
 
     # =========================================
     # RUTAS CLIENTE
