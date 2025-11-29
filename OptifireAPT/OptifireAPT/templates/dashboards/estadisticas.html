@@ -1,0 +1,169 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Estadísticas | Optifire{% endblock %}
+
+{% block dashboard_menu %}
+    {% if role == 'admin' %}
+        {% include "includes/admin_menu.html" %}
+    {% elif role == 'tecnico' %}
+        {% include "includes/tecnico_menu.html" %}
+    {% else %}
+        {% include "includes/cliente_menu.html" %}
+    {% endif %}
+{% endblock dashboard_menu %}
+
+{% block dashboard_content %}
+<div class="container-fluid px-0">
+    <h1 class="h3 text-dark fw-bold mb-4">
+        <i class="fas fa-chart-pie me-2 text-primary"></i>Panel de Estadísticas
+    </h1>
+
+    {% if role == 'admin' %}
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white fw-bold">Solicitudes Generadas (Últimos 7 días)</div>
+                <div class="card-body">
+                    <canvas id="chartSemanales"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white fw-bold">Estado General</div>
+                <div class="card-body">
+                    <canvas id="chartEstados"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white fw-bold">Carga de Trabajo Actual por Técnico</div>
+                <div class="card-body">
+                    <canvas id="chartTecnicos" height="80"></canvas>
+                    <small class="text-muted">* Barras más bajas indican mayor disponibilidad.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if role == 'tecnico' %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white fw-bold">Mis Inspecciones</div>
+                <div class="card-body">
+                    <canvas id="chartTecnicoEstado"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-success text-white h-100 p-4 d-flex align-items-center justify-content-center">
+                <div class="text-center">
+                    <h1 class="display-1 fw-bold">{{ total_completadas }}</h1>
+                    <h4>Inspecciones Completadas</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if role == 'cliente' %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white fw-bold">Estado de mis Solicitudes</div>
+                <div class="card-body">
+                    <canvas id="chartCliente"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Configuración común de colores
+    const colors = ['#DC281E', '#F05A22', '#FFC20E', '#2c3e50', '#27ae60'];
+
+    {% if role == 'admin' %}
+        // 1. Gráfico Semanal (Línea)
+        new Chart(document.getElementById('chartSemanales'), {
+            type: 'line',
+            data: {
+                labels: {{ labels_semana|safe }},
+                datasets: [{
+                    label: 'Solicitudes',
+                    data: {{ data_semana|safe }},
+                    borderColor: '#DC281E',
+                    backgroundColor: 'rgba(220, 40, 30, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            }
+        });
+
+        // 2. Gráfico Estados (Dona)
+        new Chart(document.getElementById('chartEstados'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ labels_estados|safe }},
+                datasets: [{
+                    data: {{ data_estados|safe }},
+                    backgroundColor: colors
+                }]
+            }
+        });
+
+        // 3. Gráfico Técnicos (Barra)
+        new Chart(document.getElementById('chartTecnicos'), {
+            type: 'bar',
+            data: {
+                labels: {{ labels_tecnicos|safe }},
+                datasets: [{
+                    label: 'Inspecciones Activas (Pendientes)',
+                    data: {{ data_carga|safe }},
+                    backgroundColor: '#2c3e50'
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Barras horizontales
+            }
+        });
+    {% endif %}
+
+    {% if role == 'tecnico' %}
+        new Chart(document.getElementById('chartTecnicoEstado'), {
+            type: 'pie',
+            data: {
+                labels: {{ labels_estado|safe }},
+                datasets: [{
+                    data: {{ data_estado|safe }},
+                    backgroundColor: colors
+                }]
+            }
+        });
+    {% endif %}
+
+    {% if role == 'cliente' %}
+        new Chart(document.getElementById('chartCliente'), {
+            type: 'bar',
+            data: {
+                labels: {{ labels_solicitudes|safe }},
+                datasets: [{
+                    label: 'Cantidad',
+                    data: {{ data_solicitudes|safe }},
+                    backgroundColor: '#F05A22'
+                }]
+            }
+        });
+    {% endif %}
+</script>
+{% endblock dashboard_content %}
