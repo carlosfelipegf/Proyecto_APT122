@@ -11,6 +11,9 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.http import JsonResponse
 from .models import Notificacion 
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib.auth import update_session_auth_hash
 
 # Importamos formularios
 from .forms import (
@@ -55,14 +58,25 @@ def is_tecnico(user): return check_role(user, Roles.TECNICO)
 # ==========================================================
 def login_view(request):
     if request.user.is_authenticated:
+        # Validación extra por si entra directo por URL estando logueado
+        if request.user.perfil.obligar_cambio_contrasena:
+            return redirect('cambiar_password_forzado')
         return redirect('dashboard')
     
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
             login(request, user)
+            
+            # 🚨 VALIDACIÓN DE BANDERA 🚨
+            # Verificamos si el perfil tiene la obligación activada
+            if hasattr(user, 'perfil') and user.perfil.obligar_cambio_contrasena:
+                messages.info(request, "Por seguridad, debes cambiar tu contraseña en tu primer inicio de sesión.")
+                return redirect('cambiar_password_forzado') # Redirige a la nueva vista
+            
             return redirect('dashboard')
         else:
             messages.error(request, "Usuario o contraseña incorrecta")
@@ -470,3 +484,22 @@ def marcar_notificacion_leida(request, pk):
         return JsonResponse({'status': 'ok', 'mensaje': 'Notificación marcada como leída'})
     
     return JsonResponse({'status': 'error'}, status=400)
+
+class CambioContrasenaForzadoView(PasswordChangeView):
+    template_name = 'registration/password_change_force.html'
+    success_url = reverse_lazy('dashboard') # Redirige al dashboard al terminar
+
+    def form_valid(self, form):
+        # Llamamos a la lógica original de Django para cambiar la password
+        response = super().form_valid(form)
+        
+        # 🚨 MAGIA AQUÍ: Apagamos la bandera
+        perfil = self.request.user.perfil
+        perfil.obligar_cambio_contrasena = False
+        perfil.save()
+        
+        # Mantenemos al usuario logueado después del cambio (Django lo desloguea por seguridad si no hacemos esto)
+        update_session_auth_hash(self.request, self.request.user)
+        
+        messages.success(self.request, "Tu contraseña ha sido actualizada. ¡Bienvenido!")
+        return response

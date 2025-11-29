@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import CambioContrasenaForzadoView 
 
 urlpatterns = [
     # =========================================
@@ -10,7 +11,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('nosotros/', views.nosotros_view, name='nosotros'),
     path('notificacion/leida/<int:pk>/', views.marcar_notificacion_leida, name='marcar_notificacion_leida'),
-
+    path('seguridad/cambiar-password/', CambioContrasenaForzadoView.as_view(), name='cambiar_password_forzado'),
     # =========================================
     # ROUTER CENTRAL (DASHBOARD)
     # =========================================
