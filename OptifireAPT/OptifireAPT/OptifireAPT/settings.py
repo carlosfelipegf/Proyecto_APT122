@@ -186,3 +186,7 @@ EMAIL_HOST_PASSWORD = 'xoka fbky asgg sjij ' # <-- Aquí va la contraseña de ap
 
 # Remitente por defecto
 DEFAULT_FROM_EMAIL = 'Optifire <notificaciones@optifire.cl>'
+
+# Correo del equipo de Cobranzas / Finanzas
+EMAIL_COBRANZA_DESTINO = 'guerraflorescarlos@gmail.com' # <--- CAMBIA ESTO POR EL REAL
+IVA_CHILE = 0.19 # 19%

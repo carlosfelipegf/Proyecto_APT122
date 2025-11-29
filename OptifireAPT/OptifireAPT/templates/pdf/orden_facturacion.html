@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Orden de Facturación #{{ solicitud.id }}</title>
+    <style>
+        @page { size: Letter; margin: 2cm; }
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #333; line-height: 1.3; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #DC281E; margin: 0; text-transform: uppercase; font-size: 18px; }
+        .header p { margin: 2px; color: #666; }
+        
+        .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .box-title { font-weight: bold; text-transform: uppercase; color: #DC281E; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        table.data { width: 100%; }
+        table.data td { vertical-align: top; padding: 2px; }
+        .label { font-weight: bold; width: 120px; display: inline-block; color: #555; }
+
+        table.financial { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table.financial th { background: #f5f5f5; border: 1px solid #ccc; padding: 8px; text-align: center; }
+        table.financial td { border: 1px solid #ccc; padding: 8px; }
+        .text-right { text-align: right; }
+        
+        .total-row td { font-weight: bold; background: #fafafa; }
+        
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 9px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Orden de Facturación de Servicios</h1>
+        <p>Documento Interno para Emisión de DTE</p>
+        <p>Fecha de Emisión: {% now "d/m/Y" %}</p>
+    </div>
+
+    <div class="box">
+        <div class="box-title">1. Antecedentes del Cliente (Facturación)</div>
+        <table class="data">
+            <tr>
+                <td><span class="label">Razón Social:</span> {{ solicitud.cliente.perfil.rut_empresa|default:solicitud.nombre_cliente|upper }}</td>
+                <td><span class="label">RUT:</span> {{ solicitud.cliente.perfil.rut|default:"Sin RUT registrado" }}</td>
+            </tr>
+            <tr>
+                <td><span class="label">Giro/Rubro:</span> {{ solicitud.cliente.perfil.rubro|default:"Servicios Generales" }}</td>
+                <td><span class="label">Fono:</span> {{ solicitud.telefono }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><span class="label">Dirección:</span> {{ solicitud.direccion }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><span class="label">Ciudad/Región:</span> {{ solicitud.cliente.perfil.ciudad|default:"-" }}, {{ solicitud.cliente.perfil.region|default:"-" }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="box">
+        <div class="box-title">2. Detalle del Servicio Realizado</div>
+        <table class="data">
+            <tr>
+                <td><span class="label">Orden de Trabajo:</span> #{{ solicitud.id }}</td>
+                <td><span class="label">Fecha Ejecución:</span> {{ solicitud.inspeccion.fecha_finalizacion|date:"d/m/Y" }}</td>
+            </tr>
+            <tr>
+                <td><span class="label">Técnico:</span> {{ solicitud.inspeccion.tecnico.get_full_name }}</td>
+                <td><span class="label">Estado:</span> Finalizado / Aprobado</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding-top: 10px;">
+                    <strong>Descripción (Glosa para Factura):</strong><br>
+                    Servicio de Inspección Técnica para maquinaria: {{ solicitud.maquinaria }}.
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="box">
+        <div class="box-title">3. Valorización del Servicio</div>
+        <table class="financial">
+            <thead>
+                <tr>
+                    <th width="60%">Descripción</th>
+                    <th width="40%">Monto (CLP)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Servicio de Inspección Técnica (OT #{{ solicitud.id }})</td>
+                    <td class="text-right">$ {{ monto_neto|floatformat:"0g" }}</td>
+                </tr>
+                <tr><td style="border:none;"></td><td style="border:none;"></td></tr>
+                
+                <tr class="total-row">
+                    <td class="text-right">Monto Neto:</td>
+                    <td class="text-right">$ {{ monto_neto|floatformat:"0g" }}</td>
+                </tr>
+                <tr class="total-row">
+                    <td class="text-right">I.V.A. (19%):</td>
+                    <td class="text-right">$ {{ monto_iva|floatformat:"0g" }}</td>
+                </tr>
+                <tr class="total-row" style="font-size: 14px; background: #e8e8e8;">
+                    <td class="text-right">TOTAL A PAGAR:</td>
+                    <td class="text-right">$ {{ monto_total|floatformat:"0g" }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Generado automáticamente por Sistema Optifire. Este documento no constituye factura válida ante el SII.
+    </div>
+
+</body>
+</html>

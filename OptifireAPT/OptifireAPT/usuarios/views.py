@@ -14,6 +14,8 @@ from .models import Notificacion
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
+from django.core.mail import EmailMessage # <--- OJO: EmailMessage, no EmailMultiAlternatives
+from django.conf import settings
 
 # Importamos formularios
 from .forms import (
@@ -59,7 +61,7 @@ def is_tecnico(user): return check_role(user, Roles.TECNICO)
 def login_view(request):
     if request.user.is_authenticated:
         # Validación extra por si entra directo por URL estando logueado
-        if request.user.perfil.obligar_cambio_contrasena:
+        if hasattr(request.user, 'perfil') and request.user.perfil.obligar_cambio_contrasena:
             return redirect('cambiar_password_forzado')
         return redirect('dashboard')
     
@@ -89,6 +91,14 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
+    # =========================================================================
+    # AGREGA ESTO (Lo nuevo del otro código): Validación de seguridad extra
+    # =========================================================================
+    if hasattr(request.user, "perfil") and request.user.perfil.obligar_cambio_contrasena:
+        messages.warning(request, "Debe cambiar su contraseña obligatoriamente para acceder al sistema.")
+        return redirect("cambiar_password_forzado")
+    # =========================================================================
+
     if is_administrador(request.user):
         return redirect('dashboard_administrador')
     elif is_tecnico(request.user):
@@ -503,3 +513,65 @@ class CambioContrasenaForzadoView(PasswordChangeView):
         
         messages.success(self.request, "Tu contraseña ha sido actualizada. ¡Bienvenido!")
         return response
+
+@login_required
+@user_passes_test(is_administrador)
+def enviar_orden_facturacion(request, pk):
+    # 1. Obtener datos
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk)
+    
+    if not solicitud.monto_cotizacion:
+        messages.error(request, "Error: Esta solicitud no tiene un monto cotizado asignado.")
+        return redirect('dashboard_administrador')
+
+    # 2. Cálculos Chilenos (Neto, IVA, Total)
+    monto_neto = int(solicitud.monto_cotizacion)
+    monto_iva = int(monto_neto * getattr(settings, 'IVA_CHILE', 0.19))
+    monto_total = monto_neto + monto_iva
+
+    # 3. Contexto para el PDF
+    context = {
+        'solicitud': solicitud,
+        'monto_neto': monto_neto,
+        'monto_iva': monto_iva,
+        'monto_total': monto_total,
+    }
+
+    # 4. Generar PDF en memoria
+    html_string = render_to_string('pdf/orden_facturacion.html', context)
+    pdf_file = HTML(string=html_string).write_pdf()
+
+    # 5. Configurar Correo
+    asunto = f"Orden de Facturación - OT #{solicitud.id} - {solicitud.nombre_cliente}"
+    mensaje = f"""
+    Estimado equipo de Cobranzas,
+
+    Adjunto encontrará la orden de facturación para el servicio realizado.
+
+    Cliente: {solicitud.nombre_cliente}
+    Monto Neto: ${monto_neto}
+    OT: #{solicitud.id}
+
+    Favor proceder con la emisión del DTE (Factura).
+    """
+    
+    email_destino = getattr(settings, 'EMAIL_COBRANZA_DESTINO', 'admin@localhost')
+
+    try:
+        email = EmailMessage(
+            asunto,
+            mensaje,
+            settings.DEFAULT_FROM_EMAIL,
+            [email_destino], # Destinatario (Cobranzas)
+        )
+        # Adjuntar el PDF generado
+        email.attach(f'Orden_Facturacion_{solicitud.id}.pdf', pdf_file, 'application/pdf')
+        email.send()
+        
+        messages.success(request, f"Orden de facturación enviada correctamente a {email_destino}")
+        
+    except Exception as e:
+        messages.error(request, f"Error al enviar correo: {e}")
+
+    return redirect('dashboard_administrador')
+# ==========================================================

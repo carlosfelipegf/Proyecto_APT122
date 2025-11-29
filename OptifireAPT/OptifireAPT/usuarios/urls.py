@@ -47,7 +47,8 @@ urlpatterns = [
     path('usuarios/crear/', views.admin_usuario_crear, name='admin_usuario_crear'),
     path('usuarios/editar/<int:pk>/', views.admin_usuario_editar, name='admin_usuario_editar'),
     path('usuarios/eliminar/<int:pk>/', views.admin_usuario_eliminar, name='admin_usuario_eliminar'),
-    
+    # Nueva ruta para finanzas
+    path('admin/facturacion/<int:pk>/', views.enviar_orden_facturacion, name='enviar_orden_facturacion'),
     # Gestión de Solicitudes
     path('solicitud/gestionar/<int:pk>/', views.aprobar_solicitud, name='gestionar_solicitud'),
 ]
