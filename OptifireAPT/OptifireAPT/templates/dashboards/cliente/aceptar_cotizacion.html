@@ -1,0 +1,56 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Cotización Pendiente | Optifire{% endblock %}
+
+{% block dashboard_menu %}
+    {% include "includes/cliente_menu.html" %}
+{% endblock dashboard_menu %}
+
+{% block dashboard_content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="fas fa-file-invoice-dollar me-2"></i> Cotización Pendiente
+                </div>
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Detalles de la Cotización</h5>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Dirección:</span>
+                            <span class="fw-bold">{{ solicitud.direccion }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Maquinaria:</span>
+                            <span class="fw-bold">{{ solicitud.maquinaria }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Monto Cotización (CLP):</span>
+                            <span class="fw-bold text-success">${{ solicitud.monto_cotizacion|floatformat:0 }}</span>
+                        </li>
+                        {% if solicitud.detalle_cotizacion %}
+                        <li class="list-group-item">
+                            <span class="fw-bold">Detalle:</span>
+                            <div>{{ solicitud.detalle_cotizacion }}</div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" name="action" value="aceptar" class="btn btn-success flex-grow-1 fw-bold">
+                                <i class="fas fa-check-circle me-2"></i> Aceptar Cotización
+                            </button>
+                            <button type="submit" name="action" value="rechazar" class="btn btn-danger flex-grow-1 fw-bold">
+                                <i class="fas fa-times-circle me-2"></i> Rechazar Cotización
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}

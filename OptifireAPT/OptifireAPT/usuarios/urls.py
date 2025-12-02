@@ -28,6 +28,7 @@ urlpatterns = [
     path('dashboard/cliente/', views.dashboard_cliente, name='dashboard_cliente'),
     path('solicitar-inspeccion/', views.solicitar_inspeccion, name='solicitar_inspeccion'),
     path('solicitud/detalle/<int:pk>/', views.detalle_orden, name='detalle_orden'),
+    path('solicitud/aceptar-cotizacion/<int:pk>/', views.aceptar_cotizacion_cliente, name='aceptar_cotizacion_cliente'),
     path('solicitud/anular/<int:pk>/', views.anular_solicitud, name='anular_solicitud'), 
     path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
 

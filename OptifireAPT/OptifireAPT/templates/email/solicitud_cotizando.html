@@ -1,0 +1,16 @@
+<html>
+<body>
+    <h2>¡Tienes una cotización pendiente!</h2>
+    <p>Estimado/a <b>{{ solicitud.nombre_cliente }}</b>,</p>
+    <p>El administrador ha generado una cotización para tu solicitud de inspección.</p>
+    <ul>
+        <li><b>Monto cotización:</b> ${{ solicitud.monto_cotizacion|floatformat:0 }}</li>
+        <li><b>Dirección:</b> {{ solicitud.direccion }}</li>
+        <li><b>Maquinaria:</b> {{ solicitud.maquinaria }}</li>
+    </ul>
+    <p>
+        <a href="{{ base_url }}solicitud/aceptar-cotizacion/{{ solicitud.pk }}/" style="background:#28a745;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Aceptar o Rechazar Cotización</a>
+    </p>
+    <p>Saludos,<br>Equipo Optifire</p>
+</body>
+</html>

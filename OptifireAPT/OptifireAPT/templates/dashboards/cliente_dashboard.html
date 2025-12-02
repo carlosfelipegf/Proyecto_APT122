@@ -78,22 +78,18 @@
                                             title="Anular la orden de trabajo">
                                             Anular
                                         </a>
-                                        
                                     {% elif solicitud.estado == 'COTIZANDO' %}
                                         <a href="{% url 'aceptar_cotizacion_cliente' solicitud.pk %}" 
                                             class="btn btn-sm btn-warning text-dark fw-bold" 
                                             title="Revisar y gestionar la cotización">
                                             <i class="fas fa-file-invoice-dollar me-1"></i> Cotización
                                         </a>
-
                                     {% elif solicitud.estado == 'ANULADA' %}
                                         <span class="text-muted small fst-italic">Anulada</span>
-                                        
                                     {% elif solicitud.estado != 'RECHAZADA' %}
                                         <a href="{% url 'detalle_orden' solicitud.pk %}" class="btn btn-sm btn-outline-primary" title="Ver Detalles">
                                             Ver detalle
                                         </a>
-                                        
                                     {% else %}
                                         <span class="text-muted small">Rechazada</span>
                                     {% endif %}

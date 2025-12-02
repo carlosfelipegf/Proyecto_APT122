@@ -42,21 +42,30 @@ def notificar_cambio_estado(sender, instance, created, **kwargs):
     html_template = None
     text_template = None
     
-    if nuevo_estado == EstadoSolicitud.APROBADA:
+
+    if nuevo_estado == EstadoSolicitud.COTIZANDO:
+        asunto = f"Cotización disponible para su solicitud N°{instance.pk}"
+        html_template = 'email/solicitud_cotizando.html'
+        text_template = 'email/solicitud_cotizando_text.txt'
+        # Notificación interna
+        Notificacion.objects.create(
+            usuario=instance.cliente,
+            mensaje=f"Tienes una cotización pendiente para la solicitud #{instance.pk}",
+            enlace=f"/usuarios/solicitud/aceptar-cotizacion/{instance.pk}/"
+        )
+    elif nuevo_estado == EstadoSolicitud.APROBADA:
         asunto = f"Solicitud N°{instance.pk} Aprobada y Asignada"
         context['tecnico_nombre'] = instance.inspeccion.tecnico.get_full_name() or instance.inspeccion.tecnico.username
         html_template = 'email/solicitud_aprobada.html'
         text_template = 'email/solicitud_aprobada_text.txt'
-
     elif nuevo_estado == EstadoSolicitud.RECHAZADA:
         asunto = f"Solicitud N°{instance.pk} Rechazada"
         html_template = 'email/solicitud_rechazada.html'
         text_template = 'email/solicitud_rechazada_text.txt'
-        
     elif nuevo_estado == EstadoSolicitud.COMPLETADA:
-         asunto = f"Inspección N°{instance.inspeccion.pk} Finalizada"
-         html_template = 'email/inspeccion_completada.html'
-         text_template = 'email/inspeccion_completada_text.txt'
+        asunto = f"Inspección N°{instance.inspeccion.pk} Finalizada"
+        html_template = 'email/inspeccion_completada.html'
+        text_template = 'email/inspeccion_completada_text.txt'
     else:
         return
 

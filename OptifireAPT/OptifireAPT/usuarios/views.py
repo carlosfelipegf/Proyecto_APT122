@@ -210,43 +210,32 @@ def aprobar_solicitud(request, pk):
 
     if request.method == 'POST':
         action = request.POST.get('action')
-        
+
         if action == 'aprobar':
             tecnico_id = request.POST.get('tecnico')
             plantilla_id = request.POST.get('plantilla')
             nombre_inspeccion = request.POST.get('nombre_inspeccion')
-            fecha_programada = request.POST.get('fecha_programada') 
+            fecha_programada = request.POST.get('fecha_programada')
+            monto_cotizacion = request.POST.get('monto_cotizacion')
 
-            if all([tecnico_id, plantilla_id, nombre_inspeccion]):
+            if all([tecnico_id, plantilla_id, nombre_inspeccion, monto_cotizacion]):
                 try:
-                    with transaction.atomic(): 
+                    with transaction.atomic():
                         tecnico = User.objects.get(pk=tecnico_id)
                         plantilla = PlantillaInspeccion.objects.get(pk=plantilla_id)
-                        
-                        nueva_inspeccion = Inspeccion.objects.create(
-                            solicitud=solicitud,
-                            tecnico=tecnico,
-                            plantilla_base=plantilla,
-                            nombre_inspeccion=nombre_inspeccion,
-                            fecha_programada=fecha_programada if fecha_programada else None,
-                            estado=EstadoInspeccion.ASIGNADA
-                        )
 
-                        tareas_plantilla = TareaPlantilla.objects.filter(plantilla=plantilla)
-                        tareas_a_crear = [
-                            TareaInspeccion(
-                                inspeccion=nueva_inspeccion,
-                                plantilla_tarea=tp,
-                                descripcion=tp.descripcion,
-                                estado=EstadoTarea.PENDIENTE
-                            ) for tp in tareas_plantilla
-                        ]
-                        TareaInspeccion.objects.bulk_create(tareas_a_crear)
 
-                        solicitud.estado = EstadoSolicitud.APROBADA
+                        # Guardar datos de cotización y preasignación en campos persistentes
+                        solicitud.monto_cotizacion = monto_cotizacion
+                        solicitud.detalle_cotizacion = f"Cotización generada por el administrador."
+                        solicitud.tecnico_preasignado = tecnico
+                        solicitud.plantilla_preasignada = plantilla
+                        solicitud.nombre_inspeccion_preasignado = nombre_inspeccion
+                        solicitud.fecha_programada_preasignada = fecha_programada if fecha_programada else None
+                        solicitud.estado = EstadoSolicitud.COTIZANDO
                         solicitud.save()
 
-                        messages.success(request, f"Inspección asignada a {tecnico.username}")
+                        messages.success(request, "Cotización enviada al cliente para su aprobación.")
                         return redirect('dashboard_administrador')
 
                 except Exception as e:
@@ -367,11 +356,96 @@ def perfil_tecnico(request):
 # ==========================================================
 # 5. VISTAS CLIENTE
 # ==========================================================
+
 @login_required
 @user_passes_test(is_cliente)
 def dashboard_cliente(request):
     solicitudes = SolicitudInspeccion.objects.filter(cliente=request.user).order_by('-fecha_solicitud')
     return render(request, 'dashboards/cliente_dashboard.html', {'solicitudes': solicitudes})
+
+
+# Nueva vista: aceptar o rechazar cotización
+@login_required
+@user_passes_test(is_cliente)
+def aceptar_cotizacion_cliente(request, pk):
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk, cliente=request.user)
+    if solicitud.estado != EstadoSolicitud.COTIZANDO:
+        messages.error(request, "Esta solicitud no está pendiente de cotización.")
+        return redirect('dashboard_cliente')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'aceptar':
+            tecnico = solicitud.tecnico_preasignado
+            plantilla = solicitud.plantilla_preasignada
+            nombre_inspeccion = solicitud.nombre_inspeccion_preasignado
+            fecha_programada = solicitud.fecha_programada_preasignada
+            if all([tecnico, plantilla, nombre_inspeccion]):
+                try:
+                    with transaction.atomic():
+                        nueva_inspeccion = Inspeccion.objects.create(
+                            solicitud=solicitud,
+                            tecnico=tecnico,
+                            plantilla_base=plantilla,
+                            nombre_inspeccion=nombre_inspeccion,
+                            fecha_programada=fecha_programada if fecha_programada else None,
+                            estado=EstadoInspeccion.ASIGNADA
+                        )
+                        tareas_plantilla = TareaPlantilla.objects.filter(plantilla=plantilla)
+                        tareas_a_crear = [
+                            TareaInspeccion(
+                                inspeccion=nueva_inspeccion,
+                                plantilla_tarea=tp,
+                                descripcion=tp.descripcion,
+                                estado=EstadoTarea.PENDIENTE
+                            ) for tp in tareas_plantilla
+                        ]
+                        TareaInspeccion.objects.bulk_create(tareas_a_crear)
+                        solicitud.estado = EstadoSolicitud.APROBADA
+                        # Limpiar preasignación
+                        solicitud.tecnico_preasignado = None
+                        solicitud.plantilla_preasignada = None
+                        solicitud.nombre_inspeccion_preasignado = None
+                        solicitud.fecha_programada_preasignada = None
+                        solicitud.save()
+                        # Notificación interna al admin y técnico
+                        from .models import Notificacion, Roles
+                        # Notificar a todos los admins
+                        from django.contrib.auth.models import User
+                        for admin in User.objects.filter(groups__name=Roles.ADMINISTRADOR):
+                            Notificacion.objects.create(
+                                usuario=admin,
+                                mensaje=f"El cliente {solicitud.cliente.username} aceptó la cotización de la solicitud #{solicitud.pk}.",
+                                enlace=f"/usuarios/solicitud/detalle/{solicitud.pk}/"
+                            )
+                        # Notificar al técnico asignado
+                        Notificacion.objects.create(
+                            usuario=tecnico,
+                            mensaje=f"Te han asignado una nueva inspección por aceptación de cotización (solicitud #{solicitud.pk}).",
+                            enlace=f"/usuarios/inspeccion/completar/{nueva_inspeccion.pk}/"
+                        )
+                        messages.success(request, "Cotización aceptada. Inspección asignada al técnico.")
+                        return redirect('dashboard_cliente')
+                except Exception as e:
+                    messages.error(request, f"Error al crear inspección: {str(e)}")
+            else:
+                messages.error(request, "Faltan datos de preasignación. Contacte al administrador.")
+        elif action == 'rechazar':
+            solicitud.estado = EstadoSolicitud.RECHAZADA
+            solicitud.save()
+            # Notificación interna a los admins
+            from .models import Notificacion, Roles
+            from django.contrib.auth.models import User
+            for admin in User.objects.filter(groups__name=Roles.ADMINISTRADOR):
+                Notificacion.objects.create(
+                    usuario=admin,
+                    mensaje=f"El cliente {solicitud.cliente.username} rechazó la cotización de la solicitud #{solicitud.pk}.",
+                    enlace=f"/usuarios/solicitud/detalle/{solicitud.pk}/"
+                )
+            messages.warning(request, "Has rechazado la cotización. La solicitud ha sido cancelada.")
+            return redirect('dashboard_cliente')
+
+    return render(request, 'dashboards/cliente/aceptar_cotizacion.html', {'solicitud': solicitud})
 
 @login_required
 @user_passes_test(is_cliente)
