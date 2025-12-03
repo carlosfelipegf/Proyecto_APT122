@@ -14,7 +14,7 @@ urlpatterns = [
     path('nosotros/', views.nosotros_view, name='nosotros'),
     path('notificacion/leida/<int:pk>/', views.marcar_notificacion_leida, name='marcar_notificacion_leida'),
     path('seguridad/cambiar-password/', CambioContrasenaForzadoView.as_view(), name='cambiar_password_forzado'),
-
+    
     # --- Recuperación de contraseña ---
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), name='password_reset_done'),
@@ -55,7 +55,7 @@ urlpatterns = [
     # =========================================
     path('dashboard/admin/', views.dashboard_administrador, name='dashboard_administrador'),
     path('historial/', views.historial_solicitudes, name='historial_solicitudes'),
-    
+    path('admin/solicitud/detalle/<int:pk>/', views.ver_detalle_solicitud, name='ver_detalle_solicitud'),
     # Gestión de Usuarios
     path('usuarios/', views.admin_usuarios_list, name='admin_usuarios_list'),
     path('usuarios/crear/', views.admin_usuario_crear, name='admin_usuario_crear'),

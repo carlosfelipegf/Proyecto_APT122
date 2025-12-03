@@ -3,15 +3,21 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Optifire{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-      <div class="container">
+      <div class="container-fluid px-4">
         <a class="navbar-brand navbar-brand-text" href="/">
             <i class="fa-solid fa-fire-extinguisher me-2"></i> OPTIFIRE
         </a>
@@ -19,25 +25,50 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto align-items-center">
             <li class="nav-item"><a class="nav-link nav-link-custom" href="/">Inicio</a></li>
             <li class="nav-item"><a class="nav-link nav-link-custom" href="/nosotros/">Nosotros</a></li>
 
             {% if user.is_authenticated %}
-                <li class="nav-item">
-                  <span class="nav-link nav-link-custom me-2">
-                    <i class="fa-solid fa-user me-1"></i> Hola, <span class="fw-bold">{{ user.first_name|default:user.username }}</span>
-                  </span>
+                <!-- CAMPANA DE NOTIFICACIONES (AJAX) -->
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link nav-link-custom position-relative" href="#" id="navbarDropdownNotif" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span id="notification-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none; font-size: 0.6rem;">
+                            0
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdownNotif" style="width: 320px; max-height: 400px; overflow-y: auto;" id="notification-list">
+                        <li class="dropdown-header d-flex justify-content-between align-items-center bg-light py-2">
+                            <span class="fw-bold text-dark">Notificaciones</span>
+                            <a href="#" class="text-decoration-none small" onclick="markAllAsRead(event)">Marcar todas leídas</a>
+                        </li>
+                        <li><hr class="dropdown-divider my-0"></li>
+                        <li id="loading-item" class="text-center py-3 text-muted">
+                            <div class="spinner-border spinner-border-sm" role="status"></div> Cargando...
+                        </li>
+                        <li id="no-notifications-item" class="text-center py-3 text-muted small" style="display: none;">
+                            No tienes notificaciones nuevas.
+                        </li>
+                        <li class="dropdown-divider static-item"></li>
+                        <li class="static-item"><a class="dropdown-item text-center small text-primary fw-bold py-2" href="#">Ver historial completo</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-custom" href="{% url 'dashboard' %}">Panel De Control</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link btn btn-sm btn-outline-dark ms-2" href="{% url 'logout' %}">Salir</a>
+
+                <!-- Menú Usuario -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-circle me-1"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                        <li><a class="dropdown-item" href="{% url 'dashboard' %}">Panel de Control</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                    </ul>
                 </li>
             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link btn btn-brand ms-2 text-white" href="{% url 'login' %}">Iniciar Sesión</a>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-brand btn-sm" href="{% url 'login' %}">Iniciar Sesión</a>
                 </li>
             {% endif %}
           </ul>
@@ -45,72 +76,94 @@
       </div>
     </nav>
 
-    <main>
-        {# Mensajes globales removidos para evitar duplicados; los templates individuales muestran sus propias alertas. #}
-        
+    <!-- Contenido Principal -->
+    <main class="w-100">
+        {% if messages %}
+            <div class="container mt-3" id="django-messages-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer class="footer-custom mt-5 py-3">
+    <!-- Footer -->
+    <footer class="footer-custom mt-auto">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2025 Optifire. Todos los derechos reservados.</p>
+            <p class="mb-0 text-secondary">&copy; 2025 Optifire. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/main.js' %}" defer></script>
+    <!-- ========================================== -->
+    <!-- GLOBAL LOADER MEJORADO -->
+    <!-- ========================================== -->
     <div id="global-loader" class="d-none">
+        <!-- Botón de Cerrar Manual (Salvavidas) -->
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4" aria-label="Cerrar" onclick="hideLoader()" style="z-index: 9999;"></button>
+        
         <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status">
             <span class="visually-hidden">Cargando...</span>
         </div>
-        <div class="loader-text">Procesando, por favor espere...</div>
+        <div class="loader-text mt-3">Procesando, por favor espere...</div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- SCRIPT DE CONTROL DEL LOADER -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const loader = document.getElementById('global-loader');
 
-            // Función para mostrar el loader
             window.showLoader = function() {
                 loader.classList.remove('d-none');
             };
 
-            // 1. Detectar envío de formularios
+            window.hideLoader = function() {
+                loader.classList.add('d-none');
+            }
+
+            // 1. Botón de pánico (click en fondo)
+            loader.addEventListener('click', function(e) {
+                if(e.target === loader) hideLoader();
+            });
+
+            // 2. SEGURIDAD: Si la página cargó y hay alertas de error, OCULTAR loader.
+            const errorAlerts = document.querySelectorAll('.alert-danger, .alert-warning, .errorlist');
+            if (errorAlerts.length > 0) {
+                console.log("Errores detectados, ocultando loader forzosamente.");
+                hideLoader();
+            }
+
+            // 3. Interceptar formularios
             const forms = document.querySelectorAll('form');
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
-                    // Solo mostramos si el formulario es válido (HTML5 validation)
-                    if (form.checkValidity()) {
-                        showLoader();
-                    }
+                    // Pequeño retardo para permitir que validaciones JS cancelen el envío
+                    setTimeout(() => {
+                        if (!e.defaultPrevented && form.checkValidity()) {
+                            showLoader();
+                        }
+                    }, 50);
                 });
             });
 
-            // 2. Detectar clics en enlaces de "acción" (opcional)
-            // Esto sirve para botones como "Descargar PDF" que tardan
-            const actionLinks = document.querySelectorAll('a.btn-danger, a.btn-primary, a.nav-link');
-            actionLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // No activar si abre en nueva pestaña (target="_blank") o es un ancla (#)
-                    if (!link.target && link.getAttribute('href') !== '#') {
-                        // showLoader(); // Descomenta si quieres loader en navegación
-                    }
-                });
-            });
-
-            // 3. Ocultar loader si el usuario vuelve atrás con el navegador
+            // 4. Restaurar estado al volver atrás
             window.addEventListener('pageshow', function(event) {
-                if (event.persisted) {
-                    loader.classList.add('d-none');
-                }
+                hideLoader();
             });
         });
     </script>
 
     <script src="{% static 'js/main.js' %}" defer></script>
+    <script src="{% static 'js/notifications.js' %}" defer></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

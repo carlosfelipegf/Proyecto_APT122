@@ -50,7 +50,10 @@
                             <td class="text-muted small">{{ solicitud.fecha_solicitud|date:"d/m/Y" }}</td>
                             <td class="text-end pe-4">
                                 <div class="btn-group">
-                                    <a class="btn btn-sm btn-outline-primary" href="{% url 'detalle_orden' solicitud.pk %}" title="Ver detalles">
+                                    
+                                    <!-- 🚨 CAMBIO IMPORTANTE AQUÍ 🚨 -->
+                                    <!-- Ahora apunta a 'ver_detalle_solicitud' -->
+                                    <a class="btn btn-sm btn-outline-primary" href="{% url 'ver_detalle_solicitud' solicitud.pk %}" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
 

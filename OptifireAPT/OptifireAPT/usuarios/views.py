@@ -724,3 +724,20 @@ def api_disponibilidad_tecnico(request, tecnico_id):
     ).values_list('fecha_programada', flat=True)
     return JsonResponse({'fechas_ocupadas': [f.strftime('%Y-%m-%d') for f in ocupadas]})
 # ==========================================================
+
+@login_required
+@user_passes_test(is_administrador)
+def ver_detalle_solicitud(request, pk):
+    # 1. Buscar la solicitud
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk)
+    
+    # 2. Buscar la inspección asociada (si existe)
+    inspeccion = Inspeccion.objects.filter(solicitud=solicitud).first()
+    
+    context = {
+        'solicitud': solicitud,
+        'inspeccion': inspeccion
+    }
+    
+    # 3. Renderizar la plantilla específica de admin
+    return render(request, 'dashboards/detalle_solicitud_admin.html', context)
