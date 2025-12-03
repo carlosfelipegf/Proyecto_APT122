@@ -280,6 +280,22 @@ def dashboard_tecnico(request):
         'inspecciones_asignadas': inspecciones
     })
 
+
+@login_required
+@user_passes_test(is_tecnico)
+def registro_trabajos(request):
+    """
+    Lista las inspecciones completadas por el técnico logueado.
+    """
+    inspecciones = Inspeccion.objects.filter(
+        tecnico=request.user,
+        estado=EstadoInspeccion.COMPLETADA
+    ).select_related('solicitud').order_by('-fecha_finalizacion')
+
+    return render(request, 'dashboards/tecnico/registro_trabajos.html', {
+        'inspecciones_completadas': inspecciones
+    })
+
 @login_required
 @user_passes_test(is_tecnico)
 def completar_inspeccion(request, pk):
