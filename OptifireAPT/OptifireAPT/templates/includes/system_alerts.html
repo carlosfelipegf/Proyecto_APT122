@@ -1,0 +1,32 @@
+{% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+            <div class="alert alert-modern alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                
+                <!-- ÍCONOS -->
+                {% if 'success' in message.tags %}
+                    <i class="fas fa-check-circle"></i>
+                {% elif 'error' in message.tags or 'danger' in message.tags %}
+                    <i class="fas fa-times-circle"></i>
+                {% elif 'warning' in message.tags %}
+                    <i class="fas fa-exclamation-triangle"></i>
+                {% else %}
+                    <i class="fas fa-info-circle"></i>
+                {% endif %}
+
+                <!-- TEXTO -->
+                <div>
+                    <strong class="d-block text-uppercase small mb-1" style="font-size: 0.75rem; opacity: 0.8; letter-spacing: 0.5px;">
+                        {% if 'success' in message.tags %}Éxito
+                        {% elif 'error' in message.tags or 'danger' in message.tags %}Error
+                        {% elif 'warning' in message.tags %}Atención
+                        {% else %}Información{% endif %}
+                    </strong>
+                    {{ message }}
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
