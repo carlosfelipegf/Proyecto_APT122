@@ -70,23 +70,26 @@ def login_view(request):
         return redirect('dashboard')
     
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
-        user = authenticate(request, username=username, password=password)
-        
+        from django.contrib.auth import get_user_model
+        UserModel = get_user_model()
+        try:
+            user_obj = UserModel.objects.get(email=email)
+            user = authenticate(request, username=user_obj.username, password=password)
+        except UserModel.DoesNotExist:
+            user = None
+
         if user is not None:
             login(request, user)
-            
             # 🚨 VALIDACIÓN DE BANDERA 🚨
-            # Verificamos si el perfil tiene la obligación activada
             if hasattr(user, 'perfil') and user.perfil.obligar_cambio_contrasena:
                 messages.info(request, "Por seguridad, debes cambiar tu contraseña en tu primer inicio de sesión.")
-                return redirect('cambiar_password_forzado') # Redirige a la nueva vista
-            
+                return redirect('cambiar_password_forzado')
             return redirect('dashboard')
         else:
-            messages.error(request, "Usuario o contraseña incorrecta")
-    
+            messages.error(request, "Correo o contraseña incorrecta")
+
     return render(request, "login.html")
 
 def logout_view(request):

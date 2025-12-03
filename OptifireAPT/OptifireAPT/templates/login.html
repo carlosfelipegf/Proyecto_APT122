@@ -23,25 +23,50 @@
                     </div>
                 {% endif %}
 
+
+
                 <div class="mb-3">
-                    <label for="id_username" class="form-label fw-bold small text-uppercase text-muted">Usuario</label>
-                    <input type="text" name="username" class="form-control form-control-lg bg-light border-0" placeholder="Ej: soycliente" required id="id_username">
+                    <label for="email" class="form-label">CORREO ELECTRÓNICO</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ej: correo@dominio.com" required autofocus>
+                    <div id="emailError" class="text-danger small mt-1" style="display:none;">Ingrese un correo electrónico válido.</div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="id_password" class="form-label fw-bold small text-uppercase text-muted">Contraseña</label>
-                    <input type="password" name="password" class="form-control form-control-lg bg-light border-0" placeholder="••••••••" required id="id_password">
-                </div>
 
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-brand btn-lg fw-bold">
-                        Entrar
-                    </button>
-                </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">CONTRASEÑA</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-brand btn-lg fw-bold" id="loginBtn">
+                            Entrar
+                        </button>
+                    </div>
 
                 <div class="text-center">
                         <a href="{% url 'password_reset' %}" class="small text-decoration-none text-muted">¿Olvidaste tu contraseña?</a>
                 </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form');
+                const emailInput = document.getElementById('email');
+                const emailError = document.getElementById('emailError');
+                const loginBtn = document.getElementById('loginBtn');
+                form.addEventListener('submit', function(e) {
+                    const emailValue = emailInput.value.trim();
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(emailValue)) {
+                        emailError.style.display = 'block';
+                        emailInput.classList.add('is-invalid');
+                        e.preventDefault();
+                    } else {
+                        emailError.style.display = 'none';
+                        emailInput.classList.remove('is-invalid');
+                    }
+                });
+            });
+            </script>
             </form>
         </div>
     </div>
