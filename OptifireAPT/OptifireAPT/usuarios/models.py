@@ -47,7 +47,7 @@ class Perfil(models.Model):
     descripcion = models.TextField(max_length=500, blank=True, null=True, verbose_name="Descripción / Bio")
     telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono")
     direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección (Base)")
-    
+    rut = models.CharField(max_length=12, blank=True, null=True, verbose_name="RUT", unique=True)
     # --- CAMPOS ESPECÍFICOS DE UBICACIÓN (Útiles para ambos) ---
     region = models.CharField(max_length=100, blank=True, null=True, verbose_name="Región")
     ciudad = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ciudad")
@@ -60,6 +60,12 @@ class Perfil(models.Model):
     # El técnico tendrá esto vacío (NULL)
     rut_empresa = models.CharField(max_length=20, blank=True, null=True, verbose_name="RUT Empresa")
     rubro = models.CharField(max_length=100, blank=True, null=True, verbose_name="Rubro")
+
+    # 🚨 NUEVO CAMPO: Bandera de Primer Inicio
+    obligar_cambio_contrasena = models.BooleanField(
+        default=True, 
+        verbose_name="Obligar cambio de contraseña"
+    )
 
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
@@ -107,36 +113,40 @@ class TareaPlantilla(models.Model):
 # 4. SOLICITUD DE INSPECCIÓN
 # ==========================================================
 
+
 class SolicitudInspeccion(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitudes_enviadas')
-    
+
     # Datos de Contacto
     nombre_cliente = models.CharField(max_length=100)
-    apellido_cliente = models.CharField(max_length=100, blank=True, null=True) 
+    apellido_cliente = models.CharField(max_length=100, blank=True, null=True)
     direccion = models.CharField(max_length=255)
     telefono = models.CharField(max_length=20)
-    
+
     # Datos Técnicos
-    maquinaria = models.TextField(verbose_name="Maquinaria / Servicio") 
+    maquinaria = models.TextField(verbose_name="Maquinaria / Servicio")
     observaciones_cliente = models.TextField(blank=True, null=True)
 
     # Datos Administrativos
     monto_cotizacion = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
     detalle_cotizacion = models.TextField(blank=True, null=True)
-    
-    # Eliminé tecnico_asignado de aquí para evitar redundancia. 
-    # El técnico "real" vive en el modelo Inspeccion.
-    
+
+    # Preasignación para flujo de cotización
+    tecnico_preasignado = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='solicitudes_preasignadas', limit_choices_to={'groups__name': Roles.TECNICO})
+    plantilla_preasignada = models.ForeignKey(PlantillaInspeccion, on_delete=models.SET_NULL, null=True, blank=True, related_name='solicitudes_preasignadas')
+    nombre_inspeccion_preasignado = models.CharField(max_length=200, blank=True, null=True)
+    fecha_programada_preasignada = models.DateField(null=True, blank=True)
+
     fecha_programada = models.DateField(null=True, blank=True)
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
-    
+
     estado = models.CharField(
         max_length=20,
-        choices=EstadoSolicitud.choices, 
+        choices=EstadoSolicitud.choices,
         default=EstadoSolicitud.PENDIENTE
     )
     motivo_rechazo = models.TextField(blank=True, null=True)
-    
+
     def __str__(self):
         return f"Solicitud #{self.id} - {self.get_estado_display()}"
 

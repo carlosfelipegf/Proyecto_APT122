@@ -95,7 +95,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
+        # CAMBIO 1: Aumentamos el mínimo a 10 caracteres
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -103,13 +107,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    # CAMBIO 2: Agregamos nuestro validador personalizado
+    {
+        'NAME': 'usuarios.validators.ValidarComplejidad',
+    },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-cl'
 
 TIME_ZONE = 'UTC'
 
@@ -179,3 +186,7 @@ EMAIL_HOST_PASSWORD = 'xoka fbky asgg sjij ' # <-- Aquí va la contraseña de ap
 
 # Remitente por defecto
 DEFAULT_FROM_EMAIL = 'Optifire <notificaciones@optifire.cl>'
+
+# Correo del equipo de Cobranzas / Finanzas
+EMAIL_COBRANZA_DESTINO = 'guerraflorescarlos@gmail.com' # <--- CAMBIA ESTO POR EL REAL
+IVA_CHILE = 0.19 # 19%

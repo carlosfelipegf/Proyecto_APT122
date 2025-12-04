@@ -11,6 +11,15 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.http import JsonResponse
 from .models import Notificacion 
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib.auth import update_session_auth_hash
+from django.core.mail import EmailMessage # <--- OJO: EmailMessage, no EmailMultiAlternatives
+from django.conf import settings
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.utils import timezone
+import datetime
 
 # Importamos formularios
 from .forms import (
@@ -55,18 +64,32 @@ def is_tecnico(user): return check_role(user, Roles.TECNICO)
 # ==========================================================
 def login_view(request):
     if request.user.is_authenticated:
+        # Validación extra por si entra directo por URL estando logueado
+        if hasattr(request.user, 'perfil') and request.user.perfil.obligar_cambio_contrasena:
+            return redirect('cambiar_password_forzado')
         return redirect('dashboard')
     
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
-        user = authenticate(request, username=username, password=password)
+        from django.contrib.auth import get_user_model
+        UserModel = get_user_model()
+        try:
+            user_obj = UserModel.objects.get(email=email)
+            user = authenticate(request, username=user_obj.username, password=password)
+        except UserModel.DoesNotExist:
+            user = None
+
         if user is not None:
             login(request, user)
+            # 🚨 VALIDACIÓN DE BANDERA 🚨
+            if hasattr(user, 'perfil') and user.perfil.obligar_cambio_contrasena:
+                messages.info(request, "Por seguridad, debes cambiar tu contraseña en tu primer inicio de sesión.")
+                return redirect('cambiar_password_forzado')
             return redirect('dashboard')
         else:
-            messages.error(request, "Usuario o contraseña incorrecta")
-    
+            messages.error(request, "Correo o contraseña incorrecta")
+
     return render(request, "login.html")
 
 def logout_view(request):
@@ -75,6 +98,14 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
+    # =========================================================================
+    # AGREGA ESTO (Lo nuevo del otro código): Validación de seguridad extra
+    # =========================================================================
+    if hasattr(request.user, "perfil") and request.user.perfil.obligar_cambio_contrasena:
+        messages.warning(request, "Debe cambiar su contraseña obligatoriamente para acceder al sistema.")
+        return redirect("cambiar_password_forzado")
+    # =========================================================================
+
     if is_administrador(request.user):
         return redirect('dashboard_administrador')
     elif is_tecnico(request.user):
@@ -155,13 +186,26 @@ def admin_usuario_editar(request, pk):
 @login_required
 @user_passes_test(is_administrador)
 def admin_usuario_eliminar(request, pk):
-    usuario = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        usuario.delete()
-        messages.success(request, "Usuario eliminado.")
-        return redirect('admin_usuarios_list')
-    return render(request, 'dashboards/admin/usuario_confirm_delete.html', {'usuario_objetivo': usuario})
+    usuario_a_eliminar = get_object_or_404(User, pk=pk)
 
+    # 1. PROTECCIÓN DE SUICIDIO DIGITAL
+    # Impedimos que el admin se borre a sí mismo mientras está logueado
+    if usuario_a_eliminar == request.user:
+        messages.error(request, "No puedes eliminar tu propia cuenta de administrador mientras la usas.")
+        return redirect('admin_usuarios_list')
+
+    # 2. LOGICA DE ELIMINACIÓN
+    # Aquí ya no hay restricción de "is_superuser", así que puedes borrar a otros admins.
+    if request.method == 'POST':
+        nombre = usuario_a_eliminar.username
+        usuario_a_eliminar.delete()
+        messages.success(request, f"El usuario administrador '{nombre}' ha sido eliminado correctamente.")
+        return redirect('admin_usuarios_list')
+
+    return render(request, 'dashboards/admin/usuario_confirm_delete.html', {
+        'usuario_objetivo': usuario_a_eliminar
+    })
+    
 @login_required
 @user_passes_test(is_administrador)
 def aprobar_solicitud(request, pk):
@@ -169,43 +213,32 @@ def aprobar_solicitud(request, pk):
 
     if request.method == 'POST':
         action = request.POST.get('action')
-        
+
         if action == 'aprobar':
             tecnico_id = request.POST.get('tecnico')
             plantilla_id = request.POST.get('plantilla')
             nombre_inspeccion = request.POST.get('nombre_inspeccion')
-            fecha_programada = request.POST.get('fecha_programada') 
+            fecha_programada = request.POST.get('fecha_programada')
+            monto_cotizacion = request.POST.get('monto_cotizacion')
 
-            if all([tecnico_id, plantilla_id, nombre_inspeccion]):
+            if all([tecnico_id, plantilla_id, nombre_inspeccion, monto_cotizacion]):
                 try:
-                    with transaction.atomic(): 
+                    with transaction.atomic():
                         tecnico = User.objects.get(pk=tecnico_id)
                         plantilla = PlantillaInspeccion.objects.get(pk=plantilla_id)
-                        
-                        nueva_inspeccion = Inspeccion.objects.create(
-                            solicitud=solicitud,
-                            tecnico=tecnico,
-                            plantilla_base=plantilla,
-                            nombre_inspeccion=nombre_inspeccion,
-                            fecha_programada=fecha_programada if fecha_programada else None,
-                            estado=EstadoInspeccion.ASIGNADA
-                        )
 
-                        tareas_plantilla = TareaPlantilla.objects.filter(plantilla=plantilla)
-                        tareas_a_crear = [
-                            TareaInspeccion(
-                                inspeccion=nueva_inspeccion,
-                                plantilla_tarea=tp,
-                                descripcion=tp.descripcion,
-                                estado=EstadoTarea.PENDIENTE
-                            ) for tp in tareas_plantilla
-                        ]
-                        TareaInspeccion.objects.bulk_create(tareas_a_crear)
 
-                        solicitud.estado = EstadoSolicitud.APROBADA
+                        # Guardar datos de cotización y preasignación en campos persistentes
+                        solicitud.monto_cotizacion = monto_cotizacion
+                        solicitud.detalle_cotizacion = f"Cotización generada por el administrador."
+                        solicitud.tecnico_preasignado = tecnico
+                        solicitud.plantilla_preasignada = plantilla
+                        solicitud.nombre_inspeccion_preasignado = nombre_inspeccion
+                        solicitud.fecha_programada_preasignada = fecha_programada if fecha_programada else None
+                        solicitud.estado = EstadoSolicitud.COTIZANDO
                         solicitud.save()
 
-                        messages.success(request, f"Inspección asignada a {tecnico.username}")
+                        messages.success(request, "Cotización enviada al cliente para su aprobación.")
                         return redirect('dashboard_administrador')
 
                 except Exception as e:
@@ -245,6 +278,22 @@ def dashboard_tecnico(request):
 
     return render(request, 'dashboards/tecnico/tecnico_dashboard.html', {
         'inspecciones_asignadas': inspecciones
+    })
+
+
+@login_required
+@user_passes_test(is_tecnico)
+def registro_trabajos(request):
+    """
+    Lista las inspecciones completadas por el técnico logueado.
+    """
+    inspecciones = Inspeccion.objects.filter(
+        tecnico=request.user,
+        estado=EstadoInspeccion.COMPLETADA
+    ).select_related('solicitud').order_by('-fecha_finalizacion')
+
+    return render(request, 'dashboards/tecnico/registro_trabajos.html', {
+        'inspecciones_completadas': inspecciones
     })
 
 @login_required
@@ -326,11 +375,96 @@ def perfil_tecnico(request):
 # ==========================================================
 # 5. VISTAS CLIENTE
 # ==========================================================
+
 @login_required
 @user_passes_test(is_cliente)
 def dashboard_cliente(request):
     solicitudes = SolicitudInspeccion.objects.filter(cliente=request.user).order_by('-fecha_solicitud')
     return render(request, 'dashboards/cliente_dashboard.html', {'solicitudes': solicitudes})
+
+
+# Nueva vista: aceptar o rechazar cotización
+@login_required
+@user_passes_test(is_cliente)
+def aceptar_cotizacion_cliente(request, pk):
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk, cliente=request.user)
+    if solicitud.estado != EstadoSolicitud.COTIZANDO:
+        messages.error(request, "Esta solicitud no está pendiente de cotización.")
+        return redirect('dashboard_cliente')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'aceptar':
+            tecnico = solicitud.tecnico_preasignado
+            plantilla = solicitud.plantilla_preasignada
+            nombre_inspeccion = solicitud.nombre_inspeccion_preasignado
+            fecha_programada = solicitud.fecha_programada_preasignada
+            if all([tecnico, plantilla, nombre_inspeccion]):
+                try:
+                    with transaction.atomic():
+                        nueva_inspeccion = Inspeccion.objects.create(
+                            solicitud=solicitud,
+                            tecnico=tecnico,
+                            plantilla_base=plantilla,
+                            nombre_inspeccion=nombre_inspeccion,
+                            fecha_programada=fecha_programada if fecha_programada else None,
+                            estado=EstadoInspeccion.ASIGNADA
+                        )
+                        tareas_plantilla = TareaPlantilla.objects.filter(plantilla=plantilla)
+                        tareas_a_crear = [
+                            TareaInspeccion(
+                                inspeccion=nueva_inspeccion,
+                                plantilla_tarea=tp,
+                                descripcion=tp.descripcion,
+                                estado=EstadoTarea.PENDIENTE
+                            ) for tp in tareas_plantilla
+                        ]
+                        TareaInspeccion.objects.bulk_create(tareas_a_crear)
+                        solicitud.estado = EstadoSolicitud.APROBADA
+                        # Limpiar preasignación
+                        solicitud.tecnico_preasignado = None
+                        solicitud.plantilla_preasignada = None
+                        solicitud.nombre_inspeccion_preasignado = None
+                        solicitud.fecha_programada_preasignada = None
+                        solicitud.save()
+                        # Notificación interna al admin y técnico
+                        from .models import Notificacion, Roles
+                        # Notificar a todos los admins
+                        from django.contrib.auth.models import User
+                        for admin in User.objects.filter(groups__name=Roles.ADMINISTRADOR):
+                            Notificacion.objects.create(
+                                usuario=admin,
+                                mensaje=f"El cliente {solicitud.cliente.username} aceptó la cotización de la solicitud #{solicitud.pk}.",
+                                enlace=f"/usuarios/solicitud/detalle/{solicitud.pk}/"
+                            )
+                        # Notificar al técnico asignado
+                        Notificacion.objects.create(
+                            usuario=tecnico,
+                            mensaje=f"Te han asignado una nueva inspección por aceptación de cotización (solicitud #{solicitud.pk}).",
+                            enlace=f"/usuarios/inspeccion/completar/{nueva_inspeccion.pk}/"
+                        )
+                        messages.success(request, "Cotización aceptada. Inspección asignada al técnico.")
+                        return redirect('dashboard_cliente')
+                except Exception as e:
+                    messages.error(request, f"Error al crear inspección: {str(e)}")
+            else:
+                messages.error(request, "Faltan datos de preasignación. Contacte al administrador.")
+        elif action == 'rechazar':
+            solicitud.estado = EstadoSolicitud.RECHAZADA
+            solicitud.save()
+            # Notificación interna a los admins
+            from .models import Notificacion, Roles
+            from django.contrib.auth.models import User
+            for admin in User.objects.filter(groups__name=Roles.ADMINISTRADOR):
+                Notificacion.objects.create(
+                    usuario=admin,
+                    mensaje=f"El cliente {solicitud.cliente.username} rechazó la cotización de la solicitud #{solicitud.pk}.",
+                    enlace=f"/usuarios/solicitud/detalle/{solicitud.pk}/"
+                )
+            messages.warning(request, "Has rechazado la cotización. La solicitud ha sido cancelada.")
+            return redirect('dashboard_cliente')
+
+    return render(request, 'dashboards/cliente/aceptar_cotizacion.html', {'solicitud': solicitud})
 
 @login_required
 @user_passes_test(is_cliente)
@@ -457,3 +591,152 @@ def marcar_notificacion_leida(request, pk):
         return JsonResponse({'status': 'ok', 'mensaje': 'Notificación marcada como leída'})
     
     return JsonResponse({'status': 'error'}, status=400)
+
+class CambioContrasenaForzadoView(PasswordChangeView):
+    template_name = 'registration/password_change_force.html'
+    success_url = reverse_lazy('dashboard') # Redirige al dashboard al terminar
+
+    def form_valid(self, form):
+        # Llamamos a la lógica original de Django para cambiar la password
+        response = super().form_valid(form)
+        
+        # 🚨 MAGIA AQUÍ: Apagamos la bandera
+        perfil = self.request.user.perfil
+        perfil.obligar_cambio_contrasena = False
+        perfil.save()
+        
+        # Mantenemos al usuario logueado después del cambio (Django lo desloguea por seguridad si no hacemos esto)
+        update_session_auth_hash(self.request, self.request.user)
+        
+        messages.success(self.request, "Tu contraseña ha sido actualizada. ¡Bienvenido!")
+        return response
+
+@login_required
+@user_passes_test(is_administrador)
+def enviar_orden_facturacion(request, pk):
+    # 1. Obtener datos
+    solicitud = get_object_or_404(SolicitudInspeccion, pk=pk)
+    
+    if not solicitud.monto_cotizacion:
+        messages.error(request, "Error: Esta solicitud no tiene un monto cotizado asignado.")
+        return redirect('dashboard_administrador')
+
+    # 2. Cálculos Chilenos (Neto, IVA, Total)
+    monto_neto = int(solicitud.monto_cotizacion)
+    monto_iva = int(monto_neto * getattr(settings, 'IVA_CHILE', 0.19))
+    monto_total = monto_neto + monto_iva
+
+    # 3. Contexto para el PDF
+    context = {
+        'solicitud': solicitud,
+        'monto_neto': monto_neto,
+        'monto_iva': monto_iva,
+        'monto_total': monto_total,
+    }
+
+    # 4. Generar PDF en memoria
+    html_string = render_to_string('pdf/orden_facturacion.html', context)
+    pdf_file = HTML(string=html_string).write_pdf()
+
+    # 5. Configurar Correo
+    asunto = f"Orden de Facturación - OT #{solicitud.id} - {solicitud.nombre_cliente}"
+    mensaje = f"""
+    Estimado equipo de Cobranzas,
+
+    Adjunto encontrará la orden de facturación para el servicio realizado.
+
+    Cliente: {solicitud.nombre_cliente}
+    Monto Neto: ${monto_neto}
+    OT: #{solicitud.id}
+
+    Favor proceder con la emisión del DTE (Factura).
+    """
+    
+    email_destino = getattr(settings, 'EMAIL_COBRANZA_DESTINO', 'admin@localhost')
+
+    try:
+        email = EmailMessage(
+            asunto,
+            mensaje,
+            settings.DEFAULT_FROM_EMAIL,
+            [email_destino], # Destinatario (Cobranzas)
+        )
+        # Adjuntar el PDF generado
+        email.attach(f'Orden_Facturacion_{solicitud.id}.pdf', pdf_file, 'application/pdf')
+        email.send()
+        
+        messages.success(request, f"Orden de facturación enviada correctamente a {email_destino}")
+        
+    except Exception as e:
+        messages.error(request, f"Error al enviar correo: {e}")
+
+    return redirect('dashboard_administrador')
+@login_required
+def estadisticas_view(request):
+    user = request.user
+    role = None
+    context = {}
+
+    # 1. Determinar Rol (Asegúrate de que tus funciones is_... existan)
+    if is_administrador(user):
+        role = 'admin'
+    elif is_tecnico(user):
+        role = 'tecnico'
+    elif is_cliente(user):
+        role = 'cliente'
+
+    # 2. Lógica según Rol
+    if role == 'admin':
+        # A. OTs Semanales
+        hoy = timezone.now()
+        hace_una_semana = hoy - datetime.timedelta(days=7)
+        ots_semanales = SolicitudInspeccion.objects.filter(
+            fecha_solicitud__gte=hace_una_semana
+        ).extra(select={'day': 'date(fecha_solicitud)'}).values('day').annotate(count=Count('id')).order_by('day')
+
+        # B. Carga de Técnicos
+        tecnicos_carga = User.objects.filter(groups__name='Técnico').annotate(
+            carga_trabajo=Count('inspecciones_asignadas', filter=Q(inspecciones_asignadas__estado__in=['ASIGNADA', 'EN_CURSO']))
+        ).order_by('carga_trabajo')
+
+        # C. Estados Globales
+        estados_globales = SolicitudInspeccion.objects.values('estado').annotate(total=Count('estado'))
+
+        context = {
+            'role': 'admin',
+            'labels_semana': [entry['day'] for entry in ots_semanales],
+            'data_semana': [entry['count'] for entry in ots_semanales],
+            'labels_tecnicos': [t.username for t in tecnicos_carga],
+            'data_carga': [t.carga_trabajo for t in tecnicos_carga],
+            'labels_estados': [e['estado'] for e in estados_globales],
+            'data_estados': [e['total'] for e in estados_globales],
+        }
+
+    elif role == 'tecnico':
+        mis_inspecciones = Inspeccion.objects.filter(tecnico=user)
+        resumen = mis_inspecciones.values('estado').annotate(total=Count('estado'))
+        context = {
+            'role': 'tecnico',
+            'labels_estado': [item['estado'] for item in resumen],
+            'data_estado': [item['total'] for item in resumen],
+            'total_completadas': mis_inspecciones.filter(estado='COMPLETADA').count()
+        }
+
+    elif role == 'cliente':
+        mis_solicitudes = SolicitudInspeccion.objects.filter(cliente=user)
+        resumen = mis_solicitudes.values('estado').annotate(total=Count('estado'))
+        context = {
+            'role': 'cliente',
+            'labels_solicitudes': [item['estado'] for item in resumen],
+            'data_solicitudes': [item['total'] for item in resumen],
+        }
+
+    return render(request, 'dashboards/estadisticas.html', context)
+def api_disponibilidad_tecnico(request, tecnico_id):
+    ocupadas = Inspeccion.objects.filter(
+        tecnico_id=tecnico_id,
+        estado__in=[EstadoInspeccion.ASIGNADA, EstadoInspeccion.EN_CURSO],
+        fecha_programada__isnull=False
+    ).values_list('fecha_programada', flat=True)
+    return JsonResponse({'fechas_ocupadas': [f.strftime('%Y-%m-%d') for f in ocupadas]})
+# ==========================================================

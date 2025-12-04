@@ -3,12 +3,10 @@
 
 {% block title %}Detalle Orden #{{ solicitud.id }} | Optifire{% endblock %}
 
-{# 1. Menú Lateral #}
 {% block dashboard_menu %}
     {% include "includes/cliente_menu.html" %}
 {% endblock dashboard_menu %}
 
-{# 2. Contenido Principal #}
 {% block dashboard_content %}
 <div class="container-fluid px-0">
 
@@ -115,7 +113,6 @@
                                 {% endif %}
                             </td>
                             <td class="small text-muted">{{ tarea.observacion|default:"-" }}</td>
-                            
                             <td class="text-center">
                                 {% if tarea.imagen_evidencia %}
                                     <a href="{{ tarea.imagen_evidencia.url }}" target="_blank" class="btn btn-sm btn-outline-primary fw-bold">
@@ -133,14 +130,17 @@
 
             {% if inspeccion.estado == 'COMPLETADA' %}
                 <div class="mt-4 text-end pt-3 border-top">
-                    <a href="{% url 'descargar_acta' inspeccion.pk %}" class="btn btn-danger btn-lg shadow-sm" target="_blank">
+                    <a href="{% url 'descargar_acta' inspeccion.pk %}" 
+                       class="btn btn-danger btn-lg shadow-sm" 
+                       target="_blank"
+                       onclick="showLoader(); setTimeout(() => document.getElementById('global-loader').classList.add('d-none'), 5000);">
                         <i class="fas fa-file-pdf me-2"></i> Descargar Acta PDF
                     </a>
                 </div>
             {% endif %}
         </div>
     </div>
-    {% endif %} {# <--- ESTE ES EL ENDIF QUE FALTABA #}
+    {% endif %}
 
 </div>
 {% endblock dashboard_content %}

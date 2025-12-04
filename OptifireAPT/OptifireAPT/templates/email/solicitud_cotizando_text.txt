@@ -1,0 +1,11 @@
+Estimado/a {{ solicitud.nombre_cliente }},
+
+Tienes una nueva cotización disponible para tu solicitud de inspección.
+
+Monto cotización: ${{ solicitud.monto_cotizacion|floatformat:0 }}
+
+Por favor, ingresa a la plataforma para aceptar o rechazar la cotización:
+{{ base_url }}solicitud/aceptar-cotizacion/{{ solicitud.pk }}/
+
+Saludos,
+Equipo Optifire

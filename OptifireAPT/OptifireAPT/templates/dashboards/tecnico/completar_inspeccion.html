@@ -16,7 +16,7 @@
             <h1 class="h3 text-dark fw-bold mb-1">
                 <i class="fas fa-clipboard-check me-2"></i>Gestión de Inspección
             </h1>
-            <p class="text-muted mb-0">Completa el checklist y sube la evidencia fotográfica.</p>
+            <p class="text-muted mb-0">Completa el checklist y captura evidencia en tiempo real.</p>
         </div>
         <a href="{% url 'dashboard_tecnico' %}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left me-2"></i> Volver al Tablero
@@ -43,30 +43,15 @@
                         <p class="mb-0">{{ inspeccion.solicitud.cliente.get_full_name|default:inspeccion.solicitud.cliente.username|title }}</p>
                     </div>
                     <div class="mb-3">
-                        <label class="small text-muted fw-bold text-uppercase">Dirección / Ubicación</label>
-                        <p class="mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ inspeccion.solicitud.direccion|default:"No especificada" }}</p>
-                    </div>
-                    <div class="mb-3">
                         <label class="small text-muted fw-bold text-uppercase">Maquinaria</label>
                         <p class="mb-0 bg-light p-2 rounded border">{{ inspeccion.solicitud.maquinaria|default:"No especificada" }}</p>
-                    </div>
-                    <div>
-                        <label class="small text-muted fw-bold text-uppercase">Fecha Programada</label>
-                        <p class="mb-0 fw-bold text-primary">
-                            {% if inspeccion.fecha_programada %}
-                                <i class="far fa-calendar-alt me-1"></i> {{ inspeccion.fecha_programada|date:"d M, Y" }}
-                            {% else %}
-                                --
-                            {% endif %}
-                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-8 mb-4">
-            
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" id="inspectionForm">
                 {% csrf_token %}
                 {{ formset.management_form }}
 
@@ -101,13 +86,40 @@
                                             <i class="fas fa-paperclip me-1"></i> Evidencia Fotográfica
                                         </label>
                                         
-                                        {{ form.imagen_evidencia|as_crispy_field }}
-                                        
+                                        <div class="d-none">
+                                            {{ form.imagen_evidencia }}
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-outline-dark btn-sm" onclick="abrirCamara('{{ form.imagen_evidencia.auto_id }}', 'preview-{{ form.prefix }}')">
+                                                <i class="fas fa-camera me-1"></i> Tomar Foto
+                                            </button>
+                                            
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('{{ form.imagen_evidencia.auto_id }}').click()">
+                                                <i class="fas fa-folder-open"></i>
+                                            </button>
+
+                                            <span id="preview-{{ form.prefix }}-text" class="small text-muted ms-2 fst-italic">
+                                                {% if form.instance.imagen_evidencia %}
+                                                    Imagen guardada previamente.
+                                                {% else %}
+                                                    Sin evidencia nueva.
+                                                {% endif %}
+                                            </span>
+                                        </div>
+
+                                        <div id="preview-{{ form.prefix }}-container" class="mt-2 d-none">
+                                            <img id="preview-{{ form.prefix }}-img" src="" class="img-thumbnail" style="max-height: 150px;">
+                                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="borrarFoto('{{ form.imagen_evidencia.auto_id }}', 'preview-{{ form.prefix }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+
                                         {% if form.instance.imagen_evidencia %}
-                                            <div class="mt-2 p-2 bg-light border rounded d-flex align-items-center">
-                                                <i class="fas fa-image text-success me-2"></i>
-                                                <span class="small me-2">Imagen cargada actualmente</span>
-                                                <a href="{{ form.instance.imagen_evidencia.url }}" target="_blank" class="btn btn-sm btn-outline-primary ms-auto">Ver imagen</a>
+                                            <div class="mt-2">
+                                                <a href="{{ form.instance.imagen_evidencia.url }}" target="_blank" class="small text-primary">
+                                                    <i class="fas fa-external-link-alt"></i> Ver imagen actual en BD
+                                                </a>
                                             </div>
                                         {% endif %}
                                     </div>
@@ -121,16 +133,14 @@
 
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
-                        <label for="id_comentarios_generales" class="form-label fw-bold text-primary">
-                            <i class="fas fa-comment-alt me-2"></i> Comentarios Finales / Conclusiones
-                        </label>
-                        <textarea name="comentarios_generales" id="id_comentarios_generales" rows="4" class="form-control" placeholder="Escribe aquí las observaciones generales de la inspección...">{{ inspeccion.comentarios_generales|default:"" }}</textarea>
+                        <label class="fw-bold text-primary">Comentarios Finales</label>
+                        <textarea name="comentarios_generales" rows="3" class="form-control mb-3">{{ inspeccion.comentarios_generales|default:"" }}</textarea>
                         
-                        <div class="d-flex justify-content-end align-items-center mt-4 pt-3 border-top gap-2">
+                        <div class="d-flex justify-content-end gap-2">
                             <button type="submit" name="action" value="guardar" class="btn btn-outline-primary fw-bold">
                                 <i class="fas fa-save me-2"></i> Guardar Progreso
                             </button>
-                            <button type="submit" name="action" value="terminar" class="btn btn-success fw-bold px-4" onclick="return confirm('¿Finalizar inspección? Una vez finalizada no podrás editarla.');">
+                            <button type="submit" name="action" value="terminar" class="btn btn-success fw-bold px-4" onclick="return confirm('¿Finalizar inspección?');">
                                 <i class="fas fa-check-circle me-2"></i> Finalizar
                             </button>
                         </div>
@@ -140,4 +150,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="cameraModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title"><i class="fas fa-camera me-2"></i>Capturar Evidencia</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="detenerCamara()"></button>
+            </div>
+            <div class="modal-body p-0 bg-black text-center position-relative">
+                <video id="videoElement" autoplay playsinline style="width: 100%; max-height: 400px; object-fit: cover;"></video>
+                <canvas id="canvasElement" style="display: none;"></canvas>
+            </div>
+            <div class="modal-footer justify-content-center bg-dark border-top-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal" onclick="detenerCamara()">Cancelar</button>
+                <button type="button" class="btn btn-light rounded-circle p-3 shadow" onclick="tomarFoto()">
+                    <i class="fas fa-circle fa-2x text-danger"></i> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/inspeccion_camera.js' %}"></script>
 {% endblock dashboard_content %}
