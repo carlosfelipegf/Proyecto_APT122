@@ -13,9 +13,9 @@
         <p class="mb-4">¿Seguro que deseas eliminar la cuenta de <strong>{{ usuario_objetivo.username }}</strong>? Esta acción no se puede deshacer.</p>
         <form method="post">
             {% csrf_token %}
-            <div class="d-flex justify-content-between">
-                <a class="btn btn-secondary" href="{% url 'admin_usuarios_list' %}">Cancelar</a>
-                <button type="submit" class="btn btn-danger">
+            <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                <a class="btn btn-secondary w-100 w-md-auto order-2 order-md-1" href="{% url 'admin_usuarios_list' %}">Cancelar</a>
+                <button type="submit" class="btn btn-danger w-100 w-md-auto order-1 order-md-2">
                     <i class="fas fa-trash"></i> Eliminar usuario
                 </button>
             </div>

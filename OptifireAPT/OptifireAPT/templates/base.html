@@ -30,8 +30,6 @@
             <li class="nav-item"><a class="nav-link nav-link-custom" href="/nosotros/">Nosotros</a></li>
 
             {% if user.is_authenticated %}
-                <!-- CAMPANA ELIMINADA DE AQUÍ -->
-
                 <!-- Menú Usuario -->
                 <li class="nav-item dropdown">
                     <a class="nav-link nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -66,7 +64,7 @@
         </div>
     </footer>
 
-    <!-- GLOBAL LOADER -->
+    <!-- GLOBAL LOADER ARREGLADO -->
     <div id="global-loader" class="d-none">
         <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4" aria-label="Cerrar" onclick="hideLoader()" style="z-index: 9999;"></button>
         <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status">
