@@ -16,7 +16,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.core.mail import EmailMessage
 from django.conf import settings
-from django.db.models import Count, Q # <--- IMPORTANTE: Q es necesario
+from django.db.models import Count, Q  # IMPORTANTE: Q es necesario
 import datetime
 
 # Importamos formularios

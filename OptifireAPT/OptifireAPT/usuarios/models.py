@@ -61,7 +61,7 @@ class Perfil(models.Model):
     rut_empresa = models.CharField(max_length=20, blank=True, null=True, verbose_name="RUT Empresa")
     rubro = models.CharField(max_length=100, blank=True, null=True, verbose_name="Rubro")
 
-    # 🚨 NUEVO CAMPO: Bandera de Primer Inicio
+    # NUEVO CAMPO: Bandera de Primer Inicio
     obligar_cambio_contrasena = models.BooleanField(
         default=True, 
         verbose_name="Obligar cambio de contraseña"

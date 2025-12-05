@@ -63,7 +63,7 @@ class UsuarioAdminCreateForm(forms.ModelForm):
         cuerpo = rut_limpio[:-1]
         dv = rut_limpio[-1]
 
-        # 🚨 CORRECCIÓN: Validar que el cuerpo sea numérico antes de calcular
+        # CORRECCIÓN: Validar que el cuerpo sea numérico antes de calcular
         if not cuerpo.isdigit():
             raise forms.ValidationError("El cuerpo del RUT debe contener solo números.")
 
@@ -151,7 +151,7 @@ class UsuarioAdminUpdateForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         
-        # 🚨 LÓGICA DE SUPER ADMIN AL EDITAR 🚨
+        # LÓGICA DE SUPER ADMIN AL EDITAR
         rol_seleccionado = self.cleaned_data['rol']
         
         if rol_seleccionado == Roles.ADMINISTRADOR:

@@ -48,7 +48,7 @@ urlpatterns = [
     path('perfil/tecnico/', views.perfil_tecnico, name='perfil_tecnico'),
     path('dashboard/tecnico/registro/', views.registro_trabajos, name='registro_trabajos'),
 
-    # 🚨 NUEVA RUTA PARA EL PDF (Puede usarla Cliente, Técnico o Admin) 🚨
+    # NUEVA RUTA PARA EL PDF (Puede usarla Cliente, Técnico o Admin)
     path('inspeccion/acta/<int:pk>/', views.descargar_acta, name='descargar_acta'),
 
     # =========================================
