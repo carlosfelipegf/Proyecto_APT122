@@ -9,7 +9,7 @@ from usuarios.views import (
     login_view, 
     logout_view, 
     nosotros_view, 
-    dashboard 
+    dashboard  # <--- Ya lo estabas importando, ¡bien!
 )
 
 # Definición de urlpatterns
@@ -21,6 +21,10 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('nosotros/', nosotros_view, name='nosotros'), 
+    
+    # --- ESTA LÍNEA FALTABA ---
+    # Es necesaria para que el login sepa a dónde redirigir inicialmente
+    path('dashboard/', dashboard, name='dashboard'), 
     
     # ----------------------------------------
     # B. ADMIN DJANGO
@@ -36,7 +40,5 @@ urlpatterns = [
 # ----------------------------------------
 # D. CONFIGURACIÓN PARA MOSTRAR IMÁGENES (MEDIA)
 # ----------------------------------------
-# Esto es vital: Django no sirve archivos subidos por el usuario (fotos de perfil)
-# por defecto. Debemos agregar esta ruta manualmente cuando estamos en modo DEBUG.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

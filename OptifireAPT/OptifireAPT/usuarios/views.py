@@ -16,7 +16,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.core.mail import EmailMessage
 from django.conf import settings
-from django.db.models import Count, Q  # IMPORTANTE: Q es necesario
+from django.db.models import Count, Q # <--- IMPORTANTE: Q es necesario
 import datetime
 
 # Importamos formularios
@@ -27,7 +27,8 @@ from .forms import (
     UsuarioAdminUpdateForm,
     UsuarioPerfilForm, 
     TecnicoPerfilForm, 
-    ClientePerfilForm , 
+    ClientePerfilForm,
+    AdminPerfilForm, # <--- CORRECTO: Formulario para el perfil admin
 )
 
 # Importamos los Modelos
@@ -170,6 +171,31 @@ def dashboard_administrador(request):
     return render(request, 'dashboards/admin_dashboard.html', {
         'solicitudes_pendientes': solicitudes_pendientes
     })
+
+# --- INICIO AGREGADO: PERFIL ADMINISTRATIVO ---
+@login_required
+@user_passes_test(is_administrador)
+def perfil_administrador(request):
+    """Vista para que el Admin edite su propio perfil."""
+    # Obtener o crear el perfil
+    perfil, created = Perfil.objects.get_or_create(usuario=request.user)
+
+    if request.method == 'POST':
+        # Pasamos request.FILES para poder subir la imagen
+        form = AdminPerfilForm(request.POST, request.FILES, instance=perfil, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Tu perfil administrativo ha sido actualizado!')
+            return redirect('perfil_administrador')
+    else:
+        form = AdminPerfilForm(instance=perfil, user=request.user)
+
+    # Renderizamos pasando AMBOS: el formulario y el objeto perfil para asegurar que el HTML tenga datos
+    return render(request, 'usuarios/perfil_administrador.html', {
+        'form': form,
+        'perfil': perfil 
+    })
+# --- FIN AGREGADO ---
 
 @login_required
 @user_passes_test(is_administrador)
