@@ -45,7 +45,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const colors = ['#DC281E', '#F05A22', '#FFC20E', '#2c3e50', '#27ae60'];
+    // Colores ajustados según lo solicitado:
+    // APROBADA: azul (#0d6efd)
+    // FINALIZADA: verde (#198754)
+    // RECHAZADA: rojo (#dc3545)
+    // ANULADA: gris (#6c757d)
+    const colors = ['#6c757d', '#0d6efd', '#198754', '#dc3545', '#9966FF', ''];
 
     {% if role == 'admin' %}
         new Chart(document.getElementById('chartSemanales'), { type: 'line', data: { labels: {{ labels_semana|safe }}, datasets: [{ label: 'Solicitudes', data: {{ data_semana|safe }}, borderColor: '#DC281E', backgroundColor: 'rgba(220, 40, 30, 0.1)', fill: true, tension: 0.4 }] } });
