@@ -48,6 +48,18 @@ class AdminPerfilForm(forms.ModelForm):
             'ciudad': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', first_name):
+            raise forms.ValidationError("El nombre solo puede contener letras y espacios.")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', last_name):
+            raise forms.ValidationError("El apellido solo puede contener letras y espacios.")
+        return last_name
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
@@ -94,6 +106,18 @@ class SolicitudInspeccionForm(forms.ModelForm):
                                                            'placeholder': 'Instrucciones adicionales (opcional)'}),
         }
 
+    def clean_nombre_cliente(self):
+        nombre = self.cleaned_data.get('nombre_cliente')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', nombre):
+            raise forms.ValidationError("El nombre solo puede contener letras y espacios.")
+        return nombre
+
+    def clean_apellido_cliente(self):
+        apellido = self.cleaned_data.get('apellido_cliente')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', apellido):
+            raise forms.ValidationError("El apellido solo puede contener letras y espacios.")
+        return apellido
+
 
 # ==========================================================
 # 2. FORMULARIOS DE ADMINISTRACIÓN DE USUARIOS
@@ -127,6 +151,21 @@ class UsuarioAdminCreateForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
+
+    # ----------------------------
+    # VALIDACIÓN NOMBRE Y APELLIDO
+    # ----------------------------
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', first_name):
+            raise forms.ValidationError("El nombre solo puede contener letras y espacios.")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', last_name):
+            raise forms.ValidationError("El apellido solo puede contener letras y espacios.")
+        return last_name
 
     # ----------------------------
     # VALIDACIÓN RUT CHILENO
@@ -165,6 +204,9 @@ class UsuarioAdminCreateForm(forms.ModelForm):
     def clean_password(self):
         password = self.cleaned_data.get('password')
         regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$'
+
+        if ' ' in password:
+            raise forms.ValidationError("La contraseña no puede contener espacios.")
 
         if not re.match(regex, password):
             raise forms.ValidationError(
@@ -224,6 +266,18 @@ class UsuarioAdminUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'is_active']
 
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', first_name):
+            raise forms.ValidationError("El nombre solo puede contener letras.")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', last_name):
+            raise forms.ValidationError("El apellido solo puede contener letras.")
+        return last_name
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -269,6 +323,18 @@ class UsuarioPerfilForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', first_name):
+            raise forms.ValidationError("El nombre solo puede contener letras y espacios.")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', last_name):
+            raise forms.ValidationError("El apellido solo puede contener letras y espacios.")
+        return last_name
 
 
 class TecnicoPerfilForm(forms.ModelForm):

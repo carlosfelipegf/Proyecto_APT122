@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Obtenemos los campos por los IDs que genera Django Crispy Forms
         const nombre = document.getElementById("id_first_name");
+        const apellido = document.getElementById("id_last_name");
         const email = document.getElementById("id_email");
         const password = document.getElementById("id_password");
         const confirmarPassword = document.getElementById("id_confirmar_password"); // Asegúrate que este ID coincida
@@ -17,9 +18,26 @@ document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll(".alert-js-error").forEach(el => el.remove());
 
         // 1. Validar Nombre
-        if (nombre && nombre.value.trim().length < 3) {
-            errores.push("El nombre debe tener al menos 3 caracteres.");
-            marcarError(nombre);
+        const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+        if (nombre) {
+            if (nombre.value.trim().length < 3) {
+                errores.push("El nombre debe tener al menos 3 caracteres.");
+                marcarError(nombre);
+            } else if (!nombreRegex.test(nombre.value.trim())) {
+                errores.push("El nombre solo puede contener letras y espacios.");
+                marcarError(nombre);
+            }
+        }
+
+        // 1.1 Validar Apellido
+        if (apellido) {
+            if (apellido.value.trim().length < 3) {
+                errores.push("El apellido debe tener al menos 3 caracteres.");
+                marcarError(apellido);
+            } else if (!nombreRegex.test(apellido.value.trim())) {
+                errores.push("El apellido solo puede contener letras y espacios.");
+                marcarError(apellido);
+            }
         }
 
         // 2. Validar Email
@@ -31,9 +49,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // 3. Validar Contraseña Fuerte
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-        if (password && !passwordRegex.test(password.value)) {
-            errores.push("La contraseña debe tener: 8+ caracteres, 1 mayúscula, 1 minúscula y 1 número.");
-            marcarError(password);
+        if (password) {
+            if (/\s/.test(password.value)) {
+                errores.push("La contraseña no puede contener espacios.");
+                marcarError(password);
+            } else if (!passwordRegex.test(password.value)) {
+                errores.push("La contraseña debe tener: 8+ caracteres, 1 mayúscula, 1 minúscula y 1 número.");
+                marcarError(password);
+            }
         }
 
         // 4. Confirmar Contraseña

@@ -71,24 +71,22 @@ def login_view(request):
         return redirect('dashboard')
     
     if request.method == 'POST':
-        # 1. Obtener datos (Soporta 'username' del HTML aunque el usuario escriba email)
-        user_input = request.POST.get('username', '').strip()
+        # 1. Obtener datos (Ahora esperamos 'email' del formulario)
+        email_input = request.POST.get('email', '').strip()
         password = request.POST.get('password', '').strip()
 
         # --- INICIO DIAGNÓSTICO ---
         print("\n" + "="*40)
         print("🔍 INTENTO DE LOGIN - DEBUG")
-        print(f"   Input Usuario: '{user_input}'")
+        print(f"   Email Ingresado: '{email_input}'")
         
-        if not user_input or not password:
+        if not email_input or not password:
             messages.error(request, "Ingrese credenciales válidas.")
             return render(request, "login.html")
 
-        # 2. BÚSQUEDA HÍBRIDA (Username O Email)
+        # 2. BÚSQUEDA SOLO POR EMAIL
         # Busca coincidencias ignorando mayúsculas/minúsculas
-        posibles_usuarios = User.objects.filter(
-            Q(username__iexact=user_input) | Q(email__iexact=user_input)
-        )
+        posibles_usuarios = User.objects.filter(email__iexact=email_input)
         
         print(f"   Usuarios encontrados en DB: {posibles_usuarios.count()}")
 
@@ -97,9 +95,9 @@ def login_view(request):
         # 3. ITERACIÓN DE SEGURIDAD (Manejo de duplicados)
         if posibles_usuarios.exists():
             for usuario_db in posibles_usuarios:
-                print(f"   -> Probando con usuario: '{usuario_db.username}' (ID: {usuario_db.pk})")
+                print(f"   -> Probando con usuario: '{usuario_db.username}' (Email: {usuario_db.email})")
                 
-                # Intentar autenticar
+                # Intentar autenticar (authenticate requiere username, así que lo pasamos del usuario encontrado)
                 auth_user = authenticate(request, username=usuario_db.username, password=password)
                 
                 if auth_user is not None:
@@ -114,7 +112,7 @@ def login_view(request):
                     else:
                         print("   -> ❌ CONTRASEÑA INCORRECTA")
         else:
-            print("   -> ❌ NO EXISTE EL USUARIO EN BD")
+            print("   -> ❌ NO EXISTE EL EMAIL EN BD")
 
         print("="*40 + "\n")
         # --- FIN DIAGNÓSTICO ---
