@@ -1,22 +1,39 @@
 <ul class="nav flex-column flex-grow-1">
+
     <li class="nav-item">
-        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_administrador' %}active{% endif %}" href="{% url 'dashboard_administrador' %}">
+        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_administrador' %}active{% endif %}"
+           href="{% url 'dashboard_administrador' %}">
             <i class="fas fa-chart-line"></i> Resumen
         </a>
     </li>
+
     <li class="nav-item">
-        <a class="nav-link {% if 'usuario' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'admin_usuarios_list' %}">
+        <a class="nav-link {% if 'usuario' in request.resolver_match.url_name %}active{% endif %}"
+           href="{% url 'admin_usuarios_list' %}">
             <i class="fas fa-users-cog"></i> Usuarios
         </a>
     </li>
+
+    <!-- ✔️ AGREGADO: MI PERFIL ADMINISTRADOR -->
     <li class="nav-item">
-        <a class="nav-link {% if 'historial' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'historial_solicitudes' %}">
+        <a class="nav-link {% if request.resolver_match.url_name == 'perfil_administrador' %}active{% endif %}"
+           href="{% url 'perfil_administrador' %}">
+            <i class="fas fa-user-tie"></i> Mi Perfil
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {% if 'historial' in request.resolver_match.url_name %}active{% endif %}"
+           href="{% url 'historial_solicitudes' %}">
             <i class="fas fa-history"></i> Historial
         </a>
     </li>
+
     <li class="nav-item">
-    <a class="nav-link {% if request.resolver_match.url_name == 'estadisticas' %}active{% endif %}" href="{% url 'estadisticas' %}">
-        <i class="fas fa-chart-pie"></i> Estadísticas
-    </a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'estadisticas' %}active{% endif %}"
+           href="{% url 'estadisticas' %}">
+            <i class="fas fa-chart-pie"></i> Estadísticas
+        </a>
     </li>
+
 </ul>

@@ -3,27 +3,59 @@
 {% block content %}
 <div class="dashboard-wrapper">
     <nav class="sidebar">
+       <div class="d-lg-none text-end mb-2">
+            <button class="btn btn-sm btn-light" onclick="document.querySelector('.sidebar').classList.remove('active')">
+                <i class="fas fa-times"></i> Cerrar
+            </button>
+       </div>
        {% block dashboard_menu %}{% endblock %}
     </nav>
     
     <div class="dashboard-content">
+        
+        <!-- Menú móvil -->
+        <div class="d-lg-none mb-3">
+            <button class="btn btn-light border shadow-sm" type="button" onclick="document.querySelector('.sidebar').classList.toggle('active')">
+                <i class="fas fa-bars me-2"></i>Menú
+            </button>
+        </div>
+
+        <!-- Alertas -->
+        {% if messages %}
+            <div class="w-100 mb-4">
+                {% for message in messages %}
+                    <div class="alert alert-modern alert-{{ message.tags }} alert-dismissible show" role="alert">
+                        
+                        {% if 'success' in message.tags %}<i class="fas fa-check-circle"></i>
+                        {% elif 'error' in message.tags %}<i class="fas fa-times-circle"></i>
+                        {% else %}<i class="fas fa-info-circle"></i>{% endif %}
+
+                        <div class="w-100">
+                            <strong class="d-block text-uppercase small mb-1" style="font-size: 0.75rem; opacity: 0.8;">
+                                {% if 'success' in message.tags %}ÉXITO
+                                {% elif 'error' in message.tags %}ERROR
+                                {% else %}INFORMACIÓN{% endif %}
+                            </strong>
+                            {{ message }}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
        {% block dashboard_content %}{% endblock %}
     </div>
 </div>
 
-{# ================================================================= #}
-{# SISTEMA DE NOTIFICACIONES (TOASTS)                                #}
-{# ================================================================= #}
+<!-- Notificaciones -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-    
     {% if mis_notificaciones %}
         {% for notif in mis_notificaciones %}
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+            <div class="toast show" role="alert" data-bs-autohide="false" id="toast-{{ notif.id }}">
                 <div class="toast-header bg-primary text-white">
-                    <i class="fas fa-bell me-2"></i>
                     <strong class="me-auto">Nueva Actividad</strong>
-                    <small class="text-white-50">Reciente</small>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close" onclick="marcarLeido({{ notif.id }})"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" onclick="marcarLeido({{ notif.id }})"></button>
                 </div>
                 <div class="toast-body bg-white text-dark shadow-sm">
                     {{ notif.mensaje }}
@@ -38,24 +70,6 @@
             </div>
         {% endfor %}
     {% endif %}
-
 </div>
-
-<script>
-    function marcarLeido(id) {
-        // Llama a la vista de Django sin recargar la página (AJAX)
-        fetch(`/usuarios/notificacion/leida/${id}/`, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if(response.ok) {
-                console.log("Notificación marcada como leída: " + id);
-            }
-        }).catch(error => console.error('Error:', error));
-    }
-</script>
 
 {% endblock %}

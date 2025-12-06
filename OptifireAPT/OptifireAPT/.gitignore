@@ -3,10 +3,17 @@ APT/
 venv/
 env/
 
-# --- Archivos temporales de Python 
-__pycache__/
-*.pyc
+
 
 # --- Archivos de Sistema ---
 .DS_Store
 Thumbs.db
+
+# --- Archivos temporales de Python 
+OptifireAPT/OptifireAPT/APT/
+
+
+# Ignorar Python Cache
+__pycache__/
+*.py[cod]
+*$py.class

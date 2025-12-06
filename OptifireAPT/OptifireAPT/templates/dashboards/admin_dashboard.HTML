@@ -1,59 +1,48 @@
 {% extends "base_dashboard.html" %}
-{% load static %}
 
 {% block dashboard_menu %}
     {% include "includes/admin_menu.html" %}
 {% endblock dashboard_menu %}
 
 {% block dashboard_content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="h3 text-dark fw-bold mb-1">Panel de Control</h1>
-        <p class="text-muted mb-0">Gestiona usuarios y solicitudes de inspección.</p>
-    </div>
-    <a class="btn btn-primary shadow-sm" href="{% url 'admin_usuarios_list' %}">
-        <i class="fas fa-users-cog me-2"></i> Gestionar Usuarios
-    </a>
-</div>
-
-{% if solicitudes_pendientes %}
-    <div class="card shadow-sm mb-4 border-0">
-        <div class="card-header py-3 bg-white border-bottom border-warning border-3">
-            <h6 class="m-0 fw-bold text-dark">
-                <i class="fas fa-exclamation-triangle text-warning me-2"></i> Solicitudes Pendientes ({{ solicitudes_pendientes|length }})
-            </h6>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 text-dark fw-bold mb-1">Panel de Control</h1>
+            <p class="text-muted mb-0">Gestiona usuarios y solicitudes de inspección.</p>
         </div>
-        <div class="card-body p-0">
+        <a href="{% url 'admin_usuarios_list' %}" class="btn btn-primary shadow-sm w-100 w-md-auto">
+            <i class="fas fa-users-cog me-2"></i> Gestionar Usuarios
+        </a>
+    </div>
+
+    <!--  AQUÍ NO PONEMOS NINGUNA ALERTA DINÁMICA, YA VIENEN DEL PADRE  -->
+
+    {% if solicitudes_pendientes %}
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="m-0 fw-bold text-primary"><i class="fas fa-clock me-2"></i>Solicitudes Pendientes</h6>
+            </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                <table class="table table-hover align-middle mb-0 mobile-card-table">
+                    <thead class="table-light">
                         <tr>
                             <th class="ps-4">ID</th>
                             <th>Cliente</th>
-                            <th>Dirección</th>
                             <th>Maquinaria</th>
                             <th>Fecha</th>
-                            <th class="text-end pe-4">Acciones</th>
+                            <th class="text-end pe-4">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for solicitud in solicitudes_pendientes %}
                         <tr>
-                            <td class="ps-4 fw-bold">#{{ solicitud.id }}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-sm bg-light rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                        <i class="fas fa-user text-secondary"></i>
-                                    </div>
-                                    {{ solicitud.nombre_cliente }} {{ solicitud.apellido_cliente|default:"" }}
-                                </div>
-                            </td>
-                            <td>{{ solicitud.direccion }}</td>
-                            <td><span class="badge bg-light text-dark border">{{ solicitud.maquinaria|truncatechars:30 }}</span></td>
-                            <td>{{ solicitud.fecha_solicitud|date:"d M, Y" }}</td>
-                            <td class="text-end pe-4">
-                                <a href="{% url 'gestionar_solicitud' pk=solicitud.pk %}" class="btn btn-sm btn-primary">
-                                    Revisar <i class="fas fa-arrow-right ms-1"></i>
+                            <td class="ps-4 fw-bold" data-label="ID">#{{ solicitud.id }}</td>
+                            <td data-label="Cliente">{{ solicitud.nombre_cliente }}</td>
+                            <td data-label="Maquinaria">{{ solicitud.maquinaria|truncatechars:30 }}</td>
+                            <td data-label="Fecha">{{ solicitud.fecha_solicitud|date:"d/m/Y" }}</td>
+                            <td class="text-end pe-4" data-label="Acción">
+                                <a href="{% url 'gestionar_solicitud' solicitud.pk %}" class="btn btn-sm btn-primary">
+                                    Revisar
                                 </a>
                             </td>
                         </tr>
@@ -62,15 +51,18 @@
                 </table>
             </div>
         </div>
-    </div>
-{% else %}
-    <div class="alert alert-success border-0 shadow-sm d-flex align-items-center" role="alert">
-        <i class="fas fa-check-circle fa-2x me-3"></i>
-        <div>
-            <h4 class="alert-heading h5 mb-1">¡Todo al día!</h4>
-            <p class="mb-0">No hay solicitudes de inspección pendientes de revisión.</p>
+    {% else %}
+        <!-- Alerta estática de "Todo al día" (Esta es fija, siempre sale si no hay tareas) -->
+        <div class="alert alert-modern alert-success shadow-sm" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <strong class="d-block text-uppercase small mb-1" style="font-size: 0.75rem; opacity: 0.8; letter-spacing: 0.5px;">
+                    ESTADO
+                </strong>
+                <span class="fw-bold">¡Todo al día!</span><br>
+                <span class="small">No hay solicitudes de inspección pendientes de revisión.</span>
+            </div>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 
 {% endblock dashboard_content %}

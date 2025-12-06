@@ -4,7 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 
-# 🚨 IMPORTACIONES CORREGIDAS: Están todos los modelos necesarios
+# IMPORTACIONES CORREGIDAS: Están todos los modelos necesarios
 from .models import (
     SolicitudInspeccion, 
     EstadoSolicitud, 
