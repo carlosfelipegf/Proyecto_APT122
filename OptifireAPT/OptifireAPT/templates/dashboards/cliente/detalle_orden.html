@@ -23,7 +23,7 @@
     </div>
 
     <div class="row">
-        <!-- COLUMNA IZQUIERDA: DATOS GENERALES -->
+        <!-- Datos Generales -->
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm h-100 border-0">
                 <div class="card-header bg-primary text-white fw-bold">
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <!-- COLUMNA DERECHA: ESTADO Y TÉCNICA -->
+        <!-- Estado y Técnica -->
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm h-100 border-0">
                 <div class="card-header bg-dark text-white fw-bold">
@@ -75,7 +75,7 @@
                         </span>
                     </div>
 
-                    <!-- SECCIÓN DE COTIZACIÓN (Si existe) -->
+                    <!-- Cotización -->
                     {% if solicitud.monto_cotizacion %}
                         <div class="alert alert-success border-success d-flex justify-content-between align-items-center shadow-sm">
                             <div>
@@ -117,7 +117,7 @@
                         </div>
 
                     {% else %}
-                        <!-- Lógica si no hay inspección aún -->
+                        <!-- Sin inspección -->
                         {% if solicitud.estado == 'COTIZANDO' %}
                              <div class="d-grid">
                                 <a href="{% url 'aceptar_cotizacion_cliente' solicitud.pk %}" class="btn btn-warning fw-bold text-dark shadow-sm">
@@ -141,7 +141,7 @@
         </div>
     </div>
 
-    <!-- 📸 GALERÍA DE EVIDENCIAS (IGUAL AL ADMIN) -->
+    <!-- Galería de Evidencias -->
     {% if inspeccion and inspeccion.tareas.exists %}
     <div class="row">
         <div class="col-12">

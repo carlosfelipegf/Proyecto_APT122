@@ -319,7 +319,7 @@ a { text-decoration: none; }
 }
 
 /* =========================================
-   ALERTAS MODERNAS (Top UX/UI)
+   ALERTAS
    ========================================= */
 .alert-modern {
     border: none;
@@ -343,7 +343,7 @@ a { text-decoration: none; }
     flex-shrink: 0;
 }
 
-/* 1. ÉXITO (Verde suave) */
+/* 1. ÉXITO */
 .alert-success {
     background-color: #f0fdf4;
     border-left-color: #22c55e;
@@ -351,19 +351,17 @@ a { text-decoration: none; }
 }
 .alert-success i { color: #22c55e; }
 
-/* 2. ERROR / PELIGRO (Naranja Vibrante - Neutro pero visible) */
-/* Reemplazo del rojo por un tono Terra Cotta/Naranja para menos agresividad */
+/* 2. ERROR / PELIGRO */
 .alert-error, .alert-danger {
-    background-color: #fff7ed; /* Fondo crema anaranjado muy suave */
-    border-left-color: #f97316; /* Borde naranja vivo */
-    color: #c2410c; /* Texto naranja oscuro (tierra) */
+    background-color: #fff7ed;
+    border-left-color: #f97316;
+    color: #c2410c;
     
-    /* Mantenemos vibración para feedback táctil visual */
     animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 .alert-error i, .alert-danger i { color: #f97316; }
 
-/* 3. ADVERTENCIA (Amarillo) */
+/* 3. ADVERTENCIA */
 .alert-warning {
     background-color: #fffbeb;
     border-left-color: #f59e0b;
@@ -371,7 +369,7 @@ a { text-decoration: none; }
 }
 .alert-warning i { color: #f59e0b; }
 
-/* 4. INFO (Azul) */
+/* 4. INFO */
 .alert-info {
     background-color: #eff6ff;
     border-left-color: #3b82f6;

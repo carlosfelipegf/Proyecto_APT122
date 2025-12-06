@@ -181,8 +181,8 @@ EMAIL_USE_TLS = True          # Usar seguridad TLS
 
 # CREDENCIALES (DEBES REEMPLAZAR ESTAS LÍNEAS)
 # IMPORTANTE: Reemplaza con tus datos reales
-EMAIL_HOST_USER = 'guerraflorescarlos@gmail.com'         # Ejemplo: notificaciones@optifire.cl
-EMAIL_HOST_PASSWORD = 'xoka fbky asgg sjij '  # Contraseña de aplicación (usar variable de entorno en producción)
+EMAIL_HOST_USER = 'solucionesgmd.ti@gmail.com'         # Ejemplo: notificaciones@optifire.cl
+EMAIL_HOST_PASSWORD = 'yedg eenz duxr slng'  # Contraseña de aplicación (usar variable de entorno en producción)
 
 # Remitente por defecto
 DEFAULT_FROM_EMAIL = 'Optifire <notificaciones@optifire.cl>'

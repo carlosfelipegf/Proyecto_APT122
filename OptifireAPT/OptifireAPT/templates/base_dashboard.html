@@ -13,14 +13,14 @@
     
     <div class="dashboard-content">
         
-        <!-- Sidebar móvil -->
+        <!-- Menú móvil -->
         <div class="d-lg-none mb-3">
             <button class="btn btn-light border shadow-sm" type="button" onclick="document.querySelector('.sidebar').classList.toggle('active')">
                 <i class="fas fa-bars me-2"></i>Menú
             </button>
         </div>
 
-        <!-- ALERTAS DE SISTEMA -->
+        <!-- Alertas -->
         {% if messages %}
             <div class="w-100 mb-4">
                 {% for message in messages %}
@@ -48,7 +48,7 @@
     </div>
 </div>
 
-<!-- TOASTS DE NOTIFICACIONES (Lógica en notifications.js) -->
+<!-- Notificaciones -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
     {% if mis_notificaciones %}
         {% for notif in mis_notificaciones %}

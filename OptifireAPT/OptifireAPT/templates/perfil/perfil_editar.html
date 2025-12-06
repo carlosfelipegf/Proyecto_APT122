@@ -4,16 +4,14 @@
 
 {% block title %}Editar Perfil | Optifire{% endblock %}
 
-{# ================================================================= #}
-{# LOGICA INTELIGENTE DE MENÚ (Detecta el rol automáticamente)       #}
-{# ================================================================= #}
+{# Menú dinámico según rol #}
 {% block dashboard_menu %}
     {% if request.user.is_superuser or request.user.groups.all.0.name == 'Administrador' %}
         {% include "includes/admin_menu.html" %}
     {% elif request.user.groups.all.0.name == 'Técnico' %}
         {% include "includes/tecnico_menu.html" %}
     {% else %}
-        {# Por defecto, si no es Admin ni Técnico, mostramos menú Cliente #}
+        {# Menú Cliente por defecto #}
         {% include "includes/cliente_menu.html" %}
     {% endif %}
 {% endblock dashboard_menu %}
@@ -91,7 +89,7 @@
                     <div class="card-body p-4">
                         <h6 class="text-muted mb-3 small text-uppercase fw-bold"><i class="fas fa-user-lock me-1"></i> Datos de la Cuenta</h6>
                         
-                        {# Usamos |crispy para renderizar rápido y bonito #}
+                        {# Renderizado con Crispy #}
                         {{ user_form|crispy }}
                         
                         <hr class="my-4 text-muted opacity-25">
