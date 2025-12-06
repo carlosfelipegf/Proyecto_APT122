@@ -1,5 +1,11 @@
 from pathlib import Path
 import os
+from pathlib import Path
+import os
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,11 +85,21 @@ WSGI_APPLICATION = 'OptifireAPT.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# TEMPORAL: Usar SQLite para sacar los datos
+import dj_database_url
+from dotenv import load_dotenv
+import os
+
+load_dotenv() # Carga el archivo .env
+
+# Base de datos
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        # Esta línea le dice: "Usa la URL del .env, si no hay, usa SQLite"
+        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 

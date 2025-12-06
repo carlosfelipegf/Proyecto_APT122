@@ -1,0 +1,3679 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2025-10-25T15:30:10.600Z",
+    "user": 1,
+    "content_type": 3,
+    "object_id": "1",
+    "object_repr": "Cliente",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2025-10-25T15:30:18.925Z",
+    "user": 1,
+    "content_type": 3,
+    "object_id": "2",
+    "object_repr": "Técnico",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2025-10-25T15:30:46.042Z",
+    "user": 1,
+    "content_type": 3,
+    "object_id": "3",
+    "object_repr": "Administrador",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2025-10-25T15:30:58.373Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "cliente",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2025-10-25T15:31:08.085Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "cliente",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2025-10-25T15:31:22.842Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "Tecnico",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2025-10-25T15:31:30.297Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "Tecnico",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2025-10-25T15:51:17.235Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Mantencion",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"Tarea de Plantilla\", \"object\": \"Mantencion: Inspecci\\u00f3n Pre-Mantenimiento\"}}, {\"added\": {\"name\": \"Tarea de Plantilla\", \"object\": \"Mantencion: Drenaje y Reemplazo de Fluidos/Filtros\"}}, {\"added\": {\"name\": \"Tarea de Plantilla\", \"object\": \"Mantencion: Lubricaci\\u00f3n y Ajustes\"}}, {\"added\": {\"name\": \"Tarea de Plantilla\", \"object\": \"Mantencion: Revisi\\u00f3n de Seguridad y Sistemas Cr\\u00edticos\"}}, {\"added\": {\"name\": \"Tarea de Plantilla\", \"object\": \"Mantencion: Prueba Operacional y Limpieza\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2025-12-02T01:16:13.175Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "12",
+    "object_repr": "ttecnico1",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2025-12-03T16:13:48.119Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "21",
+    "object_repr": "TractoresLTDA",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2025-12-03T16:14:13.249Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "21",
+    "object_repr": "TractoresLTDA",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Email address\", \"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2025-12-03T16:16:22.040Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "22",
+    "object_repr": "Austin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2025-12-03T16:17:06.068Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "22",
+    "object_repr": "Austin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\", \"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2025-12-03T21:38:24.698Z",
+    "user": 23,
+    "content_type": 10,
+    "object_id": "8",
+    "object_repr": "OT #8 - Inspección de Tractor - Eric",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2025-12-03T21:38:34.310Z",
+    "user": 23,
+    "content_type": 10,
+    "object_id": "6",
+    "object_repr": "OT #6 - Inspección de Tractores - Rick",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2025-12-03T21:38:41.050Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "12",
+    "object_repr": "ttecnico1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2025-12-03T21:38:48.899Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "17",
+    "object_repr": "restablecer_prueba",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2025-12-03T21:38:58.415Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "7",
+    "object_repr": "guerracarlos",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2025-12-03T21:39:03.460Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "11",
+    "object_repr": "cfgf26",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2025-12-03T21:39:10.168Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "14",
+    "object_repr": "ccliente1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2025-12-03T21:39:16.759Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "8",
+    "object_repr": "carlosguerra",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2025-12-03T21:39:22.511Z",
+    "user": 23,
+    "content_type": 4,
+    "object_id": "15",
+    "object_repr": "aadmin1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2025-12-04T16:28:09.765Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "cliente",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2025-12-04T16:28:39.966Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "diego",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2025-12-04T16:28:45.247Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "22",
+    "object_repr": "Austin",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2025-12-04T16:32:30.736Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "diego",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2025-12-04T16:56:27.576Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "Tecnico",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2025-12-04T16:57:28.609Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "diego",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2025-12-04T16:58:17.448Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "22",
+    "object_repr": "Austin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2025-12-04T17:00:13.067Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "diego",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2025-12-04T17:30:53.537Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "10",
+    "object_repr": "OT #10 - Inspección de a - a",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2025-12-04T17:31:46.090Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "18",
+    "object_repr": "Solicitud #18 - Finalizada",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2025-12-04T17:31:58.131Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "41",
+    "object_repr": "Inspección Pre-Mantenimiento (Bueno (Cumple))",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2025-12-04T17:32:01.134Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "42",
+    "object_repr": "Drenaje y Reemplazo de Fluidos/Filtros (Bueno (Cumple))",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2025-12-04T17:32:03.469Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "43",
+    "object_repr": "Lubricación y Ajustes (Bueno (Cumple))",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2025-12-04T17:32:05.995Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "44",
+    "object_repr": "Revisión de Seguridad y Sistemas Críticos (Bueno (Cumple))",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2025-12-04T17:32:09.409Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "45",
+    "object_repr": "Prueba Operacional y Limpieza (Bueno (Cumple))",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2025-12-04T17:32:56.292Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "Mantencion Correctiva",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2025-12-04T17:35:05.866Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Mantencion Preventiva",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Preventiva: Drenaje y Reemplazo de Fluidos/Filtros\", \"fields\": [\"Orden\"]}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Preventiva: Lubricaci\\u00f3n y Ajustes\", \"fields\": [\"Orden\"]}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Preventiva: Revisi\\u00f3n de Seguridad y Sistemas Cr\\u00edticos\", \"fields\": [\"Orden\"]}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Preventiva: Prueba Operacional y Limpieza\", \"fields\": [\"Orden\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2025-12-04T17:37:54.197Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "Mantencion Correctiva",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Correctiva: Diagn\\u00f3stico y Evaluaci\\u00f3n de Falla\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Correctiva: Desmontaje y Reemplazo de Componentes\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Correctiva: Pruebas de Funcionamiento y Calibraci\\u00f3n\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Mantencion Correctiva: Desbloqueo de panel y Limpieza\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2025-12-04T17:41:11.465Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "Instalacion",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Recepci\\u00f3n, Inventario y Desembalaje\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Montaje Estructural y Ensamble Mec\\u00e1nico\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Abastecimiento de Fluidos y Energizaci\\u00f3n\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Configuraci\\u00f3n Electr\\u00f3nica y Calibraci\\u00f3n\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2025-12-04T17:52:24.191Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "23",
+    "object_repr": "Solicitud #23 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Maquinaria / Servicio\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2025-12-04T17:52:31.834Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "22",
+    "object_repr": "Solicitud #22 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Maquinaria / Servicio\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2025-12-04T17:52:44.645Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "21",
+    "object_repr": "Solicitud #21 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Maquinaria / Servicio\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2025-12-04T17:52:49.028Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "23",
+    "object_repr": "Solicitud #23 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2025-12-04T17:52:55.785Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "22",
+    "object_repr": "Solicitud #22 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Direccion\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2025-12-04T17:53:21.491Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "21",
+    "object_repr": "Solicitud #21 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Direccion\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2025-12-04T17:53:25.733Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "22",
+    "object_repr": "Solicitud #22 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2025-12-04T17:53:32.639Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "21",
+    "object_repr": "Solicitud #21 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Direccion\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2025-12-04T17:53:38.038Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "20",
+    "object_repr": "Solicitud #20 - Anulada por Cliente",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2025-12-04T17:54:10.297Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "23",
+    "object_repr": "Solicitud #23 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Maquinaria / Servicio\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2025-12-04T17:55:55.585Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "21",
+    "object_repr": "Solicitud #21 - Pendiente de Aprobación (Cliente)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Maquinaria / Servicio\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2025-12-05T21:59:06.414Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "Desinstalación del producto",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Desinstalaci\\u00f3n del producto: Desarme y Aseguramiento del Sistema\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Desinstalaci\\u00f3n del producto: Desconexi\\u00f3n El\\u00e9ctrica\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Desinstalaci\\u00f3n del producto: Desmontaje de la Red de Distribuci\\u00f3n (Reacton)\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Desinstalaci\\u00f3n del producto: Retiro del Tanque y Panel\"}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Desinstalaci\\u00f3n del producto: Sellado y Restauraci\\u00f3n\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2025-12-05T22:01:23.397Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "Instalacion",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Descripcion\"]}}, {\"added\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Pruebas y Puesta en Marcha\"}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Evaluaci\\u00f3n de Riesgos y Planificaci\\u00f3n de Dise\\u00f1o\", \"fields\": [\"Descripcion\"]}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Instalaci\\u00f3n del Sistema de Detecci\\u00f3n (Stremax)\", \"fields\": [\"Descripcion\"]}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Montaje del Sistema de Supresi\\u00f3n (Reacton)\", \"fields\": [\"Descripcion\"]}}, {\"changed\": {\"name\": \"tarea plantilla\", \"object\": \"Instalacion: Integraci\\u00f3n y Activaci\\u00f3n\", \"fields\": [\"Descripcion\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2025-12-05T22:04:20.187Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "2",
+    "object_repr": "OT #2 - Inspección de Tanke sovietico - Evo",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2025-12-05T22:04:26.324Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "3",
+    "object_repr": "OT #3 - Inspección de Tractor - EVO",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2025-12-05T22:04:31.283Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "4",
+    "object_repr": "OT #4 - Inspección de Tractor sovietico - karol",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2025-12-05T22:04:35.278Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "5",
+    "object_repr": "OT #5 - Inspección de tanke aleman - adolf",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2025-12-05T22:05:08.305Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "9",
+    "object_repr": "tecnico_carlos",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2025-12-05T22:05:19.044Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "10",
+    "object_repr": "cliente_carlos",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 63,
+  "fields": {
+    "action_time": "2025-12-05T22:12:57.178Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "9",
+    "object_repr": "OT #9 - Inspección de Tractor - TractoresLTDA",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 64,
+  "fields": {
+    "action_time": "2025-12-05T22:13:01.140Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "14",
+    "object_repr": "OT #14 - Inspección de Desembalaje e Insta… - Tractores LTDA",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 65,
+  "fields": {
+    "action_time": "2025-12-05T22:13:06.574Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "13",
+    "object_repr": "OT #13 - Inspección de Mantención Correcti… - Tractores LTDA",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 66,
+  "fields": {
+    "action_time": "2025-12-05T22:13:10.923Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "12",
+    "object_repr": "OT #12 - Inspección de Mantención Preventi… - Tractores LTDA",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 67,
+  "fields": {
+    "action_time": "2025-12-05T22:13:14.107Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "11",
+    "object_repr": "OT #11 - Inspección de Tractor - Alvaro",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 68,
+  "fields": {
+    "action_time": "2025-12-05T22:13:16.979Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "7",
+    "object_repr": "OT #7 - Inspección de Bus turistico - Linda",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 69,
+  "fields": {
+    "action_time": "2025-12-05T22:13:29.113Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "22",
+    "object_repr": "ALake",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 70,
+  "fields": {
+    "action_time": "2025-12-05T22:13:34.372Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "25",
+    "object_repr": "AlfredoGomez898",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 71,
+  "fields": {
+    "action_time": "2025-12-05T22:13:38.212Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "19",
+    "object_repr": "Linda.Peralta",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 72,
+  "fields": {
+    "action_time": "2025-12-05T22:13:41.594Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "26",
+    "object_repr": "Pedro.Pizarro",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 73,
+  "fields": {
+    "action_time": "2025-12-05T22:13:46.800Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "27",
+    "object_repr": "Sofi",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 74,
+  "fields": {
+    "action_time": "2025-12-05T22:14:41.240Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "28",
+    "object_repr": "ALake",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 75,
+  "fields": {
+    "action_time": "2025-12-05T22:15:02.422Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "28",
+    "object_repr": "ALake",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\", \"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 76,
+  "fields": {
+    "action_time": "2025-12-05T23:55:34.505Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "22",
+    "object_repr": "Solicitud #22 - Aprobada (Orden Creada)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 77,
+  "fields": {
+    "action_time": "2025-12-05T23:55:40.607Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "21",
+    "object_repr": "Solicitud #21 - Aprobada (Orden Creada)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 78,
+  "fields": {
+    "action_time": "2025-12-05T23:56:41.192Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "23",
+    "object_repr": "Solicitud #23 - Finalizada",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 79,
+  "fields": {
+    "action_time": "2025-12-05T23:56:44.567Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "17",
+    "object_repr": "Solicitud #17 - Finalizada",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 80,
+  "fields": {
+    "action_time": "2025-12-06T00:23:20.392Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "24",
+    "object_repr": "Solicitud #24 - Pendiente de Revisión (Admin)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre cliente\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 81,
+  "fields": {
+    "action_time": "2025-12-06T00:23:40.919Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "25",
+    "object_repr": "Solicitud #25 - Pendiente de Revisión (Admin)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre cliente\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 82,
+  "fields": {
+    "action_time": "2025-12-06T00:23:56.005Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "26",
+    "object_repr": "Solicitud #26 - Pendiente de Revisión (Admin)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre cliente\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 83,
+  "fields": {
+    "action_time": "2025-12-06T00:24:13.135Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "27",
+    "object_repr": "Solicitud #27 - Pendiente de Revisión (Admin)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre cliente\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 84,
+  "fields": {
+    "action_time": "2025-12-06T00:24:30.635Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "28",
+    "object_repr": "Solicitud #28 - Pendiente de Revisión (Admin)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre cliente\", \"Observaciones cliente\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 85,
+  "fields": {
+    "action_time": "2025-12-06T00:40:58.906Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "25",
+    "object_repr": "Solicitud #25 - Aprobada (Orden Creada)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Fecha programada preasignada\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 86,
+  "fields": {
+    "action_time": "2025-12-06T00:41:19.690Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "24",
+    "object_repr": "Solicitud #24 - Aprobada (Orden Creada)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Fecha programada\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 87,
+  "fields": {
+    "action_time": "2025-12-06T00:41:33.467Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "24",
+    "object_repr": "Solicitud #24 - Aprobada (Orden Creada)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Fecha programada preasignada\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 88,
+  "fields": {
+    "action_time": "2025-12-06T00:42:49.512Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "19",
+    "object_repr": "OT #19 - Inspección de RetroexcavadoraMa… - Roberto",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Fecha programada\"]}}]"
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 1,
+  "fields": {
+    "name": "Cliente",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 2,
+  "fields": {
+    "name": "Técnico",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 3,
+  "fields": {
+    "name": "Administrador",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$0ph7PokJBwEkAZ4IGsyu01$Dk3tthkf0oEE3SXyNV/CrT/OMKxDYzGctjhzcpP/Cds=",
+    "last_login": "2025-12-06T02:01:24.048Z",
+    "is_superuser": true,
+    "username": "diego",
+    "first_name": "Diego",
+    "last_name": "Ignacio",
+    "email": "nyandiego@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:19:33Z",
+    "groups": [
+      3
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$iFj5PCkCCU1qw32pF6dzR4$AOYz4q3Pj4BJtU2OnXB6gCRT4t4TL5zNn6uqDkcIe30=",
+    "last_login": "2025-12-06T01:39:55.690Z",
+    "is_superuser": false,
+    "username": "al.nunez",
+    "first_name": "Alonso",
+    "last_name": "Núñez Peralta",
+    "email": "azul.morales.peralta@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-29T10:47:11.968Z",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$9Om5mXejt43Eu4jFuKvf16$EZTgN8sKHK0rTWSUX1H6FANcAVBuI6QQ0UQa2nFQeX0=",
+    "last_login": "2025-11-29T12:10:40.981Z",
+    "is_superuser": true,
+    "username": "hmoralesp",
+    "first_name": "Hector",
+    "last_name": "Morales",
+    "email": "hmoralesp@solu4b.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-29T12:10:05.137Z",
+    "groups": [
+      3
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$rBdu4hxSvUlO4Yp6MeyIoI$UDX2P8KXSDx0FXS3SAIMAEaKmsmqvrSHIU5xOPlZLYU=",
+    "last_login": "2025-12-06T02:07:13.720Z",
+    "is_superuser": false,
+    "username": "TractoresLTDA",
+    "first_name": "Hernan",
+    "last_name": "Herrera",
+    "email": "die.marinf@duocuc.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-03T16:13:47Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$zgF8KThInzXKT5RpKGpNBa$VMu8vBFe6laGMDEgTaXIeZMF9HnG3vhbTDyBnr4eTDQ=",
+    "last_login": "2025-12-06T02:44:51.555Z",
+    "is_superuser": true,
+    "username": "carlosguerraf",
+    "first_name": "Carlos",
+    "last_name": "Guerra",
+    "email": "guerraflorescarlos@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-03T21:37:46.960Z",
+    "groups": [
+      3
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$Yvw6wVZw6oOBuQ1oQ9n2ns$oGZ67G0swlGLRMNfQqmrxO16eA48VSKdYw5zrsRRXko=",
+    "last_login": "2025-12-03T21:41:38.158Z",
+    "is_superuser": false,
+    "username": "alvaroramos8989",
+    "first_name": "Alvaro",
+    "last_name": "Ramos",
+    "email": "ca.guerraf@duocuc.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-03T21:41:16.072Z",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$1VaukP16ycYHjp23F4ssre$TOrH0WpaKoeo2iI2U1QRWgBpXFEwdryq2TYcmrSU8Bo=",
+    "last_login": "2025-12-06T00:38:54.156Z",
+    "is_superuser": false,
+    "username": "ALake",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-05T22:14:40Z",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$aDqHNhBQLxS3XbtaArbJBg$YrCMuxAIZ7VAV/iK26ifCeHLDf9Hr+6I+Ialc15YWAE=",
+    "last_login": "2025-12-06T01:52:26.680Z",
+    "is_superuser": false,
+    "username": "MineraNorte",
+    "first_name": "Roberto",
+    "last_name": "González Méndez",
+    "email": "roberto.gonzalez@mineranorte.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-05T22:29:35.290Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 30,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$WY4riG3ZvEzzI3Zm0tbTTx$RuwdgoyCFSRSz2JpYKtPy4ghwGJ7/hE5aoOUx/5gTUg=",
+    "last_login": "2025-12-06T00:37:16.749Z",
+    "is_superuser": false,
+    "username": "ForestalBioBio",
+    "first_name": "Ana María",
+    "last_name": "Lagos Torres",
+    "email": "alagos@forestalbiobio.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-05T22:34:50.863Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 31,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$349BcyuT2ojiTDvW8UWz6v$quM8JLYRqA/V6/jb9AjZlWudfFDu0OkfsUyxuRsxc5Q=",
+    "last_login": "2025-12-06T01:59:56.134Z",
+    "is_superuser": false,
+    "username": "Luis.Octavio",
+    "first_name": "Luis",
+    "last_name": "Vargas",
+    "email": "intunetest@solu4b.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-06T01:59:32.117Z",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 32,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$QKiN4soNbknQ649K6Bp8dy$/2/yJu9vY500dMtDpNwapmCgAK54wo1m+4/dsYMMeiQ=",
+    "last_login": "2025-12-06T02:02:52.125Z",
+    "is_superuser": false,
+    "username": "Nicolas.Reyes",
+    "first_name": "Nicolas",
+    "last_name": "Reyes",
+    "email": "intunetest2@solu4b.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-12-06T02:02:35.933Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2aqdn7sbexgv3r0dtm36ov4m016nsyvf",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAUBe_iGll2vFPS5wzWXwwOIEeKkwpxd4iUAto3M-8lMmxrzVsvS55YnIUWp98NgR6l7YDv0G6zpLmty4RyV-RBuxxnLs_L4f4dVOj1W189JefJu2IxpBjBBwfMwURVyFpMVCwHrdFGYzi4AZQKxgLAgKAgivcH4hE30Q:1vChRj:I2t7xawgmjTd5gEuGQFzv83r4sf5lfKnjcsg75WsQWc",
+    "expire_date": "2025-11-08T16:48:51.280Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "62yvx3x6vowqlg7roaa1uw3etet6qjs5",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGlmx179Q0nOGaNfrxQHkSPlUiLtDpBTQvpl5LzXgttZhW8o8jKzOyqjT70aYH6XtgO_YbpPOU1vnkfSu6IMu-jpxeV4O9--g4lK_dQ_FEUAE8KlznBOz61FCEe-Ig1CyJKGz5FMxGCNYMJLRZZTohLJ6fwDntziW:1vQbBR:FOHDrDK8LlKRH4-tEtixaUAZTx29bHWs11SnpHG_6DI",
+    "expire_date": "2025-12-17T00:57:29.039Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7cmx4a6338ul5kt5jhgikulwum23gf0x",
+  "fields": {
+    "session_data": ".eJxVjDEOgzAMAP_iuYpwghNg7N43oMR2Cm1FJAJT1b9XSAztene6N4xx36Zxr7qOs8AAFuHyC1Pkpy6HkUdc7sVwWbZ1TuZIzGmruRXR1_Vs_wZTrBMMwIG6QNRT9q6xSZFYCblH9RaRkNqQcpTQZlW2HMSLzQ32Ttjlzmf4fAHyTTgR:1vRDwK:VwaHafuTxcjIJZDkV2WKyJc29AK4jiY5gP5hwJz6dpA",
+    "expire_date": "2025-12-18T18:20:28.812Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "d3o85hlavcgje76mezcfit8nxygbo0rv",
+  "fields": {
+    "session_data": ".eJxVjDsKwzAQBe-ydRDC1sdymT5nECvtbuwkSGDZVcjdg8BF0j1mhveGiMe-xKPxFleCGYYRLr8wYX5y6YYeWO5V5Vr2bU2qJ-q0Td0q8et6tn8HC7YFZrA4-UEcEwsysXOGQrZ9sp0MihfrETWJC8mONo1BApJhLSiatYbPF1SVOfg:1vQvDv:oTcDpA2Eus8w2_FFpemT05g-Zj3bS2nTu05qgk2H9-s",
+    "expire_date": "2025-12-17T22:21:23.045Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "e5inwjzo28bp0dr4qko4kvafh9ic6qz9",
+  "fields": {
+    "session_data": ".eJxVjLsOwjAMAP_FM4qSuHVIR_Z-Q2QnMS2gVupjQvw7qtQB1rvTvSHxvg1pX-uSxgIdOAeXXyicn3U6THnwdJ9NnqdtGcUciTntavq51NftbP8GA68DdIBK2loqepUSlYIjoswcpEqL6KU2PghqbnwI0TmJqC4i2VaLR-sVPl8ROjfb:1vP9gZ:biPm8pd2e-0Nu2lgs_wqrzTkWhwegDDodJud2d6RYnc",
+    "expire_date": "2025-12-13T01:23:39.069Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "germ0bhq9u2kxcpxajl70zk8efvlywak",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAoDIJL956BzMAgVUOT0q6Md7dNutDte-__t4i4LjWunec4ZnERWpx-GWF6cttFfmC7TzJNbZlHknsiD9vlbcr8uh7t30HFXrc1GgZjEMgPlIstibwlnUGhs-fM4EAFhzZpT7RR1jr4YAqUQbFlLOLzBfXnOFo:1vRgKp:GRo_0cN0awiSInJewtIObwIGvfky6xEXsfjejOt0uKs",
+    "expire_date": "2025-12-20T00:39:39.283Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gy2d98b840a4s64373upyncm3sp7r1uj",
+  "fields": {
+    "session_data": ".eJxVjLsOwjAMAP_FM4qSJi5JR_Z-Q2XHDimgVupjQvw7qtQB1rvTvWGgfavDvuoyjAIdOLj8Mqb81OkQ8qDpPps8T9sysjkSc9rV9LPo63a2f4NKa4UOyCt6T8ixYSmhZI6BnaClNlxFsUWbWgrZRWZBq86lmHzB0lgNSgU-X_XnOFo:1vRW9P:tHyIb3X0BiT3LVUlH8nZ1DbyW7MsLYSGv1ALSjluJyU",
+    "expire_date": "2025-12-19T13:47:11.395Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "k2xe2cvohrdtk2zdptvi35iurg2s57ew",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAoDIJL956BzMAgVUOT0q6Md7dNutDte-__t4i4LjWunec4ZnERWpx-GWF6cttFfmC7TzJNbZlHknsiD9vlbcr8uh7t30HFXrc1GgZjEMgPlIstibwlnUGhs-fM4EAFhzZpT7RR1jr4YAqUQbFlLOLzBfXnOFo:1vRLNw:l_H-PXGRDWR91qWnH3Ct0kEMuItZrBDRCx5HiRQBILs",
+    "expire_date": "2025-12-19T02:17:28.644Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "k9foeacrui1me6f73zz0p7s5n6bi5564",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAOdKC4dO8ZGpgZbNVAUtqV8e7apAvd_vfef6kxbus0bk2WcWZ1VgbU6XdMkR5SdsL3WG5VUy3rMie9K_qgTV8ry_NyuH8HU2zTtyaPg0cMmJ3tTBJAEgQKIM4AIGDvU47s-yxChjw7NrmDYJlsHlxW7w_yTTgR:1vRhhZ:dP9GMrdfmQW7Gc5zaMNXWjD5xly7jYBfYLuLXQUJu90",
+    "expire_date": "2025-12-20T02:07:13.729Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "l577r3hcrr4lq8pitsrzcgz29zgzd8uu",
+  "fields": {
+    "session_data": ".eJxVjDsKwzAQBe-ydRDC1sdymT5nECvtbuwkSGDZVcjdg8BF0j1mhveGiMe-xKPxFleCGYYRLr8wYX5y6YYeWO5V5Vr2bU2qJ-q0Td0q8et6tn8HC7YFZrA4-UEcEwsysXOGQrZ9sp0MihfrETWJC8mONo1BApJhLSiatYbPF1SVOfg:1vRiHz:1--3IaDMoMv_aTwCzMGKZUCcwyVcrR8OJuvtjwItbA0",
+    "expire_date": "2025-12-20T02:44:51.566Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "m8c0pxpjvimae6lwj57tbx9fikg3pbnl",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pChBQSX7nsGMgyDVA0kpV0Z765NutDtf-_9lwi4rSVsnZcwJ3ERA4jT7xiRHlx3ku5Yb01Sq-syR7kr8qBdTi3x83q4fwcFe_nWlolgTMmwcoZGANCZvGaDoKw_o3XkBsOJwDjntQeXNZCFbH1UBlC8P_6XN3U:1vPJmu:-3QR_7zfXr0noCfKBawXNyWAZzISy5aQQnOCn1IRKoY",
+    "expire_date": "2025-12-13T12:10:52.294Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "qujw6nrnjpqffxrstmisgbl2vbfybqf5",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQAP-yZ0OQgkt79O4byO4CUjWQlPZk_Ltp0oNeZybzhkDbWsLW0xLmCBNYOP0yJnmmuov4oHpvSlpdl5nVnqjDdnVrMb2uR_s3KNQLTKAN8VkGsY589A5Jj4QjI-khZ_QWhSN677Sxkh07toMXNNpcBJ1BA58v4Cg3Rg:1vDwMx:b7EImQE_7VcGIAzeer4aMPIaVaSAR9m6uDr1N-GiPBI",
+    "expire_date": "2025-11-12T02:57:03.424Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vqcwml5b8wv9uy8du4jr5mmp4wv6or7j",
+  "fields": {
+    "session_data": ".eJxVjMsKwjAQAP9lzxLyaEq2R-9-Q8huNqYqDTTtSfx3KfSg15lh3hDTvtW4d1njnGECo-HyCynxU5bD5Eda7k1xW7Z1JnUk6rRd3VqW1_Vs_wY19QoTJKutMIVifbDjUFhTCR6JxVBG1oPJmApbb5FIHNFIo0FBR06j1wU-XyPROLk:1vMdYk:6QfevCESbgOJJuUoEzZcxG5dCt8uDkxSlWwjnsBR7dA",
+    "expire_date": "2025-12-06T02:41:10.550Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "w48uqmdazrgim725uth1ftvn4xf6kvja",
+  "fields": {
+    "session_data": ".eJxVjDEOgzAMAP_iuYoAJyQwdu8bIjuOC20VJAJT1b9XSAztene6N0TatynuNa9xFhihhcsvY0rPXA4hDyr3xaSlbOvM5kjMaau5LZJf17P9G0xUJxhhwGwZ0SO60FhJQcQOpH1WZ1l65dCx9k3HLuSWvMcOW01kE6m3ygk-X-e3OJY:1vQply:TETC4r8cPkDaRTDKSMajXXFd5Iy2uhk3-uA79qF6ti0",
+    "expire_date": "2025-12-17T16:32:10.414Z"
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 11,
+  "fields": {
+    "usuario": 18,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": null,
+    "rut": null,
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 13,
+  "fields": {
+    "usuario": 20,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": null,
+    "rut": null,
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 15,
+  "fields": {
+    "usuario": 1,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": "",
+    "rut": null,
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 17,
+  "fields": {
+    "usuario": 21,
+    "foto": "perfiles/fotos/Tractor.jpg",
+    "telefono": "+56978482638",
+    "direccion": "Macul",
+    "descripcion": "Empresa dedicada a la compra y venta de maquinaria pesada ( Usualmente tractores )",
+    "rut": null,
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": "9.365.563-1",
+    "rubro": "Venta y compra de Maquinaria Pesada",
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 19,
+  "fields": {
+    "usuario": 23,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": null,
+    "rut": null,
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 20,
+  "fields": {
+    "usuario": 24,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": null,
+    "rut": "10463928-3",
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 24,
+  "fields": {
+    "usuario": 28,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": "",
+    "rut": null,
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": "2022-03-12",
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 25,
+  "fields": {
+    "usuario": 29,
+    "foto": "",
+    "telefono": "+56956688959",
+    "direccion": "Quellón #3323",
+    "descripcion": "Industria Minera",
+    "rut": "995628406",
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": "967879703",
+    "rubro": "Minera",
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 26,
+  "fields": {
+    "usuario": 30,
+    "foto": "perfiles/fotos/ana.png",
+    "telefono": "+56989685935",
+    "direccion": "BioBio",
+    "descripcion": "Forestal Bio-Bio",
+    "rut": "969591006",
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": "969591006",
+    "rubro": "Forestal",
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 27,
+  "fields": {
+    "usuario": 31,
+    "foto": "",
+    "telefono": null,
+    "direccion": null,
+    "descripcion": null,
+    "rut": "761842609",
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": null,
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.perfil",
+  "pk": 28,
+  "fields": {
+    "usuario": 32,
+    "foto": "",
+    "telefono": "+56956688959",
+    "direccion": "Grumete Perez #2214",
+    "descripcion": "Presta Servicios de Excavadora y Tractores",
+    "rut": "967879703",
+    "region": null,
+    "ciudad": null,
+    "rut_empresa": null,
+    "rubro": "Trabajador Independiente",
+    "fecha_contratacion": null,
+    "cargo": null,
+    "edad": null,
+    "obligar_cambio_contrasena": false
+  }
+},
+{
+  "model": "usuarios.plantillainspeccion",
+  "pk": 1,
+  "fields": {
+    "nombre": "Mantencion Preventiva",
+    "descripcion": "Esta planilla es para la mantención de cualquier tipo de maquinaria",
+    "fecha_creacion": "2025-10-25T15:51:17.221Z"
+  }
+},
+{
+  "model": "usuarios.plantillainspeccion",
+  "pk": 2,
+  "fields": {
+    "nombre": "Mantencion Correctiva",
+    "descripcion": "Mantencion Correctiva para maquinaria pesada",
+    "fecha_creacion": "2025-12-04T17:32:56.285Z"
+  }
+},
+{
+  "model": "usuarios.plantillainspeccion",
+  "pk": 3,
+  "fields": {
+    "nombre": "Instalacion",
+    "descripcion": "Instalar y asegurar que los sensores de Stremax cubran las zonas de calor y que las boquillas de Reacton apunten a los puntos de ignición.",
+    "fecha_creacion": "2025-12-04T17:41:11.462Z"
+  }
+},
+{
+  "model": "usuarios.plantillainspeccion",
+  "pk": 4,
+  "fields": {
+    "nombre": "Desinstalación del producto",
+    "descripcion": "La desinstalación requiere precaución extrema, ya que estás manipulando sistemas presurizados.\r\n\r\nADVERTENCIA DE SEGURIDAD: Antes de iniciar, asegúrate de que la maquinaria esté apagada, bloqueada y fría.",
+    "fecha_creacion": "2025-12-05T21:59:06.408Z"
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 1,
+  "fields": {
+    "plantilla": 1,
+    "descripcion": "Inspección Pre-Mantenimiento",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 2,
+  "fields": {
+    "plantilla": 1,
+    "descripcion": "Drenaje y Reemplazo de Fluidos/Filtros",
+    "orden": 2
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 3,
+  "fields": {
+    "plantilla": 1,
+    "descripcion": "Lubricación y Ajustes",
+    "orden": 3
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 4,
+  "fields": {
+    "plantilla": 1,
+    "descripcion": "Revisión de Seguridad y Sistemas Críticos",
+    "orden": 4
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 5,
+  "fields": {
+    "plantilla": 1,
+    "descripcion": "Prueba Operacional y Limpieza",
+    "orden": 5
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 6,
+  "fields": {
+    "plantilla": 2,
+    "descripcion": "Diagnóstico y Evaluación de Falla",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 7,
+  "fields": {
+    "plantilla": 2,
+    "descripcion": "Desmontaje y Reemplazo de Componentes",
+    "orden": 2
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 8,
+  "fields": {
+    "plantilla": 2,
+    "descripcion": "Pruebas de Funcionamiento y Calibración",
+    "orden": 3
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 9,
+  "fields": {
+    "plantilla": 2,
+    "descripcion": "Desbloqueo de panel y Limpieza",
+    "orden": 4
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 10,
+  "fields": {
+    "plantilla": 3,
+    "descripcion": "Evaluación de Riesgos y Planificación de Diseño",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 11,
+  "fields": {
+    "plantilla": 3,
+    "descripcion": "Instalación del Sistema de Detección (Stremax)",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 12,
+  "fields": {
+    "plantilla": 3,
+    "descripcion": "Montaje del Sistema de Supresión (Reacton)",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 13,
+  "fields": {
+    "plantilla": 3,
+    "descripcion": "Integración y Activación",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 14,
+  "fields": {
+    "plantilla": 4,
+    "descripcion": "Desarme y Aseguramiento del Sistema",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 15,
+  "fields": {
+    "plantilla": 4,
+    "descripcion": "Desconexión Eléctrica",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 16,
+  "fields": {
+    "plantilla": 4,
+    "descripcion": "Desmontaje de la Red de Distribución (Reacton)",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 17,
+  "fields": {
+    "plantilla": 4,
+    "descripcion": "Retiro del Tanque y Panel",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 18,
+  "fields": {
+    "plantilla": 4,
+    "descripcion": "Sellado y Restauración",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.tareaplantilla",
+  "pk": 19,
+  "fields": {
+    "plantilla": 3,
+    "descripcion": "Pruebas y Puesta en Marcha",
+    "orden": 1
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 24,
+  "fields": {
+    "cliente": 29,
+    "nombre_cliente": "Roberto",
+    "apellido_cliente": "González Méndez",
+    "direccion": "Quellón #3323",
+    "telefono": "+56989685935",
+    "maquinaria": "Retroexcavadora\r\nMantención Preventiva",
+    "observaciones_cliente": "Industria Minera\r\nUrgente",
+    "monto_cotizacion": "1539000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": "2025-12-30",
+    "fecha_programada": "2025-12-30",
+    "fecha_solicitud": "2025-12-06T00:02:08.957Z",
+    "estado": "COMPLETADA",
+    "motivo_rechazo": ""
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 25,
+  "fields": {
+    "cliente": 29,
+    "nombre_cliente": "Roberto",
+    "apellido_cliente": "González Méndez",
+    "direccion": "Quellón #3323",
+    "telefono": "+56989685935",
+    "maquinaria": "Perforadora de Superficie\r\nInstalacion",
+    "observaciones_cliente": "Industria Minera\r\nUrgente",
+    "monto_cotizacion": "4229000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": "2025-12-30",
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:04:31.477Z",
+    "estado": "COMPLETADA",
+    "motivo_rechazo": ""
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 26,
+  "fields": {
+    "cliente": 30,
+    "nombre_cliente": "Ana María",
+    "apellido_cliente": "Lagos Torres",
+    "direccion": "Los Alamos, Bio Bio",
+    "telefono": "+56989685935",
+    "maquinaria": "Tractor\r\nMantención Correctiva",
+    "observaciones_cliente": "Forestal\r\nUrgente",
+    "monto_cotizacion": "4229000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:08:34.585Z",
+    "estado": "COMPLETADA",
+    "motivo_rechazo": ""
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 27,
+  "fields": {
+    "cliente": 30,
+    "nombre_cliente": "Ana María",
+    "apellido_cliente": "Lagos Torres",
+    "direccion": "Los Alamos, Bio Bio",
+    "telefono": "+56989685935",
+    "maquinaria": "Tractor\r\nInstalacion",
+    "observaciones_cliente": "Forestal\r\nUrgente",
+    "monto_cotizacion": "4229000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:09:06.705Z",
+    "estado": "APROBADA",
+    "motivo_rechazo": ""
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 28,
+  "fields": {
+    "cliente": 30,
+    "nombre_cliente": "Ana María",
+    "apellido_cliente": "Lagos Torres",
+    "direccion": "Los Alamos, Bio Bio",
+    "telefono": "+56989685935",
+    "maquinaria": "Apilador de alcance\r\nMantención Correctiva",
+    "observaciones_cliente": "Forestal\r\nUrgente",
+    "monto_cotizacion": "1539000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:10:31.986Z",
+    "estado": "COMPLETADA",
+    "motivo_rechazo": ""
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 29,
+  "fields": {
+    "cliente": 21,
+    "nombre_cliente": "Hernan",
+    "apellido_cliente": "Herrera",
+    "direccion": "Macul #6895",
+    "telefono": "+56956688959",
+    "maquinaria": "Excavadora\r\nInstalacion",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": "4229000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:16:25.889Z",
+    "estado": "APROBADA",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 30,
+  "fields": {
+    "cliente": 21,
+    "nombre_cliente": "Hernan",
+    "apellido_cliente": "Herrera",
+    "direccion": "Macul #6895",
+    "telefono": "+56956688959",
+    "maquinaria": "Tractor\r\nMantención Correctiva",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": "1529000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:16:54.350Z",
+    "estado": "COMPLETADA",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 31,
+  "fields": {
+    "cliente": 21,
+    "nombre_cliente": "Hernan",
+    "apellido_cliente": "Herrera",
+    "direccion": "Macul #6895",
+    "telefono": "+56956688959",
+    "maquinaria": "Excavadora\r\nInstalacion",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": "4228000",
+    "detalle_cotizacion": "Cotización generada por el administrador.",
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T00:17:25.115Z",
+    "estado": "COMPLETADA",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 32,
+  "fields": {
+    "cliente": 21,
+    "nombre_cliente": "Hernan",
+    "apellido_cliente": "Herrera",
+    "direccion": "Macul #6895",
+    "telefono": "+56956688959",
+    "maquinaria": "Tractor\r\nInstalacion",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": null,
+    "detalle_cotizacion": null,
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T01:38:59.559Z",
+    "estado": "ANULADA",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 33,
+  "fields": {
+    "cliente": 29,
+    "nombre_cliente": "Roberto",
+    "apellido_cliente": "González Méndez",
+    "direccion": "Los Alamos, Bio Bio",
+    "telefono": "Numero",
+    "maquinaria": "Tractor\r\nMantencion Correctiva",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": null,
+    "detalle_cotizacion": null,
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T01:41:17.728Z",
+    "estado": "ANULADA",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 34,
+  "fields": {
+    "cliente": 29,
+    "nombre_cliente": "Roberto",
+    "apellido_cliente": "González Méndez",
+    "direccion": "Quellón #3323",
+    "telefono": "+56956688959",
+    "maquinaria": "Tractor\r\nMantencion",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": null,
+    "detalle_cotizacion": null,
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T01:42:42.440Z",
+    "estado": "RECHAZADA",
+    "motivo_rechazo": "No Cumple Los Requisitos."
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 35,
+  "fields": {
+    "cliente": 32,
+    "nombre_cliente": "Nicolas",
+    "apellido_cliente": "Reyes",
+    "direccion": "Grumete Perez #2214",
+    "telefono": "+56989632935",
+    "maquinaria": "Excavadora\r\nMantención Preventiva",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": null,
+    "detalle_cotizacion": null,
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T02:03:55.053Z",
+    "estado": "PENDIENTE",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.solicitudinspeccion",
+  "pk": 36,
+  "fields": {
+    "cliente": 32,
+    "nombre_cliente": "Nicolas",
+    "apellido_cliente": "Reyes",
+    "direccion": "Grumete Perez #2214",
+    "telefono": "+56956688959",
+    "maquinaria": "Tractor\r\nInstalacion",
+    "observaciones_cliente": "Urgente",
+    "monto_cotizacion": null,
+    "detalle_cotizacion": null,
+    "tecnico_preasignado": null,
+    "plantilla_preasignada": null,
+    "nombre_inspeccion_preasignado": null,
+    "fecha_programada_preasignada": null,
+    "fecha_programada": null,
+    "fecha_solicitud": "2025-12-06T02:04:53.097Z",
+    "estado": "PENDIENTE",
+    "motivo_rechazo": null
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 15,
+  "fields": {
+    "solicitud": 31,
+    "tecnico": 28,
+    "plantilla_base": 3,
+    "nombre_inspeccion": "Inspección de ExcavadoraInstala… - Hernan",
+    "fecha_creacion": "2025-12-06T00:33:19.741Z",
+    "fecha_programada": "2026-01-11",
+    "fecha_finalizacion": "2025-12-06T01:16:48.107Z",
+    "comentarios_generales": "",
+    "estado": "COMPLETADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 16,
+  "fields": {
+    "solicitud": 30,
+    "tecnico": 18,
+    "plantilla_base": 2,
+    "nombre_inspeccion": "Inspección de TractorMantención… - Hernan",
+    "fecha_creacion": "2025-12-06T00:33:25.709Z",
+    "fecha_programada": "2025-12-08",
+    "fecha_finalizacion": "2025-12-06T01:37:07.082Z",
+    "comentarios_generales": "Finalizada",
+    "estado": "COMPLETADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 17,
+  "fields": {
+    "solicitud": 29,
+    "tecnico": 18,
+    "plantilla_base": 3,
+    "nombre_inspeccion": "Inspección de ExcavadoraInstala… - Hernan",
+    "fecha_creacion": "2025-12-06T00:33:38.861Z",
+    "fecha_programada": "2026-02-04",
+    "fecha_finalizacion": null,
+    "comentarios_generales": null,
+    "estado": "ASIGNADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 18,
+  "fields": {
+    "solicitud": 25,
+    "tecnico": 28,
+    "plantilla_base": 3,
+    "nombre_inspeccion": "Inspección de Perforadora de Supe… - Roberto",
+    "fecha_creacion": "2025-12-06T00:36:36.140Z",
+    "fecha_programada": "2026-01-31",
+    "fecha_finalizacion": "2025-12-06T01:21:17.434Z",
+    "comentarios_generales": "Instalacion Completada",
+    "estado": "COMPLETADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 19,
+  "fields": {
+    "solicitud": 24,
+    "tecnico": 28,
+    "plantilla_base": 1,
+    "nombre_inspeccion": "Inspección de RetroexcavadoraMa… - Roberto",
+    "fecha_creacion": "2025-12-06T00:36:40.974Z",
+    "fecha_programada": "2025-12-29",
+    "fecha_finalizacion": "2025-12-06T01:09:08.775Z",
+    "comentarios_generales": "",
+    "estado": "COMPLETADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 20,
+  "fields": {
+    "solicitud": 28,
+    "tecnico": 28,
+    "plantilla_base": 2,
+    "nombre_inspeccion": "Inspección de Apilador de alcance… - Ana María",
+    "fecha_creacion": "2025-12-06T00:37:22.473Z",
+    "fecha_programada": "2025-12-28",
+    "fecha_finalizacion": "2025-12-06T01:00:28.269Z",
+    "comentarios_generales": "",
+    "estado": "COMPLETADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 21,
+  "fields": {
+    "solicitud": 27,
+    "tecnico": 18,
+    "plantilla_base": 3,
+    "nombre_inspeccion": "Inspección de TractorInstalacion - Ana María",
+    "fecha_creacion": "2025-12-06T00:37:27.505Z",
+    "fecha_programada": "2026-02-26",
+    "fecha_finalizacion": null,
+    "comentarios_generales": null,
+    "estado": "ASIGNADA"
+  }
+},
+{
+  "model": "usuarios.inspeccion",
+  "pk": 22,
+  "fields": {
+    "solicitud": 26,
+    "tecnico": 28,
+    "plantilla_base": 2,
+    "nombre_inspeccion": "Inspección de TractorMantención… - Ana María",
+    "fecha_creacion": "2025-12-06T00:37:32.357Z",
+    "fecha_programada": "2026-03-12",
+    "fecha_finalizacion": "2025-12-06T01:29:32.481Z",
+    "comentarios_generales": "Mantención Correctiva Completada ",
+    "estado": "COMPLETADA"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 69,
+  "fields": {
+    "inspeccion": 15,
+    "plantilla_tarea": 10,
+    "descripcion": "Evaluación de Riesgos y Planificación de Diseño",
+    "observacion": "Se realizó el mapeo térmico del compartimento del motor. Se identificaron 3 puntos críticos: Turbocompresor, Múltiple de escape y Banco de bombas hidráulicas. Se validó la ubicación del cilindro en el contrapeso derecho para protegerlo de impactos de giro.",
+    "imagen_evidencia": "inspecciones/evidencias/2121.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 70,
+  "fields": {
+    "inspeccion": 15,
+    "plantilla_tarea": 11,
+    "descripcion": "Instalación del Sistema de Detección (Stremax)",
+    "observacion": "Tendido de cable de detección lineal térmica (LHD) fijado con clips de acero inoxidable recubiertos. Panel de control instalado en el pilar A de la cabina, asegurando visibilidad del operador sin obstruir visión de trabajo. Cableado protegido con corrugado ignífugo.",
+    "imagen_evidencia": "inspecciones/evidencias/14141_ycMkPhD.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 71,
+  "fields": {
+    "inspeccion": 15,
+    "plantilla_tarea": 12,
+    "descripcion": "Montaje del Sistema de Supresión (Reacton)",
+    "observacion": "Instalación de cilindro de 9kg con soportes Heavy Duty. Distribución de tubería de descarga en acero inoxidable hacia los 3 puntos críticos definidos en el paso 1. Boquillas orientadas y fijadas con Loctite para evitar desajuste por vibración.",
+    "imagen_evidencia": "inspecciones/evidencias/151_61zTWn0.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 72,
+  "fields": {
+    "inspeccion": 15,
+    "plantilla_tarea": 13,
+    "descripcion": "Integración y Activación",
+    "observacion": "Conexión a alimentación 24V directa de batería (fusible independiente). Se conectó la interfaz de disparo automático entre el panel Stremax y la válvula solenoide del tanque Reacton. Cableado ordenado y etiquetado.",
+    "imagen_evidencia": "inspecciones/evidencias/caxa.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 73,
+  "fields": {
+    "inspeccion": 15,
+    "plantilla_tarea": 19,
+    "descripcion": "Pruebas y Puesta en Marcha",
+    "observacion": "Prueba de continuidad de circuitos: OK. Simulación de alarma de fuego: Sirena y baliza activadas correctamente. Parada de motor automática verificada (relay de corte). Sistema queda presurizado, activo y con precintos de seguridad instalados.",
+    "imagen_evidencia": "inspecciones/evidencias/xaxa_3VnGz1r.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 74,
+  "fields": {
+    "inspeccion": 16,
+    "plantilla_tarea": 6,
+    "descripcion": "Diagnóstico y Evaluación de Falla",
+    "observacion": "El panel Stremax emitía un pitido intermitente con el error \"Falla de Alimentación / Bajo Voltaje\". Tras revisar la línea de energía principal, se encontró el portafusibles aéreo sulfatado y con corrosión severa cerca de la batería del tractor, lo que interrumpía el paso de corriente al sistema.",
+    "imagen_evidencia": "inspecciones/evidencias/waweas_rqsCj21.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 75,
+  "fields": {
+    "inspeccion": 16,
+    "plantilla_tarea": 7,
+    "descripcion": "Desmontaje y Reemplazo de Componentes",
+    "observacion": "Se cortó la sección de cable dañada por el ácido. Se instaló un nuevo portafusibles estanco (IP67) de grado marino, resistente a la humedad y químicos agrícolas. Se reemplazó el fusible de 10A y se aplicaron terminales termocontraíbles para sellar la conexión.",
+    "imagen_evidencia": "inspecciones/evidencias/eqw.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 76,
+  "fields": {
+    "inspeccion": 16,
+    "plantilla_tarea": 8,
+    "descripcion": "Pruebas de Funcionamiento y Calibración",
+    "observacion": "Se midió voltaje en la entrada del panel: 12.6V estables. Se realizó prueba de desconexión de batería principal para verificar que la batería de respaldo (backup) interna del Stremax entra en funcionamiento sin apagar el sistema. Prueba exitosa.",
+    "imagen_evidencia": "inspecciones/evidencias/caxa_cYBjAMd.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 77,
+  "fields": {
+    "inspeccion": 16,
+    "plantilla_tarea": 9,
+    "descripcion": "Desbloqueo de panel y Limpieza",
+    "observacion": "Se reinició el sistema para borrar el historial de \"Fallo de Energía\". Se limpió la bocina de la sirena externa que estaba obstruida con barro, recuperando su volumen normal de alerta.",
+    "imagen_evidencia": "inspecciones/evidencias/7_i5ijXDS.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 78,
+  "fields": {
+    "inspeccion": 17,
+    "plantilla_tarea": 10,
+    "descripcion": "Evaluación de Riesgos y Planificación de Diseño",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 79,
+  "fields": {
+    "inspeccion": 17,
+    "plantilla_tarea": 11,
+    "descripcion": "Instalación del Sistema de Detección (Stremax)",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 80,
+  "fields": {
+    "inspeccion": 17,
+    "plantilla_tarea": 12,
+    "descripcion": "Montaje del Sistema de Supresión (Reacton)",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 81,
+  "fields": {
+    "inspeccion": 17,
+    "plantilla_tarea": 13,
+    "descripcion": "Integración y Activación",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 82,
+  "fields": {
+    "inspeccion": 17,
+    "plantilla_tarea": 19,
+    "descripcion": "Pruebas y Puesta en Marcha",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 83,
+  "fields": {
+    "inspeccion": 18,
+    "plantilla_tarea": 10,
+    "descripcion": "Evaluación de Riesgos y Planificación de Diseño",
+    "observacion": "Se inspeccionó el compartimento del motor y el cabezal del compresor. Se identificaron zonas de acumulación de polvo de perforación mezclado con aceite. Se diseñó la ruta de tubería evitando interferencia con el mástil de perforación y las mangueras hidráulicas móviles.",
+    "imagen_evidencia": "inspecciones/evidencias/151_Gt0iKxg.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 84,
+  "fields": {
+    "inspeccion": 18,
+    "plantilla_tarea": 11,
+    "descripcion": "Instalación del Sistema de Detección (Stremax)",
+    "observacion": "Se instaló cable de detección lineal (LHD) con doble revestimiento para proteger contra la abrasión del polvo de roca. Se colocaron sensores puntuales adicionales en la zona de bombas hidráulicas. Panel de control sellado (IP65) instalado en cabina para evitar ingreso de polvo fino.",
+    "imagen_evidencia": "inspecciones/evidencias/14141_dmygKvS.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 85,
+  "fields": {
+    "inspeccion": 18,
+    "plantilla_tarea": 12,
+    "descripcion": "Montaje del Sistema de Supresión (Reacton)",
+    "observacion": "Se instalaron dos cilindros de agente extintor en el lateral del chasis (zona de fácil acceso para recarga). Red de distribución construida en acero inoxidable para resistir la vibración constante del martillo de perforación. Boquillas con capuchones protectores de silicona (blow-off caps) para evitar obstrucción por polvo.",
+    "imagen_evidencia": "inspecciones/evidencias/123_S6KGsSH.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 86,
+  "fields": {
+    "inspeccion": 18,
+    "plantilla_tarea": 13,
+    "descripcion": "Integración y Activación",
+    "observacion": "Se realizó el cableado hacia el solenoide de activación. Se integró el sistema de parada de emergencia del motor (Engine Shutdown): al detectar fuego, Stremax apagará el motor y el compresor automáticamente para evitar avivar las llamas con aire comprimido.",
+    "imagen_evidencia": "inspecciones/evidencias/caxa_8hYjCW0.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 87,
+  "fields": {
+    "inspeccion": 18,
+    "plantilla_tarea": 19,
+    "descripcion": "Pruebas y Puesta en Marcha",
+    "observacion": "Test de simulación completo. La sirena de alta decibilidad es audible incluso con la perforadora en operación. Todos los circuitos verdes. Se verifica presión de nitrógeno en cilindros. Sistema queda en modo \"Vigilancia\".",
+    "imagen_evidencia": "inspecciones/evidencias/1515_jx9wVHL.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 88,
+  "fields": {
+    "inspeccion": 19,
+    "plantilla_tarea": 1,
+    "descripcion": "Inspección Pre-Mantenimiento",
+    "observacion": "Se verifica estado inicial del panel Stremax: LEDs en verde (Operativo). Inspección visual del cilindro Reacton: manómetro en zona verde (15 bar) y precintos de seguridad intactos. No hay daños físicos visibles en la estructura externa.",
+    "imagen_evidencia": "inspecciones/evidencias/1515.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 89,
+  "fields": {
+    "inspeccion": 19,
+    "plantilla_tarea": 2,
+    "descripcion": "Drenaje y Reemplazo de Fluidos/Filtros",
+    "observacion": "El agente extintor está dentro de su vida útil (vence en 2026). No se requiere recarga ni cambio de fluidos en esta mantención preventiva mensual. Solo se verifica peso del cartucho actuador.",
+    "imagen_evidencia": "inspecciones/evidencias/123.png",
+    "estado": "N/A"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 90,
+  "fields": {
+    "inspeccion": 19,
+    "plantilla_tarea": 3,
+    "descripcion": "Lubricación y Ajustes",
+    "observacion": "Se detectaron 2 abrazaderas sueltas en la línea de detección térmica (zona del turbo) debido a vibración; se procedió al reapriete. Se ajustó la orientación de la boquilla #3 que apuntaba fuera del ángulo de riesgo",
+    "imagen_evidencia": "inspecciones/evidencias/151.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 91,
+  "fields": {
+    "inspeccion": 19,
+    "plantilla_tarea": 4,
+    "descripcion": "Revisión de Seguridad y Sistemas Críticos",
+    "observacion": "Se revisó el cableado del sensor lineal para descartar cortes o quemaduras por contacto con el motor. Se verificó la conexión de la batería de respaldo (Backup Battery) del sistema Stremax, voltaje estable en 24V.",
+    "imagen_evidencia": "inspecciones/evidencias/14141.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 92,
+  "fields": {
+    "inspeccion": 19,
+    "plantilla_tarea": 5,
+    "descripcion": "Prueba Operacional y Limpieza",
+    "observacion": "Se realizó \"Test de Lámpara\" en el panel. Se limpiaron las boquillas de descarga y el sensor óptico del panel de control que tenía acumulación de polvo de obra. Se retira el pin de seguridad del tanque Reacton al finalizar la labor. Sistema Armado.",
+    "imagen_evidencia": "inspecciones/evidencias/xaxa.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 93,
+  "fields": {
+    "inspeccion": 20,
+    "plantilla_tarea": 6,
+    "descripcion": "Diagnóstico y Evaluación de Falla",
+    "observacion": "Se detectó alarma de \"Falla de Circuito Abierto\" en el panel Stremax. Tras la inspección visual, se encontró el cable de detección lineal cortado por rozamiento contra el bloque del motor, cerca del turbocompresor.",
+    "imagen_evidencia": "inspecciones/evidencias/1.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 94,
+  "fields": {
+    "inspeccion": 20,
+    "plantilla_tarea": 7,
+    "descripcion": "Desmontaje y Reemplazo de Componentes",
+    "observacion": "Se procedió al retiro del tramo de cable sensor dañado (1.5 metros). Se instaló nuevo cable de detección térmica y se reforzó la sujeción con abrazaderas de acero inoxidable con recubrimiento de goma para evitar futuros daños por vibración.",
+    "imagen_evidencia": "inspecciones/evidencias/2.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 95,
+  "fields": {
+    "inspeccion": 20,
+    "plantilla_tarea": 8,
+    "descripcion": "Pruebas de Funcionamiento y Calibración",
+    "observacion": "Se realizó prueba de continuidad eléctrica: Exitosa. Se verificó la presión del manómetro del tanque Reaction (zona verde). Se realizó simulacro de disparo (sin activar botella) verificando encendido de baliza y sirena en cabina",
+    "imagen_evidencia": "inspecciones/evidencias/3.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 96,
+  "fields": {
+    "inspeccion": 20,
+    "plantilla_tarea": 9,
+    "descripcion": "Desbloqueo de panel y Limpieza",
+    "observacion": "Se realizó el reset del panel de control Stremax eliminando el historial de fallas activo. Se limpiaron las boquillas de descarga del sistema Reacton que presentaban acumulación de grasa y polvo.",
+    "imagen_evidencia": "inspecciones/evidencias/7.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 97,
+  "fields": {
+    "inspeccion": 21,
+    "plantilla_tarea": 10,
+    "descripcion": "Evaluación de Riesgos y Planificación de Diseño",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 98,
+  "fields": {
+    "inspeccion": 21,
+    "plantilla_tarea": 11,
+    "descripcion": "Instalación del Sistema de Detección (Stremax)",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 99,
+  "fields": {
+    "inspeccion": 21,
+    "plantilla_tarea": 12,
+    "descripcion": "Montaje del Sistema de Supresión (Reacton)",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 100,
+  "fields": {
+    "inspeccion": 21,
+    "plantilla_tarea": 13,
+    "descripcion": "Integración y Activación",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 101,
+  "fields": {
+    "inspeccion": 21,
+    "plantilla_tarea": 19,
+    "descripcion": "Pruebas y Puesta en Marcha",
+    "observacion": null,
+    "imagen_evidencia": "",
+    "estado": "PENDIENTE"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 102,
+  "fields": {
+    "inspeccion": 22,
+    "plantilla_tarea": 6,
+    "descripcion": "Diagnóstico y Evaluación de Falla",
+    "observacion": "Se acude por reporte de \"Luz de Falla\" en panel Stremax. Al inspeccionar, se detecta que una rama golpeó y dobló la tubería de descarga del lado izquierdo del motor, estrangulando el flujo y soltando un soporte. El sistema no se descargó, pero quedó comprometido mecánicamente.",
+    "imagen_evidencia": "inspecciones/evidencias/321.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 103,
+  "fields": {
+    "inspeccion": 22,
+    "plantilla_tarea": 7,
+    "descripcion": "Desmontaje y Reemplazo de Componentes",
+    "observacion": "Se cortó y retiró la sección de tubería dañada (30 cm). Se reemplazó con manguera flexible reforzada con malla de acero (más resistente a impactos futuros en esa zona expuesta) y se instalaron nuevos conectores push-lock. Se reemplazó el soporte roto por uno de doble anclaje.",
+    "imagen_evidencia": "inspecciones/evidencias/wawe.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 104,
+  "fields": {
+    "inspeccion": 22,
+    "plantilla_tarea": 8,
+    "descripcion": "Pruebas de Funcionamiento y Calibración",
+    "observacion": "Se verificó que la nueva manguera no roce con partes calientes del motor ni correas móviles. Se comprobó la presión del cilindro Reacton (estable). Se realizó prueba de circuito eléctrico para confirmar que el golpe no desconectó el solenoide de activación.",
+    "imagen_evidencia": "inspecciones/evidencias/waweas.jpg",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.tareainspeccion",
+  "pk": 105,
+  "fields": {
+    "inspeccion": 22,
+    "plantilla_tarea": 9,
+    "descripcion": "Desbloqueo de panel y Limpieza",
+    "observacion": "Se eliminó la alerta de error en el panel Stremax. Se realizó limpieza profunda de los sensores térmicos que estaban cubiertos de barro seco, lo cual podría aislar el calor y retrasar la detección de un incendio real.",
+    "imagen_evidencia": "inspecciones/evidencias/7_57xiKcF.png",
+    "estado": "B"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 14,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #17",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/17/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:17:57.931Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 19,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #18",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:26:30.612Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 24,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Inspección Pre-Mantenimiento",
+    "enlace": "/usuarios/solicitud/detalle/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:27:54.151Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 25,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Drenaje y Reemplazo de Fluidos/Filtros",
+    "enlace": "/usuarios/solicitud/detalle/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:27:54.158Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 26,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Lubricación y Ajustes",
+    "enlace": "/usuarios/solicitud/detalle/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:27:54.167Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 27,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Revisión de Seguridad y Sistemas Críticos",
+    "enlace": "/usuarios/solicitud/detalle/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:27:54.176Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 28,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Prueba Operacional y Limpieza",
+    "enlace": "/usuarios/solicitud/detalle/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-03T16:27:54.184Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 30,
+  "fields": {
+    "usuario": 24,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #19).",
+    "enlace": "/usuarios/inspeccion/completar/11/",
+    "leido": false,
+    "fecha_creacion": "2025-12-03T22:09:15.864Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 31,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #23",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/23/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T17:50:11.213Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 32,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #22",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/22/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T17:50:37.994Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 33,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #21",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/21/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T17:50:57.594Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 37,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Inspección Pre-Mantenimiento",
+    "enlace": "/usuarios/solicitud/detalle/23/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T18:10:30.964Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 38,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Drenaje y Reemplazo de Fluidos/Filtros",
+    "enlace": "/usuarios/solicitud/detalle/23/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T18:10:30.971Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 39,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Lubricación y Ajustes",
+    "enlace": "/usuarios/solicitud/detalle/23/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T18:10:30.981Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 40,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Revisión de Seguridad y Sistemas Críticos",
+    "enlace": "/usuarios/solicitud/detalle/23/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T18:10:30.989Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 41,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Prueba Operacional y Limpieza",
+    "enlace": "/usuarios/solicitud/detalle/23/",
+    "leido": true,
+    "fecha_creacion": "2025-12-04T18:10:31.005Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 42,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #24",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:26:27.831Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 43,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #28",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/28/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:26:46.899Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 44,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #31",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:27:28.251Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 45,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #25",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:28:34.357Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 46,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #30",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:29:08.169Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 47,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #29",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/29/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:31:12.931Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 48,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #27",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/27/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:31:35.002Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 49,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "Tienes una cotización pendiente para la solicitud #26",
+    "enlace": "/usuarios/solicitud/aceptar-cotizacion/26/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:31:58.565Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 50,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #31.",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:22.158Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 51,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #31.",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:22.158Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 52,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #31.",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:33:22.159Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 53,
+  "fields": {
+    "usuario": 28,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #31).",
+    "enlace": "/usuarios/inspeccion/completar/15/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:22.159Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 54,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #30.",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:27.832Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 55,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #30.",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:27.832Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 56,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #30.",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:33:27.833Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 57,
+  "fields": {
+    "usuario": 18,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #30).",
+    "enlace": "/usuarios/inspeccion/completar/16/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:27.833Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 58,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #29.",
+    "enlace": "/usuarios/solicitud/detalle/29/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:41.085Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 59,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #29.",
+    "enlace": "/usuarios/solicitud/detalle/29/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:41.085Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 60,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente TractoresLTDA aceptó la cotización de la solicitud #29.",
+    "enlace": "/usuarios/solicitud/detalle/29/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:33:41.086Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 61,
+  "fields": {
+    "usuario": 18,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #29).",
+    "enlace": "/usuarios/inspeccion/completar/17/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:33:41.086Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 62,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente MineraNorte aceptó la cotización de la solicitud #25.",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:36:38.331Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 63,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente MineraNorte aceptó la cotización de la solicitud #25.",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:36:38.331Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 64,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente MineraNorte aceptó la cotización de la solicitud #25.",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:36:38.332Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 65,
+  "fields": {
+    "usuario": 28,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #25).",
+    "enlace": "/usuarios/inspeccion/completar/18/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:36:38.332Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 66,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente MineraNorte aceptó la cotización de la solicitud #24.",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:36:43.063Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 67,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente MineraNorte aceptó la cotización de la solicitud #24.",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:36:43.064Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 68,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente MineraNorte aceptó la cotización de la solicitud #24.",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:36:43.064Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 69,
+  "fields": {
+    "usuario": 28,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #24).",
+    "enlace": "/usuarios/inspeccion/completar/19/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:36:43.065Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 70,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #28.",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:24.740Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 71,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #28.",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:24.740Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 72,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #28.",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:37:24.741Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 73,
+  "fields": {
+    "usuario": 28,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #28).",
+    "enlace": "/usuarios/inspeccion/completar/20/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:24.741Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 74,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #27.",
+    "enlace": "/usuarios/solicitud/detalle/27/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:30.091Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 75,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #27.",
+    "enlace": "/usuarios/solicitud/detalle/27/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:30.091Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 76,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #27.",
+    "enlace": "/usuarios/solicitud/detalle/27/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:37:30.091Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 77,
+  "fields": {
+    "usuario": 18,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #27).",
+    "enlace": "/usuarios/inspeccion/completar/21/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:30.092Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 78,
+  "fields": {
+    "usuario": 1,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #26.",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:34.553Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 79,
+  "fields": {
+    "usuario": 23,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #26.",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:34.554Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 80,
+  "fields": {
+    "usuario": 20,
+    "mensaje": "El cliente ForestalBioBio aceptó la cotización de la solicitud #26.",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:37:34.554Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 81,
+  "fields": {
+    "usuario": 28,
+    "mensaje": "Te han asignado una nueva inspección por aceptación de cotización (solicitud #26).",
+    "enlace": "/usuarios/inspeccion/completar/22/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T00:37:34.555Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 82,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Diagnóstico y Evaluación de Falla",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:48:17.286Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 83,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Desmontaje y Reemplazo de Componentes",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:59:04.871Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 84,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Pruebas de Funcionamiento y Calibración",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:59:04.891Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 85,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Desbloqueo de panel y Limpieza",
+    "enlace": "/usuarios/solicitud/detalle/28/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T00:59:04.910Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 86,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Drenaje y Reemplazo de Fluidos/Filtros",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:05:03.388Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 87,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Inspección Pre-Mantenimiento",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:09:08.698Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 88,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Lubricación y Ajustes",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:09:08.721Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 89,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Revisión de Seguridad y Sistemas Críticos",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:09:08.739Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 90,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Prueba Operacional y Limpieza",
+    "enlace": "/usuarios/solicitud/detalle/24/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:09:08.761Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 91,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Evaluación de Riesgos y Planificación de Diseño",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:13:25.312Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 92,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Instalación del Sistema de Detección (Stremax)",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:16:48.023Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 93,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Montaje del Sistema de Supresión (Reacton)",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:16:48.053Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 94,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Integración y Activación",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:16:48.075Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 95,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Pruebas y Puesta en Marcha",
+    "enlace": "/usuarios/solicitud/detalle/31/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:16:48.096Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 96,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Evaluación de Riesgos y Planificación de Diseño",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:20:01.691Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 97,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Instalación del Sistema de Detección (Stremax)",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:20:01.712Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 98,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Montaje del Sistema de Supresión (Reacton)",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:20:01.735Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 99,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Integración y Activación",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:21:13.669Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 100,
+  "fields": {
+    "usuario": 29,
+    "mensaje": "📸 Nueva evidencia cargada: Pruebas y Puesta en Marcha",
+    "enlace": "/usuarios/solicitud/detalle/25/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:21:13.689Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 101,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Diagnóstico y Evaluación de Falla",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T01:27:03.066Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 102,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Desmontaje y Reemplazo de Componentes",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T01:27:03.088Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 103,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Pruebas de Funcionamiento y Calibración",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T01:28:45.578Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 104,
+  "fields": {
+    "usuario": 30,
+    "mensaje": "📸 Nueva evidencia cargada: Desbloqueo de panel y Limpieza",
+    "enlace": "/usuarios/solicitud/detalle/26/",
+    "leido": false,
+    "fecha_creacion": "2025-12-06T01:29:32.474Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 105,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Diagnóstico y Evaluación de Falla",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:37:07.009Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 106,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Desmontaje y Reemplazo de Componentes",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:37:07.033Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 107,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Pruebas de Funcionamiento y Calibración",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:37:07.053Z"
+  }
+},
+{
+  "model": "usuarios.notificacion",
+  "pk": 108,
+  "fields": {
+    "usuario": 21,
+    "mensaje": "📸 Nueva evidencia cargada: Desbloqueo de panel y Limpieza",
+    "enlace": "/usuarios/solicitud/detalle/30/",
+    "leido": true,
+    "fecha_creacion": "2025-12-06T01:37:07.073Z"
+  }
+}
+]
