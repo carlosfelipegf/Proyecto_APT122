@@ -7,8 +7,8 @@
 {% block dashboard_content %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 text-dark fw-bold mb-1">Panel de Control</h1>
-            <p class="text-muted mb-0">Gestiona usuarios y solicitudes de inspección.</p>
+            <h1 class="h3 text-dark fw-bold mb-1">Bandeja De Entrada</h1>
+            <p class="text-muted mb-0">Gestiona usuarios y Ordenes de Trabajo.</p>
         </div>
         <a href="{% url 'admin_usuarios_list' %}" class="btn btn-primary shadow-sm">
             <i class="fas fa-users-cog me-2"></i> Gestionar Usuarios
@@ -60,7 +60,7 @@
                     ESTADO
                 </strong>
                 <span class="fw-bold">¡Todo al día!</span><br>
-                <span class="small">No hay solicitudes de inspección pendientes de revisión.</span>
+                <span class="small">No hay órdenes pendientes de revisión.</span>
             </div>
         </div>
     {% endif %}
