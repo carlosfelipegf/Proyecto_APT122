@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     # Tus apps
     # 'otra_app',
     
-    # 🚨 SOLUCIÓN: LIBRERÍAS CRISPY FORMS 🚨
+    #  SOLUCIÓN: LIBRERÍAS CRISPY FORMS 
     # 1. App base de Crispy Forms
     'crispy_forms', 
     # 2. El paquete de templates específico para Bootstrap 5 (¡NECESARIO!)
@@ -179,14 +179,14 @@ EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP de Google
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True          # Usar seguridad TLS
 
-# 🚨 CREDENCIALES (DEBES REEMPLAZAR ESTAS LÍNEAS) 🚨
+# CREDENCIALES (DEBES REEMPLAZAR ESTAS LÍNEAS)
 # IMPORTANTE: Reemplaza con tus datos reales
-EMAIL_HOST_USER = 'guerraflorescarlos@gmail.com'         # Ejemplo: notificaciones@optifire.cl
-EMAIL_HOST_PASSWORD = 'xoka fbky asgg sjij ' # <-- Aquí va la contraseña de aplicación generada
+EMAIL_HOST_USER = 'solucionesgmd.ti@gmail.com'         # Ejemplo: notificaciones@optifire.cl
+EMAIL_HOST_PASSWORD = 'yedg eenz duxr slng'  # Contraseña de aplicación (usar variable de entorno en producción)
 
 # Remitente por defecto
 DEFAULT_FROM_EMAIL = 'Optifire <notificaciones@optifire.cl>'
 
 # Correo del equipo de Cobranzas / Finanzas
-EMAIL_COBRANZA_DESTINO = 'guerraflorescarlos@gmail.com' # <--- CAMBIA ESTO POR EL REAL
+EMAIL_COBRANZA_DESTINO = 'guerraflorescarlos@gmail.com'  # Dirección de cobranza (ajustar en producción)
 IVA_CHILE = 0.19 # 19%

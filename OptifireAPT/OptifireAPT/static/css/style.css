@@ -54,12 +54,51 @@ a { text-decoration: none; }
 .navbar-custom {
     background-color: var(--container-color);
     box-shadow: var(--shadow-soft);
-    height: var(--header-height);
+    min-height: var(--header-height);
     z-index: 1000;
 }
 .navbar-brand-text { color: var(--primary-color) !important; font-weight: 800; letter-spacing: 1px; }
 .nav-link-custom { color: var(--text-main) !important; font-weight: 500; margin: 0 0.5rem; }
 .nav-link-custom:hover { color: var(--primary-color) !important; }
+
+@media (max-width: 991px) {
+    .alert-modern {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+    .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--container-color);
+        padding: 1.5rem;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        border-top: 1px solid #f0f0f0;
+        z-index: 1050;
+    }
+    .nav-link-custom {
+        margin: 0.25rem 0;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f8f9fa;
+        text-align: center;
+        display: block;
+    }
+    .nav-link-custom:last-child {
+        border-bottom: none;
+    }
+    .navbar-nav {
+        width: 100%;
+    }
+    .navbar-nav .dropdown-menu {
+        text-align: center;
+        border: none;
+        background-color: #f8f9fa;
+        box-shadow: none;
+        margin-top: 0.5rem;
+    }
+}
 
 /* =========================================
    DASHBOARD LAYOUT
@@ -88,6 +127,30 @@ a { text-decoration: none; }
 .sidebar .nav-link:hover { background-color: #fff5f5; color: var(--primary-color); }
 .sidebar .nav-link.active { background-color: #fee2e2; color: var(--primary-dark); font-weight: 700; }
 .dashboard-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
+
+/* =========================================
+   RESPONSIVE DASHBOARD
+   ========================================= */
+@media (max-width: 991px) {
+    .sidebar {
+        position: fixed;
+        top: var(--header-height);
+        left: -280px;
+        height: calc(100vh - var(--header-height));
+        z-index: 1045;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .dashboard-content {
+        width: 100%;
+        padding: 1rem;
+    }
+}
 
 /* =========================================
    FOOTER
@@ -147,8 +210,9 @@ a { text-decoration: none; }
     background-color: var(--background-color);
 }
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2rem;
     padding: 0 1rem;
     max-width: 1200px;
@@ -162,6 +226,8 @@ a { text-decoration: none; }
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
     border-top: 4px solid transparent;
+    flex: 1 1 300px;
+    max-width: 400px;
 }
 .feature-card:hover {
     transform: translateY(-5px);
@@ -253,7 +319,7 @@ a { text-decoration: none; }
 }
 
 /* =========================================
-   ALERTAS MODERNAS (Top UX/UI)
+   ALERTAS
    ========================================= */
 .alert-modern {
     border: none;
@@ -274,9 +340,10 @@ a { text-decoration: none; }
     font-size: 1.5rem;
     margin-right: 15px;
     margin-top: 2px;
+    flex-shrink: 0;
 }
 
-/* 1. ÉXITO (Verde suave) */
+/* 1. ÉXITO */
 .alert-success {
     background-color: #f0fdf4;
     border-left-color: #22c55e;
@@ -284,19 +351,17 @@ a { text-decoration: none; }
 }
 .alert-success i { color: #22c55e; }
 
-/* 2. ERROR / PELIGRO (Naranja Vibrante - Neutro pero visible) */
-/* Reemplazo del rojo por un tono Terra Cotta/Naranja para menos agresividad */
+/* 2. ERROR / PELIGRO */
 .alert-error, .alert-danger {
-    background-color: #fff7ed; /* Fondo crema anaranjado muy suave */
-    border-left-color: #f97316; /* Borde naranja vivo */
-    color: #c2410c; /* Texto naranja oscuro (tierra) */
+    background-color: #fff7ed;
+    border-left-color: #f97316;
+    color: #c2410c;
     
-    /* Mantenemos vibración para feedback táctil visual */
     animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 .alert-error i, .alert-danger i { color: #f97316; }
 
-/* 3. ADVERTENCIA (Amarillo) */
+/* 3. ADVERTENCIA */
 .alert-warning {
     background-color: #fffbeb;
     border-left-color: #f59e0b;
@@ -304,7 +369,7 @@ a { text-decoration: none; }
 }
 .alert-warning i { color: #f59e0b; }
 
-/* 4. INFO (Azul) */
+/* 4. INFO */
 .alert-info {
     background-color: #eff6ff;
     border-left-color: #3b82f6;
@@ -323,4 +388,68 @@ a { text-decoration: none; }
     20%, 80% { transform: translate3d(2px, 0, 0); }
     30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
     40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* =========================================
+   UTILITIES
+   ========================================= */
+@media (min-width: 768px) {
+    .w-md-auto {
+        width: auto !important;
+    }
+}
+
+/* =========================================
+   MOBILE CARD TABLE
+   ========================================= */
+@media (max-width: 768px) {
+    .mobile-card-table, .mobile-card-table tbody, .mobile-card-table tr, .mobile-card-table td {
+        display: block;
+        width: 100%;
+    }
+    
+    .mobile-card-table thead {
+        display: none;
+    }
+
+    .mobile-card-table tbody tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid #e1e4e8;
+        border-radius: var(--border-radius);
+        background-color: #fff;
+        box-shadow: var(--shadow-soft);
+        padding: 1.25rem;
+        position: relative;
+    }
+
+    .mobile-card-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: none;
+        padding: 0.5rem 0;
+        text-align: right;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .mobile-card-table td:last-child {
+        border-bottom: none;
+        padding-top: 1rem;
+        margin-top: 0.5rem;
+        justify-content: center;
+    }
+
+    .mobile-card-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--text-secondary);
+        margin-right: auto;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+    
+    /* Ajustes específicos para que se vea bien */
+    .mobile-card-table td[data-label="Acciones"]::before {
+        display: none;
+    }
 }

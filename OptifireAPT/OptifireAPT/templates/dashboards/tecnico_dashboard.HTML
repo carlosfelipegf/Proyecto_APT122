@@ -22,7 +22,7 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0 mobile-card-table">
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4">OT #</th>
@@ -35,19 +35,19 @@
                     <tbody>
                     {% for inspeccion in inspecciones_asignadas %}
                         <tr>
-                            <td class="ps-4 fw-bold">#{{ inspeccion.solicitud.id|default:inspeccion.id }}</td>
-                            <td>
+                            <td class="ps-4 fw-bold" data-label="OT #">#{{ inspeccion.solicitud.id|default:inspeccion.id }}</td>
+                            <td data-label="Inspección">
                                 <div class="fw-bold">{{ inspeccion.nombre_inspeccion }}</div>
                                 <small class="text-muted">{{ inspeccion.solicitud.direccion|default:"Sin dirección" }}</small>
                             </td>
-                            <td>
+                            <td data-label="Fecha Programada">
                                 {% if inspeccion.fecha_programada %}
                                     <i class="far fa-calendar-alt me-1 text-muted"></i> {{ inspeccion.fecha_programada|date:"d M, Y" }}
                                 {% else %}
                                     <span class="text-muted">--</span>
                                 {% endif %}
                             </td>
-                            <td>
+                            <td data-label="Estado">
                                 <span class="badge rounded-pill
                                     {% if inspeccion.estado == 'ASIGNADA' %} bg-warning text-dark
                                     {% elif inspeccion.estado == 'EN_CURSO' %} bg-primary
@@ -57,7 +57,7 @@
                                     {{ inspeccion.get_estado_display }}
                                 </span>
                             </td>
-                            <td class="text-end pe-4">
+                            <td class="text-end pe-4" data-label="Acción">
                                 <a href="{% url 'completar_inspeccion' inspeccion.pk %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit me-1"></i> Gestionar
                                 </a>

@@ -6,7 +6,7 @@
 {% endblock dashboard_menu %}
 
 {% block dashboard_content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
     <div>
         <h1 class="h3 text-dark fw-bold mb-1">Registro de trabajos</h1>
         <p class="text-muted mb-0">Historial de inspecciones finalizadas por ti.</p>
@@ -22,7 +22,7 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0 mobile-card-table">
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4">OT #</th>
@@ -35,23 +35,23 @@
                     <tbody>
                     {% for inspeccion in inspecciones_completadas %}
                         <tr>
-                            <td class="ps-4 fw-bold">#{{ inspeccion.solicitud.id|default:inspeccion.id }}</td>
-                            <td>
+                            <td class="ps-4 fw-bold" data-label="OT #">#{{ inspeccion.solicitud.id|default:inspeccion.id }}</td>
+                            <td data-label="Inspección">
                                 <div class="fw-bold">{{ inspeccion.nombre_inspeccion }}</div>
                                 <small class="text-muted">{{ inspeccion.solicitud.direccion|default:"Sin dirección" }}</small>
                             </td>
-                            <td>
+                            <td data-label="Finalizada">
                                 {% if inspeccion.fecha_finalizacion %}
                                     <i class="far fa-calendar-alt me-1 text-muted"></i> {{ inspeccion.fecha_finalizacion|date:"d M, Y H:i" }}
                                 {% else %}
                                     <span class="text-muted">--</span>
                                 {% endif %}
                             </td>
-                            <td>
+                            <td data-label="Estado">
                                 <span class="badge rounded-pill bg-success">{{ inspeccion.get_estado_display }}</span>
                             </td>
-                            <td class="text-end pe-4">
-                                <!-- Botón ojo para ver detalle (abre modal) -->
+                            <td class="text-end pe-4" data-label="Acción">
+                                <!-- Ver detalle -->
                                 <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalInspeccion{{ inspeccion.pk }}">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -61,7 +61,7 @@
                             </td>
                         </tr>
 
-                        <!-- Modal por inspección -->
+                        <!-- Modal Detalle -->
                         <div class="modal fade" id="modalInspeccion{{ inspeccion.pk }}" tabindex="-1" aria-labelledby="modalLabel{{ inspeccion.pk }}" aria-hidden="true">
                           <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">

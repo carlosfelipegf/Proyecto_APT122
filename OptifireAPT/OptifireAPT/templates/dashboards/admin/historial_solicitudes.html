@@ -5,12 +5,12 @@
 {% endblock dashboard_menu %}
 
 {% block dashboard_content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
     <div>
         <h1 class="h3 mb-1 text-dark fw-bold">Historial de solicitudes</h1>
         <p class="text-muted mb-0">Consulta todas las solicitudes ya procesadas por el equipo.</p>
     </div>
-    <a class="btn btn-outline-secondary" href="{% url 'dashboard_administrador' %}">
+    <a class="btn btn-outline-secondary w-100 w-md-auto" href="{% url 'dashboard_administrador' %}">
         <i class="fas fa-arrow-left me-2"></i> Volver al panel
     </a>
 </div>
@@ -19,7 +19,7 @@
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0 mobile-card-table">
                     <thead class="table-light">
                         <tr>
                             <th scope="col" class="ps-4">ID</th>
@@ -34,11 +34,11 @@
                     <tbody>
                         {% for solicitud in historial %}
                         <tr>
-                            <td class="ps-4 fw-bold">#{{ solicitud.id }}</td>
-                            <td>{{ solicitud.nombre_cliente }} {{ solicitud.apellido_cliente|default:"" }}</td>
-                            <td>{{ solicitud.direccion }}</td>
-                            <td>{{ solicitud.maquinaria|truncatechars:30 }}</td>
-                            <td>
+                            <td class="ps-4 fw-bold" data-label="ID">#{{ solicitud.id }}</td>
+                            <td data-label="Cliente">{{ solicitud.nombre_cliente }} {{ solicitud.apellido_cliente|default:"" }}</td>
+                            <td data-label="Dirección">{{ solicitud.direccion }}</td>
+                            <td data-label="Maquinaria">{{ solicitud.maquinaria|truncatechars:30 }}</td>
+                            <td data-label="Estado">
                                 <span class="badge rounded-pill
                                     {% if solicitud.estado == 'APROBADA' %}bg-primary
                                     {% elif solicitud.estado == 'RECHAZADA' %}bg-danger
@@ -47,12 +47,10 @@
                                     {{ solicitud.get_estado_display }}
                                 </span>
                             </td>
-                            <td class="text-muted small">{{ solicitud.fecha_solicitud|date:"d/m/Y" }}</td>
-                            <td class="text-end pe-4">
+                            <td class="text-muted small" data-label="Fecha">{{ solicitud.fecha_solicitud|date:"d/m/Y" }}</td>
+                            <td class="text-end pe-4" data-label="Acciones">
                                 <div class="btn-group">
                                     
-                                    <!-- 🚨 CAMBIO IMPORTANTE AQUÍ 🚨 -->
-                                    <!-- Ahora apunta a 'ver_detalle_solicitud' -->
                                     <a class="btn btn-sm btn-outline-primary" href="{% url 'ver_detalle_solicitud' solicitud.pk %}" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
