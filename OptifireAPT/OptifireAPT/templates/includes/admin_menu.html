@@ -3,7 +3,7 @@
     <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_administrador' %}active{% endif %}"
            href="{% url 'dashboard_administrador' %}">
-            <i class="fas fa-chart-line"></i> Resumen
+            <i class="fas fa-chart-line"></i> Bandeja De Entrada
         </a>
     </li>
 
@@ -32,7 +32,7 @@
     <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'estadisticas' %}active{% endif %}"
            href="{% url 'estadisticas' %}">
-            <i class="fas fa-chart-pie"></i> Estadísticas
+            <i class="fas fa-chart-pie"></i> Panel De Control
         </a>
     </li>
 
