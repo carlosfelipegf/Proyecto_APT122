@@ -4,12 +4,12 @@
 
 {% block title %}Nueva Solicitud | Optifire{% endblock %}
 
-{# 1. ESTA ES LA PIEZA QUE FALTABA: El menú lateral #}
+{# Menú lateral #}
 {% block dashboard_menu %}
     {% include "includes/cliente_menu.html" %}
 {% endblock dashboard_menu %}
 
-{# 2. Contenido Principal #}
+{# Contenido Principal #}
 {% block dashboard_content %}
 <div class="container-fluid px-0">
     
@@ -27,7 +27,8 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
                     
-                    <form method="post">
+                    {# 1. AGREGUÉ UN ID AL FORMULARIO Y 'NOVALIDATE' PARA QUE EL JS TOME EL CONTROL #}
+                    <form method="post" id="form-solicitud" novalidate>
                         {% csrf_token %}
                         
                         {{ form|crispy }}
@@ -54,4 +55,95 @@
         </div>
     </div>
 </div>
+
+{# 2. JAVASCRIPT ADAPTADO A LOS CAMPOS DE LA ORDEN DE TRABAJO #}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("form-solicitud");
+    
+    if (!form) return;
+
+    form.addEventListener("submit", function (event) {
+        let errores = [];
+        
+        // --- OBTENCIÓN DE CAMPOS ---
+        // Django Crispy Forms genera IDs como 'id_nombre_campo'.
+        // He ajustado estos IDs basándome en los etiquetas de tu imagen (Nombre, Apellido, Direccion...).
+        // SI ALGO NO FUNCIONA: Usa "Inspeccionar elemento" en tu navegador para ver el ID real del input.
+        
+        const nombre = document.getElementById("id_nombre");       // Verifica si es id_nombre o id_first_name
+        const apellido = document.getElementById("id_apellido");   // Verifica si es id_apellido o id_last_name
+        const direccion = document.getElementById("id_direccion");
+        const telefono = document.getElementById("id_telefono");
+        const maquinaria = document.getElementById("id_maquinaria"); // O id_descripcion, id_equipo (según tu models.py)
+
+        // Limpiar alertas previas
+        document.querySelectorAll(".alert-js-error").forEach(el => el.remove());
+
+        // 1. Validar Nombre
+        if (nombre && nombre.value.trim().length < 2) {
+            errores.push("El nombre es obligatorio.");
+            marcarError(nombre);
+        }
+
+        // 2. Validar Apellido
+        if (apellido && apellido.value.trim().length < 2) {
+            errores.push("El apellido es obligatorio.");
+            marcarError(apellido);
+        }
+
+        // 3. Validar Dirección
+        if (direccion && direccion.value.trim().length < 5) {
+            errores.push("Por favor ingresa una dirección válida para la inspección.");
+            marcarError(direccion);
+        }
+
+        // 4. Validar Teléfono (Mínimo 8 dígitos, permite espacios y +)
+        const telRegex = /^[\d\s\+\-]{8,}$/;
+        if (telefono && !telRegex.test(telefono.value.trim())) {
+            errores.push("El teléfono debe tener al menos 8 dígitos.");
+            marcarError(telefono);
+        }
+
+        // 5. Validar Descripción de Maquinaria
+        if (maquinaria && maquinaria.value.trim().length < 5) {
+            errores.push("Por favor describe la maquinaria o servicio a inspeccionar (mínimo 5 letras).");
+            marcarError(maquinaria);
+        }
+
+        // Si hay errores, prevenimos el envío y mostramos alerta
+        if (errores.length > 0) {
+            event.preventDefault(); 
+            mostrarErroresArriba(errores);
+        }
+    });
+});
+
+// Función para resaltar el input en rojo
+function marcarError(input) {
+    if(input) {
+        input.classList.add("is-invalid");
+        input.addEventListener("input", () => input.classList.remove("is-invalid"));
+    }
+}
+
+// Función para crear la alerta visual arriba
+function mostrarErroresArriba(listaErrores) {
+    const contenedor = document.querySelector(".card-body");
+    const divError = document.createElement("div");
+    divError.className = "alert alert-danger alert-dismissible fade show alert-js-error shadow-sm";
+    divError.innerHTML = `
+        <strong><i class="fas fa-exclamation-triangle me-2"></i>Atención:</strong>
+        <ul class="mb-0 mt-2">
+            ${listaErrores.map(e => `<li>${e}</li>`).join('')}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    // Insertar después del título o al inicio del card-body
+    contenedor.insertBefore(divError, contenedor.firstChild);
+    
+    // Scroll suave hacia el error
+    divError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
 {% endblock dashboard_content %}
